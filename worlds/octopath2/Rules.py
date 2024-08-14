@@ -43,42 +43,155 @@ class Octopath2Rules:
     def can_be_nighttime(self, state: CollectionState, Amount) -> bool:
         return state.has(ItemName.TimeChange, self.player, Amount) or self.multiworld.startingtime[self.player] == "Night".      
 
+# Regions access
+
     def can_access_winterlands1(self, state: CollectionState, Amount) -> bool:
-        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands) or self.multiworld.startingcharacter[self.player] == "Osvald".
+        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and (self.can_access_brightlands(state,1) or self.can_access_crestlands(state,1)) or self.multiworld.startingcharacter[self.player] == "Osvald".
         
     def can_access_crestlands(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.CrestlandsUnlock, self.player, Amount) and (self.can_access_brightlands(state,1) or self.can_access_winterlands1(state,1)) or self.multiworld.startingcharacter[self.player] == "Temenos".
         
     def can_access_brightlands(self, state: CollectionState, Amount) -> bool:
-        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands) or self.multiworld.startingcharacter[self.player] == "Throne".
+        return (state.has(ItemName.BrightlandsUnlock, self.player, Amount) and (self.can_access_winterlands1(state, 1) or self.can_access_crestlands(state, 1) or self.can_access_totohaha(state, 1) or self.can_access_wildlands2(state, 1) ) or self.multiworld.startingcharacter[self.player] == "Throne".
         
     def can_access_totohaha(self, state: CollectionState, Amount) -> bool:
-        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands) or self.multiworld.startingcharacter[self.player] == "Ochette".
+        return (state.has(ItemName.TotohahaUnlock, self.player, Amount) and (self.can_access_brightlands(state, 1) or self.can_access_wildlands2(state, 1) ) or self.multiworld.startingcharacter[self.player] == "Ochette".
         
     def can_access_harborlands(self, state: CollectionState, Amount) -> bool:
-        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands) or self.multiworld.startingcharacter[self.player] == "Castti".
+        return (state.has(ItemName.HarborlandsUnlock, self.player, Amount) and (self.can_access_brightlands(state, 1) or self.can_access_hinoeuma1(state, 1) or self.can_access_hinoeuma2(state, 1) ) ) or self.multiworld.startingcharacter[self.player] == "Castti".
        
     def can_access_hinoeuma1(self, state: CollectionState, Amount) -> bool:
-        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands) or self.multiworld.startingcharacter[self.player] == "Hikari".
+        return (state.has(ItemName.HinoeumaUnlock, self.player, Amount) and (self.can_access_harbolands(state, 1) or self.can_access_wildlands1(state, 1))) or self.multiworld.startingcharacter[self.player] == "Hikari".
         
     def can_access_leaflands(self, state: CollectionState, Amount) -> bool:
-        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands) or self.multiworld.startingcharacter[self.player] == "Agnea".    
+        return (state.has(ItemName.LeaflandsUnlock, self.player, Amount) and ( self.can_access_wildlands1(state, 1) or self.can_access_wildlands2(state, 1) or self.can_access_hinoeuma2(state, 1) ) ) or self.multiworld.startingcharacter[self.player] == "Agnea".    
 
-    def can_access_wildlands(self, state: CollectionState, Amount) -> bool:
-        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands) or self.multiworld.startingcharacter[self.player] == "Partitio".
+    def can_access_wildlands1(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.WildlandsUnlock, self.player, Amount) and ( self.can_access_hinoeuma1(state, 1) or self.can_access_leaflands(state, 1) ) or self.multiworld.startingcharacter[self.player] == "Partitio".
         
     def can_access_winterlands2(self, state: CollectionState, Amount) -> bool:
-        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands)
+        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and self.can_access_crestlands(state, 1) and self.can_KO(state, 1)).
         
     def can_access_hinoeuma2(self, state: CollectionState, Amount) -> bool:
-        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands)
+        return (state.has(ItemName.HinoeumaUnlock, self.player, Amount) and (self.can_access_harbolands(state, 1) ) or self.can_access_leaflands(state, 1)).
 
     def can_access_wildlands2(self, state: CollectionState, Amount) -> bool:
-        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands)
+        return (state.has(ItemName.WildlandsUnlock, self.player, Amount) and (self.can_access_leaflands(state, 1) or self.can_access_totohaha(state, 1) or self.can_access_brightlands(state, 1) )).
 
     def can_access_sea(self, state: CollectionState, Amount) -> bool:
-        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands) or elf.multiworld.startingcharacter[self.player] == "Osvald".
+        return (state.has(ItemName.Ship, self.player, Amount) and (self.can_access_brightlands(state, 1) or self.can_access_totohaha(state, 1) or self.can_access_wildlands2(state, 1)).
 
+# Individual skills access
+
+    def can_hire(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player, Amount) and self.can_be_nighttime(state, 1).
+
+    def can_purchase(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player, Amount) and self.can_be_daytime(state, 1).
+        
+    def can_allure(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player, Amount) and self.can_be_daytime(state, 1).
+        
+    def can_entreat(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player, Amount) and self.can_be_nighttime(state, 1).
+        
+    def can_befriend(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OchetteUnlock, self.player, Amount) and self.can_be_nighttime(state, 1).
+        
+    def can_provoke(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OchetteUnlock, self.player, Amount) and self.can_be_daytime(state, 1).
+        
+    def can_guide(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player, Amount) and self.can_be_daytime(state, 1).
+        
+    def can_coerce(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player, Amount) and self.can_be_nighttime(state, 1).
+        
+    def can_steal(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player, Amount) and self.can_be_daytime(state, 1).
+        
+    def can_ambush(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player, Amount) and self.can_be_nighttime(state, 1).
+        
+    def can_inquire(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player, Amount) and self.can_be_daytime(state, 1).
+        
+    def can_soothe(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player, Amount) and self.can_be_nighttime(state, 1).
+        
+    def can_challenge(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player, Amount) and self.can_be_daytime(state, 1).
+        
+    def can_bribe(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player, Amount) and self.can_be_nighttime(state, 1).                                
+        
+    def can_scrutinize(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player, Amount) and self.can_be_daytime(state, 1).
+        
+    def can_mug(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player, Amount) and self.can_be_nighttime(state, 1).
+        
+        
+# Skills results access. 3 types, splitting day and night, for when NPCs will be considered in logic.
+
+    def can_have_followers_day(self, state: CollectionState, Amount) -> bool:
+        return self.can_guide(state, 1) or self.can_allure(state, 1).
+ 
+    def can_have_followers_night(self, state: CollectionState, Amount) -> bool:
+        return self.can_hire(state, 1) or self.can_befriend(state, 1).
+        
+    def can_have_followers(self, state: CollectionState, Amount) -> bool:
+        return self.can_have_followers_day(state, 1) or self.can_have_followers_night(state, 1).
+        
+    def can_get_npcitems_day(self, state: CollectionState, Amount) -> bool:
+        return self.can_buy(state, 1) or self.can_steal(state, 1).
+ 
+    def can_get_npcitems_night(self, state: CollectionState, Amount) -> bool:
+        return self.can_entreat(state, 1) or self.can_mug(state, 1).
+        
+    def can_get_npcitems(self, state: CollectionState, Amount) -> bool:
+        return self.can_get_npcitems_day(state, 1) or self.can_get_npcitems_night(state, 1).
+        
+    def can_get_info_day(self, state: CollectionState, Amount) -> bool:
+        return self.can_scrutinize(state, 1) or self.can_inquire(state, 1).
+ 
+    def can_get_info_night(self, state: CollectionState, Amount) -> bool:
+        return self.can_bribe(state, 1) or self.can_coerce(state, 1).
+        
+    def can_get_info(self, state: CollectionState, Amount) -> bool:
+        return self.can_get_info_day(state, 1) or self.can_get_info_night(state, 1).
+        
+    def can_KO_day(self, state: CollectionState, Amount) -> bool:
+        return self.can_provoke(state, 1) or self.can_challenge(state, 1).
+ 
+    def can_KO_night(self, state: CollectionState, Amount) -> bool:
+        return self.can_ambush(state, 1) or self.can_soothe(state, 1).
+        
+    def can_KO(self, state: CollectionState, Amount) -> bool:
+        return self.can_KO_day(state, 1) or self.can_KO_night(state, 1).
+        
+# Towns Unlocks, unfinished
+
+    def capecold_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player, Amount) and state.has(ItemName.OsvaldCh1, self.player, Amount)) or self.multiworld.startingcharacter[self.player] == "Osvald".
+
+
+# Towns Accesses, unfinished
+        
+    def can_access_capecold(self, state: CollectionState, Amount) -> bool:
+        return self.capecold_unlock(state, 1) and self.can_access_winterlands1(state, 1).
+        
+# Can Clear Story chapters, unfinished
+
+    def can_clear_osvaldch1(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player, Amount) and state.has(ItemName.OsvaldCh1, self.player, Amount) and self.can_access_capecold(state, 1) and self.can_mug(state, 1) and self.can_scrutinize(state, 1)).
+
+# Can Clear Full stories, unfinished
+
+    def can_clear_osvaldstory(self, state: CollectionState, Amount) -> bool:
+        return self.can_clear_osvaldch1(state, 1) and self.can_clear_osvaldch3(state, 1) and self.can_clear_osvaldch4(state, 1) and self.can_clear_osvaldch5(state, 1).
+
+# Old KH2 logic down there
     def oc_unlocked(self, state: CollectionState, Amount) -> bool:
         return state.has(ItemName.BattlefieldsofWar, self.player, Amount)
 
