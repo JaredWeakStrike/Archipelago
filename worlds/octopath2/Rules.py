@@ -1,3 +1,4 @@
+# Imports will need to be changed accordingly
 from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState
@@ -9,33 +10,74 @@ from .Logic import *
 
 # I don't know what is going on here, but it works.
 if TYPE_CHECKING:
-    from . import KH2World
+    from . import Octopath2World
 else:
-    KH2World = object
+    Octopath2World = object
 
 
 # Shamelessly Stolen from Messanger
 
 
-class KH2Rules:
+class Octopath2Rules:
     player: int
-    world: KH2World
-    # World Rules: Rules for the visit locks
+    world: Octopath2World
+    # Those are copy-paste from kh2 I tried to mimic into categories, but currently makes no sense
+    # I'll just put all rules here for now
+    # World Rules: Rules for the region/town locks
     # Location Rules: Deterministic of player settings.
-    # Form Rules: Rules for Drive Forms and Summon levels. These Are Locations
-    # Fight Rules: Rules for fights. These are regions in the worlds.
-    world_rules: Dict[str, Callable[[CollectionState], bool]]
-    location_rules: Dict[str, Callable[[CollectionState], bool]]
+    # Ability Rules: Rules for character talents.
+    # Fight Rules: Rules for fights. Do we want those in OT2?
+    # world_rules: Dict[str, Callable[[CollectionState], bool]]
+    # location_rules: Dict[str, Callable[[CollectionState], bool]]
 
     fight_rules: Dict[str, Callable[[CollectionState], bool]]
 
-    def __init__(self, world: KH2World) -> None:
+    def __init__(self, world: Octopath2World) -> None:
         self.player = world.player
         self.world = world
         self.multiworld = world.multiworld
 
-    def lod_unlocked(self, state: CollectionState, Amount) -> bool:
-        return state.has(ItemName.SwordoftheAncestor, self.player, Amount)
+    def can_be_daytime(self, state: CollectionState, Amount) -> bool:
+        return state.has(ItemName.TimeChange, self.player, Amount) or self.multiworld.startingtime[self.player] == "Day".
+        
+    def can_be_nighttime(self, state: CollectionState, Amount) -> bool:
+        return state.has(ItemName.TimeChange, self.player, Amount) or self.multiworld.startingtime[self.player] == "Night".      
+
+    def can_access_winterlands1(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands) or self.multiworld.startingcharacter[self.player] == "Osvald".
+        
+    def can_access_crestlands(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.CrestlandsUnlock, self.player, Amount) and (self.can_access_brightlands(state,1) or self.can_access_winterlands1(state,1)) or self.multiworld.startingcharacter[self.player] == "Temenos".
+        
+    def can_access_brightlands(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands) or self.multiworld.startingcharacter[self.player] == "Throne".
+        
+    def can_access_totohaha(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands) or self.multiworld.startingcharacter[self.player] == "Ochette".
+        
+    def can_access_harborlands(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands) or self.multiworld.startingcharacter[self.player] == "Castti".
+       
+    def can_access_hinoeuma1(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands) or self.multiworld.startingcharacter[self.player] == "Hikari".
+        
+    def can_access_leaflands(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands) or self.multiworld.startingcharacter[self.player] == "Agnea".    
+
+    def can_access_wildlands(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands) or self.multiworld.startingcharacter[self.player] == "Partitio".
+        
+    def can_access_winterlands2(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands)
+        
+    def can_access_hinoeuma2(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands)
+
+    def can_access_wildlands2(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands)
+
+    def can_access_sea(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.WinterlandsUnlock, self.player, Amount) and can_access_brightlands) or elf.multiworld.startingcharacter[self.player] == "Osvald".
 
     def oc_unlocked(self, state: CollectionState, Amount) -> bool:
         return state.has(ItemName.BattlefieldsofWar, self.player, Amount)
