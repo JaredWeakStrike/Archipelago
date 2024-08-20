@@ -170,10 +170,82 @@ class Octopath2Rules:
     def can_KO(self, state: CollectionState, Amount) -> bool:
         return self.can_KO_day(state, 1) or self.can_KO_night(state, 1).
         
-# Towns Unlocks, unfinished
+# Towns Unlocks, unfinished, tiers1 done
 
     def capecold_unlock(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.OsvaldUnlock, self.player, Amount) and state.has(ItemName.OsvaldCh1, self.player, Amount)) or self.multiworld.startingcharacter[self.player] == "Osvald".
+        
+    def winterbloom_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player, Amount) and state.has(ItemName.ThroneCh2Father, self.player, Amount)) or (state.has(ItemName.CasttiUnlock, self.player, Amount) and state.has(ItemName.CasttiCh2Winterbloom, self.player, Amount)) or (state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.PartitioGramophone, self.player, Amount)).
+        
+    def stormhail_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player, Amount) and state.has(ItemName.HikariCh4, self.player, Amount)) or (state.has(ItemName.OchetteUnlock, self.player, Amount) and state.has(ItemName.OchetteCh2Glacis, self.player, Amount)) or (state.has(ItemName.TemenosUnlock, self.player, Amount) and state.has(ItemName.TemenosCh3Stormhail, self.player, Amount)).
+       
+    def flamechurch_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player, Amount) and state.has(ItemName.TemenosCh1, self.player, Amount)) or (state.has(ItemName.TemenosUnlock, self.player, Amount) and state.has(ItemName.ThroneUnlock, self.player, Amount) and state.has(ItemName.TemenosThroneCh1, self.player, Amount)) or self.multiworld.startingcharacter[self.player] == "Temenos".
+        
+    def montwise_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player, Amount) and state.has(ItemName.ThroneCh3Father, self.player, Amount)) or (state.has(ItemName.HikariUnlock, self.player, Amount) and state.has(ItemName.HikariCh4, self.player, Amount)) or (state.has(ItemName.OsvaldUnlock, self.player, Amount) and state.has(ItemName.OsvaldCh4, self.player, Amount)) or (state.has(ItemName.OsvaldUnlock, self.player, Amount) and state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.PartitioOsvaldCh2, self.player, Amount)).
+        
+    def merryhills_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player, Amount) and state.has(ItemName.AgneaCh5, self.player, Amount)).
+        
+    def newdelsta_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player, Amount) and state.has(ItemName.ThroneCh1, self.player, Amount)) or (state.has(ItemName.ThroneUnlock, self.player, Amount) and state.has(ItemName.ThroneCh4, self.player, Amount)) or (state.has(ItemName.AgneaUnlock, self.player, Amount) and state.has(ItemName.AgneaCh2, self.player, Amount)) or (state.has(ItemName.OsvaldUnlock, self.player, Amount) and state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.PartitioOsvaldCh1, self.player, Amount)) or self.multiworld.startingcharacter[self.player] == "Throne".
+  
+    def abandonnedvillage_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player, Amount) and state.has(ItemName.CasttiCh3, self.player, Amount)).
+              
+    def clockbank_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.PartitioCh2, self.player, Amount)).
+        
+    def lostseed_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player, Amount) and state.has(ItemName.ThroneCh4, self.player, Amount)).
+        
+    def beasting_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OchetteUnlock, self.player, Amount) and state.has(ItemName.OchetteCh1, self.player, Amount)) or (state.has(ItemName.OchetteUnlock, self.player, Amount) and state.has(ItemName.OchetteCh3, self.player, Amount)) or self.multiworld.startingcharacter[self.player] == "Ochette".
+        
+    def tropuhopu_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player, Amount) and state.has(ItemName.AgneaCh3, self.player, Amount)) or (state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.PartitioShip, self.player, Amount)).
+        
+    def nameless_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player, Amount) and state.has(ItemName.TemenosCh4, self.player, Amount)).
+        
+    def canalbrine_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player, Amount) and state.has(ItemName.CasttiCh1, self.player, Amount)) or (state.has(ItemName.TemenosUnlock, self.player, Amount) and state.has(ItemName.TemenosCh2, self.player, Amount)) or self.multiworld.startingcharacter[self.player] == "Castti".
+        
+    def conningcreek_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OchetteUnlock, self.player, Amount) and state.has(ItemName.OchetteCh2Acta, self.player, Amount)) or (state.has(ItemName.OsvaldUnlock, self.player, Amount) and state.has(ItemName.OsvaldCh3, self.player, Amount)) or (state.has(ItemName.ThroneUnlock, self.player, Amount) and state.has(ItemName.TemenosUnlock, self.player, Amount) and state.has(ItemName.TemenosThroneCh2, self.player, Amount)).
+        
+    def roqueisland_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.PartitioCh4, self.player, Amount)).
+        
+    def Ryu_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player, Amount) and state.has(ItemName.HikariCh1, self.player, Amount)) or (state.has(ItemName.HikariUnlock, self.player, Amount) and state.has(ItemName.AgneaUnlock, self.player, Amount) and state.has(ItemName.HikariAgneaCh1, self.player, Amount)) or self.multiworld.startingcharacter[self.player] == "Hikari".
+        
+    def sai_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player, Amount) and state.has(ItemName.CasttiCh2Sai, self.player, Amount)) or (state.has(ItemName.AgneaUnlock, self.player, Amount) and state.has(ItemName.AgneaCh4, self.player, Amount)) or (state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.PartitioArchives, self.player, Amount)).
+        
+    def ku_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player, Amount) and state.has(ItemName.HikariCh5, self.player, Amount)) or (state.has(ItemName.HikariUnlock, self.player, Amount) and state.has(ItemName.AgneaUnlock, self.player, Amount) and state.has(ItemName.HikariAgneaCh2, self.player, Amount)).
+        
+    def cropdale_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player, Amount) and state.has(ItemName.AgneaCh1, self.player, Amount)) or (state.has(ItemName.CasttiUnlock, self.player, Amount) and state.has(ItemName.OchetteUnlock, self.player, Amount) and (state.has(ItemName.CasttiOchetteCh1, self.player, Amount) or state.has(ItemName.CasttiOchetteCh2, self.player, Amount) ) ) or self.multiworld.startingcharacter[self.player] == "Agnea".
+        
+    def wellgrove_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player, Amount) and state.has(ItemName.ThroneCh3Mother, self.player, Amount)) or (state.has(ItemName.HikariUnlock, self.player, Amount) and state.has(ItemName.HikariCh3, self.player, Amount)) or (state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.PartitioCh3, self.player, Amount)).
+        
+    def timberain_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player, Amount) and state.has(ItemName.CasttiCh4, self.player, Amount)).
+        
+    def oresrush_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.PartitioCh1, self.player, Amount)) or (state.has(ItemName.ThroneUnlock, self.player, Amount) and state.has(ItemName.ThroneCh2Mother, self.player, Amount)) or self.multiworld.startingcharacter[self.player] == "Partitio".
+        
+    def crackridge_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player, Amount) and state.has(ItemName.TemenosCh3Crackridge, self.player, Amount)) or (state.has(ItemName.OchetteUnlock, self.player, Amount) and state.has(ItemName.OchetteCh2Tera, self.player, Amount)).
+        
+    def gravell_unlock(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player, Amount) and state.has(ItemName.OsvaldCh5, self.player, Amount)).
 
 
 # Towns Accesses, unfinished
@@ -181,15 +253,260 @@ class Octopath2Rules:
     def can_access_capecold(self, state: CollectionState, Amount) -> bool:
         return self.capecold_unlock(state, 1) and self.can_access_winterlands1(state, 1).
         
+    def can_access_winterbloom(self, state: CollectionState, Amount) -> bool:
+        return self.winterbloom_unlock(state, 1) and self.can_access_winterlands1(state, 1).
+        
+    def can_access_stormhail(self, state: CollectionState, Amount) -> bool:
+        return self.stormhail_unlock(state, 1) and self.can_access_winterlands2(state, 1).
+        
+    def can_access_flamechurch(self, state: CollectionState, Amount) -> bool:
+        return self.flamechurch_unlock(state, 1) and self.can_access_crestlands(state, 1).
+        
+    def can_access_montwise(self, state: CollectionState, Amount) -> bool:
+        return self.montwise_unlock(state, 1) and self.can_access_crestlands(state, 1).
+        
+    def can_access_merryhills(self, state: CollectionState, Amount) -> bool:
+        return self.merryhills_unlock(state, 1) and self.can_access_crestlands(state, 1).
+        
+    def can_access_newdelsta(self, state: CollectionState, Amount) -> bool:
+        return self.newdelsta_unlock(state, 1) and self.can_access_brightlands(state, 1).
+        
+    def can_access_clockbank(self, state: CollectionState, Amount) -> bool:
+        return self.clockbank_unlock(state, 1) and self.can_access_brightlands(state, 1).
+        
+    def can_access_abandonnedvillage(self, state: CollectionState, Amount) -> bool:
+        return self.abandonnedvillage_unlock(state, 1) and self.can_access_brightlands(state, 1).    
+        
+    def can_access_lostseed(self, state: CollectionState, Amount) -> bool:
+        return self.lostseed_unlock(state, 1) and self.can_access_brightlands(state, 1).
+        
+    def can_access_beasting(self, state: CollectionState, Amount) -> bool:
+        return self.beasting_unlock(state, 1) and self.can_access_totohaha(state, 1).
+        
+    def can_access_tropuhopu(self, state: CollectionState, Amount) -> bool:
+        return self.tropuhopu_unlock(state, 1) and self.can_access_totohaha(state, 1).
+        
+    def can_access_nameless(self, state: CollectionState, Amount) -> bool:
+        return self.nameless_unlock(state, 1) and self.can_access_totohaha(state, 1).
+        
+    def can_access_canalbrine(self, state: CollectionState, Amount) -> bool:
+        return self.canalbrine_unlock(state, 1) and self.can_access_harborlands(state, 1).
+        
+    def can_access_conningcreek(self, state: CollectionState, Amount) -> bool:
+        return self.conningcreek_unlock(state, 1) and self.can_access_harborlands(state, 1).
+        
+    def can_access_roqueisland(self, state: CollectionState, Amount) -> bool:
+        return self.roqueisland_unlock(state, 1) and self.can_access_sea(state, 1).
+        
+    def can_access_ryu(self, state: CollectionState, Amount) -> bool:
+        return self.ryu_unlock(state, 1) and self.can_access_hinoeuma1(state, 1).
+        
+    def can_access_sai(self, state: CollectionState, Amount) -> bool:
+        return self.sai_unlock(state, 1) and self.can_access_hinoeuma2(state, 1).
+        
+    def can_access_ku(self, state: CollectionState, Amount) -> bool:
+        return self.ku_unlock(state, 1) and self.can_access_hinoeuma2(state, 1).
+        
+    def can_access_cropdale(self, state: CollectionState, Amount) -> bool:
+        return self.cropdale_unlock(state, 1) and self.can_access_leaflands(state, 1).
+        
+    def can_access_wellgrove(self, state: CollectionState, Amount) -> bool:
+        return self.wellgrove_unlock(state, 1) and self.can_access_leaflands(state, 1).
+        
+    def can_access_timberain(self, state: CollectionState, Amount) -> bool:
+        return self.timberain_unlock(state, 1) and self.can_access_leaflands(state, 1).
+        
+    def can_access_oresrush(self, state: CollectionState, Amount) -> bool:
+        return self.oresrush_unlock(state, 1) and self.can_access_wildlands1(state, 1).
+        
+    def can_access_crackridge(self, state: CollectionState, Amount) -> bool:
+        return self.crackridge_unlock(state, 1) and self.can_access_wildlands2(state, 1).
+        
+    def can_access_gravell(self, state: CollectionState, Amount) -> bool:
+        return self.gravell_unlock(state, 1) and self.can_access_wildlands2(state, 1).        
+        
 # Can Clear Story chapters, unfinished
 
     def can_clear_osvaldch1(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.OsvaldUnlock, self.player, Amount) and state.has(ItemName.OsvaldCh1, self.player, Amount) and self.can_access_capecold(state, 1) and self.can_mug(state, 1) and self.can_scrutinize(state, 1)).
+        
+    def can_clear_osvaldch3(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player, Amount) and state.has(ItemName.OsvaldCh3, self.player, Amount) and self.can_access_conningcreek(state, 1) and self.can_scrutinize(state, 1)).
+        
+    def can_clear_osvaldch4(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player, Amount) and state.has(ItemName.OsvaldCh4, self.player, Amount) and self.can_access_montwise(state, 1)  and self.can_scrutinize(state, 1)).
+        
+    def can_clear_osvaldch5(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player, Amount) and state.has(ItemName.OsvaldCh5, self.player, Amount) and self.can_access_gravell(state, 1) and self.can_mug(state, 1) and self.can_scrutinize(state, 1)).
+        
+    def can_clear_temenosch1(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player, Amount) and state.has(ItemName.TemenosCh1, self.player, Amount) and self.can_access_flamechurch(state, 1) and self.can_guide(state, 1) and self.can_coerce(state, 1)).
+        
+    def can_clear_temenosch2(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player, Amount) and state.has(ItemName.TemenosCh2, self.player, Amount) and self.can_access_canalbrine(state, 1) and self.can_guide(state, 1) and self.can_coerce(state, 1)).
+        
+    def can_clear_temenosch3crackridge(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player, Amount) and state.has(ItemName.TemenosCh3Crackridge, self.player, Amount) and self.can_access_crackridge(state, 1) and self.can_guide(state, 1) and self.can_coerce(state, 1)).
+        
+    def can_clear_temenosch3stormhail(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player, Amount) and state.has(ItemName.TemenosCh3Stormhail, self.player, Amount) and self.can_access_stormhail(state, 1) and self.can_guide(state, 1) and self.can_coerce(state, 1)).
+        
+    def can_clear_temenosch4(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player, Amount) and state.has(ItemName.TemenosCh4, self.player, Amount) and self.can_access_nameless(state, 1) and self.can_guide(state, 1).      
+        
+    def can_clear_thronech1(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player, Amount) and state.has(ItemName.ThroneCh1, self.player, Amount) and self.can_access_newdelsta(state, 1) and self.can_steal(state, 1) and self.can_ambush(state, 1)).
+        
+    def can_clear_thronech2mother(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player, Amount) and state.has(ItemName.ThroneCh2Mother, self.player, Amount) and self.can_access_oresrush(state, 1) and self.can_steal(state, 1) and self.can_ambush(state, 1)).
+        
+    def can_clear_thronech2father(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player, Amount) and state.has(ItemName.ThroneCh2Father, self.player, Amount) and self.can_access_winterbloom(state, 1) and self.can_ambush(state, 1).
+        
+    def can_clear_thronech3mother(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player, Amount) and state.has(ItemName.ThroneCh3Mother, self.player, Amount) and self.can_access_wellgrove(state, 1) and self.can_steal(state, 1) and self.can_ambush(state, 1)).
+   
+    def can_clear_thronech3father(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player, Amount) and state.has(ItemName.ThroneCh3Father, self.player, Amount) and self.can_access_montwise(state, 1).
+        
+    def can_clear_thronech4(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player, Amount) and state.has(ItemName.ThroneCh4, self.player, Amount) and self.can_access_newdelsta(state, 1).
+        
+    def can_clear_ochettech1(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OchetteUnlock, self.player, Amount) and state.has(ItemName.OchetteCh1, self.player, Amount) and self.can_access_beasting(state, 1) and self.can_provoke(state, 1) and self.can_befriend(state, 1)).
+        
+    def can_clear_ochettech2acta(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OchetteUnlock, self.player, Amount) and state.has(ItemName.OchetteCh2Acta, self.player, Amount) and self.can_access_conningcreek(state, 1) and self.can_provoke(state, 1).
+        
+    def can_clear_ochettech2tera(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OchetteUnlock, self.player, Amount) and state.has(ItemName.OchetteCh2Tera, self.player, Amount) and self.can_access_crackridge(state, 1) and self.can_befriend(state, 1).
+        
+    def can_clear_ochettech2glacis(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OchetteUnlock, self.player, Amount) and state.has(ItemName.OchetteCh2Glacis, self.player, Amount) and self.can_access_stormhail(state, 1) and self.can_provoke(state, 1).
+   
+    def can_clear_ochettech3(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OchetteUnlock, self.player, Amount) and state.has(ItemName.OchetteCh3, self.player, Amount) and self.can_access_beasting(state, 1) and self.can_befriend(state, 1)).
+         
+    def can_clear_casttich1(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player, Amount) and state.has(ItemName.CasttiCh1, self.player, Amount) and self.can_access_canalbrine(state, 1) and self.can_inquire(state, 1) and self.can_soothe(state, 1)).
+        
+    def can_clear_casttich2sai(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player, Amount) and state.has(ItemName.CasttiCh2sai, self.player, Amount) and self.can_access_sai(state, 1) and self.can_inquire(state, 1) and self.can_soothe(state, 1)).
+        
+    def can_clear_casttich2winterbloom(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player, Amount) and state.has(ItemName.CasttiCh2winterbloom, self.player, Amount) and self.can_access_winterbloom(state, 1) and self.can_inquire(state, 1) and self.can_soothe(state, 1)).
+        
+    def can_clear_casttich3(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player, Amount) and state.has(ItemName.CasttiCh3, self.player, Amount) and self.can_access_abandonnedvillage(state, 1) and self.can_steal(state, 1) and self.can_inquire(state, 1)).
+   
+    def can_clear_casttich4(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player, Amount) and state.has(ItemName.CasttiCh4, self.player, Amount) and self.can_access_timberain(state, 1) and self.can_inquire(state, 1) and self.can_soothe(state, 1)).
+        
+    def can_clear_hikarich1(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player, Amount) and state.has(ItemName.HikariCh1, self.player, Amount) and self.can_access_ryu(state, 1) and self.can_bribe(state, 1) and self.can_challenge(state, 1)).
+        
+    def can_clear_hikarich2(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player, Amount) and state.has(ItemName.HikariCh2, self.player, Amount) and self.can_access_montwise(state, 1) and self.can_bribe(state, 1) and self.can_challenge(state, 1)).
+        
+    def can_clear_hikarich3(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player, Amount) and state.has(ItemName.HikariCh3, self.player, Amount) and self.can_access_wellgrove(state, 1) and self.can_bribe(state, 1) and self.can_challenge(state, 1)).
+        
+    def can_clear_hikarich4(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player, Amount) and state.has(ItemName.HikariCh4, self.player, Amount) and self.can_access_stormhail(state, 1) and self.can_bribe(state, 1).
+   
+    def can_clear_hikarich5(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player, Amount) and state.has(ItemName.HikariCh5, self.player, Amount) and self.can_access_ku(state, 1).
+        
+    def can_clear_partitioch1(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.PartitioCh1, self.player, Amount) and self.can_access_oresrush(state, 1) and self.can_buy(state, 1) and self.can_hire(state, 1)).
+        
+    def can_clear_partitioch2(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.PartitioCh2, self.player, Amount) and self.can_access_clockbank(state, 1) and self.can_buy(state, 1) and self.can_hire(state, 1)).
+        
+    def can_clear_partitioch3(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.PartitioCh3, self.player, Amount) and self.can_access_wellgrove(state, 1) and self.can_buy(state, 1) and self.can_hire(state, 1)) and (self.can_clear_partitiogrammophone(state, 1) or self.can_clear_partitioship(state, 1) or self.can_clear_partitioarchives(state, 1)).
+        
+    def can_clear_partitioch4(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.PartitioCh4, self.player, Amount) and self.can_access_roqueisland(state, 1) and self.can_buy(state, 1).
+   
+    def can_clear_partitiogrammophone(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.PartitioGrammophone, self.player, Amount) and self.can_access_winterbloom(state, 1) and self.can_access_canalbrine(state, 1) and self.can_access_crackridge(state, 1) and self.can_access_flamechurch(state, 1) and self.can_hire(state, 1).
+
+    def can_clear_partitioship(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.PartitioShip, self.player, Amount) and self.can_access_tropuhopu(state, 1) and self.can_buy(state, 1).
+   
+   # I don't remember the complete Archives quest.
+    def can_clear_partitioarchives(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.PartitioArchives, self.player, Amount) and self.can_access_sai(state, 1).
+        
+    def can_clear_agneach1(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player, Amount) and state.has(ItemName.AgneaCh1, self.player, Amount) and self.can_access_cropdale(state, 1) and self.can_allure(state, 1) and self.can_entreat(state, 1)).
+        
+    def can_clear_agneach2(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player, Amount) and state.has(ItemName.AgneaCh2, self.player, Amount) and self.can_access_newdelsta(state, 1) and self.can_allure(state, 1).
+        
+    def can_clear_agneach3(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player, Amount) and state.has(ItemName.AgneaCh3, self.player, Amount) and self.can_access_tropuhopu(state, 1) and self.can_allure(state, 1) and self.can_entreat(state, 1)).
+        
+    def can_clear_agneach4(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player, Amount) and state.has(ItemName.AgneaCh4, self.player, Amount) and self.can_access_sai(state, 1) and self.can_allure(state, 1) and self.can_entreat(state, 1)).
+   
+    def can_clear_agneach5(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player, Amount) and state.has(ItemName.AgneaCh5, self.player, Amount) and self.can_access_merryhills(state, 1) and self.can_allure(state, 1).      
+        
 
 # Can Clear Full stories, unfinished
 
     def can_clear_osvaldstory(self, state: CollectionState, Amount) -> bool:
         return self.can_clear_osvaldch1(state, 1) and self.can_clear_osvaldch3(state, 1) and self.can_clear_osvaldch4(state, 1) and self.can_clear_osvaldch5(state, 1).
+        
+    def can_clear_temenosstory(self, state: CollectionState, Amount) -> bool:
+        return self.can_clear_temenosch1(state, 1) and self.can_clear_temenosch2(state, 1) and self.can_clear_temenosch3crackridge(state, 1) and self.can_clear_temenosch3stormhail(state, 1) and self.can_clear_temenosch4(state, 1).     
+
+    def can_clear_thronestory(self, state: CollectionState, Amount) -> bool:
+        return self.can_clear_thronech1(state, 1) and self.can_clear_thronech2mother(state, 1) and self.can_clear_thronech2father(state, 1) and self.can_clear_thronech3mother(state, 1) and self.can_clear_thronech3father(state, 1) and self.can_clear_thronech4(state, 1).
+        
+    def can_clear_ochettestory(self, state: CollectionState, Amount) -> bool:
+        return self.can_clear_ochettech1(state, 1) and self.can_clear_ochettech2acta(state, 1) and self.can_clear_ochettech2tera(state, 1) and self.can_clear_ochettech2glacis(state, 1) and self.can_clear_ochettech3(state, 1).
+        
+    def can_clear_casttistory(self, state: CollectionState, Amount) -> bool:
+        return self.can_clear_casttich1(state, 1) and self.can_clear_casttich2sai(state, 1) and self.can_clear_casttich2winterbloom(state, 1) and self.can_clear_casttich3(state, 1)  and self.can_clear_casttich4(state, 1).
+        
+    def can_clear_hikaristory(self, state: CollectionState, Amount) -> bool:
+        return self.can_clear_hikarich1(state, 1) and self.can_clear_hikarich2(state, 1) and self.can_clear_hikarich3(state, 1) and self.can_clear_hikarich4(state, 1) and self.can_clear_hikarich5(state, 1).
+        
+    def can_clear_partitiostory(self, state: CollectionState, Amount) -> bool:
+        return self.can_clear_partitioch1(state, 1) and self.can_clear_partitioch2(state, 1) and self.can_clear_partitioch3(state, 1) and self.can_clear_partitioch4(state, 1).
+        
+    def can_clear_agneastory(self, state: CollectionState, Amount) -> bool:
+        return self.can_clear_agneach1(state, 1) and self.can_clear_agneach2(state, 1) and self.can_clear_agneach3(state, 1) and self.can_clear_agneach4(state, 1) and self.can_clear_agneach5(state, 1).
+        
+        
+# Can Clear Dual-Stories
+    def can_clear_temenosthronech1(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player, Amount) and state.has(ItemName.ThroneUnlock, self.player, Amount) and state.has(ItemName.TemenosThroneCh1, self.player, Amount) and self.can_access_flamechurch(state, 1) and self.can_coerce(state, 1) and self.can_guide(state, 1). 
+        
+    def can_clear_temenosthronech2(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player, Amount) and state.has(ItemName.ThroneUnlock, self.player, Amount) and state.has(ItemName.TemenosThroneCh2, self.player, Amount) and self.can_access_conningcreek(state, 1)  and self.can_access_harborlands(state, 1) and self.can_ambush(state, 1) and self.can_steal(state, 1). 
+        
+    def can_clear_hikariagneach1(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player, Amount) and state.has(ItemName.AgneaUnlock, self.player, Amount) and state.has(ItemName.HikariAgneaCh1, self.player, Amount) and self.can_access_ryu(state, 1) and self.can_bribe(state, 1) and self.can_challenge(state, 1) and self.can_entreat(state, 1). 
+        
+    def can_clear_hikariagneach2(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player, Amount) and state.has(ItemName.AgneaUnlock, self.player, Amount) and state.has(ItemName.HikariAgneaCh2, self.player, Amount) and self.can_access_ku(state, 1)  and self.can_access_hinoeuma2(state, 1) and self.can_bribe(state, 1) and self.can_challenge(state, 1) and self.can_entreat(state, 1). 
+
+# Unsure on the skills required for both castti-ochette dual quests, so I put all of them.
+    def can_clear_casttiochettech1(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player, Amount) and state.has(ItemName.OchetteUnlock, self.player, Amount) and state.has(ItemName.CasttiOchetteCh1, self.player, Amount) and self.can_access_cropdale(state, 1) and self.can_inquire(state, 1) and self.can_soothe(state, 1) and self.can_provoke(state, 1) and self.can_befriend(state, 1). 
+        
+    def can_clear_casttiochettech2(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player, Amount) and state.has(ItemName.OchetteUnlock, self.player, Amount) and state.has(ItemName.CasttiOchetteCh2, self.player, Amount) and self.can_access_cropdale(state, 1) and self.can_inquire(state, 1) and self.can_soothe(state, 1) and self.can_provoke(state, 1) and self.can_befriend(state, 1).
+        
+    def can_clear_osvaldpartitioch1(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player, Amount) and state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.OsvaldPartitioCh1, self.player, Amount) and self.can_access_newdelsta(state, 1) and (self.can_buy(state, 1) or self.can_mug(state, 1)) and self.can_scrutinize(state, 1). 
+        
+    def can_clear_osvaldpartitioch2(self, state: CollectionState, Amount) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player, Amount) and state.has(ItemName.PartitioUnlock, self.player, Amount) and state.has(ItemName.OsvaldPartitioCh2, self.player, Amount) and self.can_access_montwise(state, 1) and self.can_mug(state, 1) and self.can_scrutinize(state, 1).         
 
 # Old KH2 logic down there
     def oc_unlocked(self, state: CollectionState, Amount) -> bool:
