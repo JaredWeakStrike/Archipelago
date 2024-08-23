@@ -13,6 +13,7 @@ class ItemData(typing.NamedTuple):
 
 
 Consumables = {
+    # Healing Items (HP/SP/BP/LP)
     ItemName.HealingGrape:                          ItemData(),
     ItemName.HealingGrapeM:                         ItemData(),
     ItemName.HealingGrapeBunch:                     ItemData(),
@@ -36,6 +37,8 @@ Consumables = {
     ItemName.OliveofLifeM:                          ItemData(),
     ItemName.OliveofLifeL:                          ItemData(),
     ItemName.AlmightyOlive:                         ItemData(),
+
+    # Status healing items
     ItemName.HerbofHealing:                         ItemData(),
     ItemName.HerbofClamor:                          ItemData(),
     ItemName.HerbofLight:                           ItemData(),
@@ -44,11 +47,15 @@ Consumables = {
     ItemName.HerbofValor:                           ItemData(),
     ItemName.HerbofRevival:                         ItemData(),
     ItemName.HerbElixir:                            ItemData(),
+
+    # Debuff items
     ItemName.BottleofPoisonDust:                    ItemData(),
     ItemName.BottleofBlindingDust:                  ItemData(),
     ItemName.BottleofBefuddlingDust:                ItemData(),
     ItemName.BottleofSleepingDust:                  ItemData(),
     ItemName.BottledNightmares:                     ItemData(),
+
+    # Soulstones and other damage items
     ItemName.FireSoulstone:                         ItemData(),
     ItemName.FireSoulstoneM:                        ItemData(),
     ItemName.FireSoulstoneL:                        ItemData(),
@@ -68,6 +75,8 @@ Consumables = {
     ItemName.ShadowSoulstoneM:                      ItemData(),
     ItemName.ShadowSoulstoneL:                      ItemData(),
     ItemName.AlmightySoulstone:                     ItemData(),
+
+    # Misc buff/damage/debuff items
     ItemName.AncientSentinelCore:                   ItemData(),
     ItemName.PrimevalHornElixir:                    ItemData(),
     ItemName.RuinousRelic:                          ItemData(),
@@ -76,6 +85,86 @@ Consumables = {
     ItemName.HerbofGraceBud:                        ItemData(),
     ItemName.WrigglingRoot:                         ItemData(),
     ItemName.GrailofLife:                           ItemData(),
+    ItemName.Candy:                                 ItemData(),
+    ItemName.AzukiPorridge:                         ItemData(),
+    ItemName.TreeNut:                               ItemData(),
+    ItemName.ForbiddenElixir:                       ItemData(),
+    ItemName.RedApple:                              ItemData(),
+    ItemName.STuFfeDToY:                            ItemData(),  # Not sure why this goes here. Gotta check later.
+    ItemName.HandmadeRiceBall:                      ItemData(),
+    ItemName.Raspberry:                             ItemData(),
+    ItemName.WheatBread:                            ItemData(),
+    ItemName.BewitchingPerfume:                     ItemData(),
+    ItemName.HomemadeCake:                          ItemData(),
+    ItemName.ExoticRemedy:                          ItemData(),
+    ItemName.BottledToxins:                         ItemData(),
+    ItemName.NoxiousNeedle:                         ItemData(),
+}
+
+Sellables = {
+    # All items that are meant to be sold, ordered by sell price.
+    ItemName.StylishNut:                            ItemData(),  # What is this? Never seen one.
+    ItemName.Stone:                                 ItemData(),
+    ItemName.OldCloth:                              ItemData(),
+    ItemName.SilverCoin:                            ItemData(),
+    ItemName.EmptyCoinPouch:                        ItemData(),
+    ItemName.GlassMarble:                           ItemData(),
+    ItemName.Handkerchief:                          ItemData(),
+    ItemName.RichAle:                               ItemData(),
+    ItemName.ChippedDish:                           ItemData(),
+    ItemName.Cog:                                   ItemData(),
+    ItemName.InventorsHandbookVolumeI:              ItemData(),
+    ItemName.OldLocket:                             ItemData(),
+    ItemName.ScrapIron:                             ItemData(),
+    ItemName.ScorchedHorseshoe:                     ItemData(),
+    ItemName.StuffedToy:                            ItemData(),
+    ItemName.Hairbrush:                             ItemData(),
+    ItemName.LightCoinPouch:                        ItemData(),
+    ItemName.RareStone:                             ItemData(),
+    ItemName.SilkHandkerchief:                      ItemData(),
+    ItemName.AgedWine:                              ItemData(),
+    ItemName.LousyRock:                             ItemData(),  # what is this?
+    ItemName.CrimsonRose:                           ItemData(),
+    ItemName.ComplexTome:                           ItemData(),
+    ItemName.IntroductiontoTrade:                   ItemData(),
+    ItemName.Dumbbell:                              ItemData(),
+    ItemName.HandmadeBouquet:                       ItemData(),
+    ItemName.SmallSilverOre:                        ItemData(),
+    ItemName.ThickTome:                             ItemData(),
+    ItemName.AntiqueCoin:                           ItemData(),
+    ItemName.AntiqueCoin_11088:                     ItemData(),  # how is this different from AntiqueCoin?
+    ItemName.LumpofSilver:                          ItemData(),
+    ItemName.HeavyBook:                             ItemData(),
+    ItemName.HeavyCoinPouch:                        ItemData(),
+    ItemName.GoldRing:                              ItemData(),
+    ItemName.ThickMagicTome:                        ItemData(),
+    ItemName.SilverFilledPouch:                     ItemData(),
+    ItemName.CouplesPendant:                        ItemData(),
+    ItemName.SilverIngot:                           ItemData(),
+    ItemName.VividJewel:                            ItemData(),
+    ItemName.SilverRimmedMonocle:                   ItemData(),
+    ItemName.RareCog:                               ItemData(),
+    ItemName.Skystone:                              ItemData(),
+    ItemName.GoldDust:                              ItemData(),
+    ItemName.LargeSilverOre:                        ItemData(),
+    ItemName.CuriousAntique:                        ItemData(),
+    ItemName.GoldPocketWatch:                       ItemData(),
+    ItemName.PurseofHope:                           ItemData(),
+    ItemName.DazzlingArtwork:                       ItemData(),
+    ItemName.GoldNugget:                            ItemData(),
+    ItemName.PoetryoftheSoul:                       ItemData(),
+    ItemName.SunkenGoldStatue:                      ItemData(),
+    ItemName.AlrondsPromissoryNote:                 ItemData()
+}
+
+Soothe_Herbs = {
+    # Separated Soothe Herbs from other items, as their only use is for Castti's Soothe Path Action.
+    ItemName.SlumberSage:                           ItemData(),
+    ItemName.HerbofSerenity:                        ItemData()
+}
+
+Nuts = {
+    # Separated Nuts from other consumables as they can't be used in battle.
     ItemName.NourishingNut:                         ItemData(),
     ItemName.NourishingNutM:                        ItemData(),
     ItemName.NourishingNutL:                        ItemData(),
@@ -105,83 +194,11 @@ Consumables = {
     ItemName.CriticalNutL:                          ItemData(),
     ItemName.LightNut:                              ItemData(),
     ItemName.LightNutM:                             ItemData(),
-    ItemName.LightNutL:                             ItemData(),
-    ItemName.ScorchedHorseshoe:                     ItemData(),
-    ItemName.StuffedToy:                            ItemData(),
-    ItemName.Candy:                                 ItemData(),
-    ItemName.GlassMarble:                           ItemData(),
-    ItemName.Handkerchief:                          ItemData(),
-    ItemName.AzukiPorridge:                         ItemData(),
-    ItemName.ThickTome:                             ItemData(),
-    ItemName.CouplesPendant:                        ItemData(),
-    ItemName.TreeNut:                               ItemData(),
-    ItemName.Hairbrush:                             ItemData(),
-    ItemName.LightCoinPouch:                        ItemData(),
-    ItemName.ForbiddenElixir:                       ItemData(),
-    ItemName.ChippedDish:                           ItemData(),
-    ItemName.CrimsonRose:                           ItemData(),
-    ItemName.Bone:                                  ItemData(),
-    ItemName.SilkHandkerchief:                      ItemData(),
-    ItemName.PoetryoftheSoul:                       ItemData(),
-    ItemName.RichAle:                               ItemData(),
-    ItemName.RedApple:                              ItemData(),
+    ItemName.LightNutL:                             ItemData()
 }
-  
-Sellables = {
-    ItemName.ComplexTome:                           ItemData(),
-    ItemName.ScrapIron:                             ItemData(),
-    ItemName.Cog:                                   ItemData(),
-    ItemName.HeavyBook:                             ItemData(),
-    ItemName.RareCog:                               ItemData(),
-    ItemName.Stone:                                 ItemData(),
-    ItemName.STuFfeDToY:                            ItemData(),
-    ItemName.SmallSilverOre:                        ItemData(),
-    ItemName.LargeSilverOre:                        ItemData(),
-    ItemName.Skystone:                              ItemData(),
-    ItemName.AgedWine:                              ItemData(),
-    ItemName.IntroductiontoTrade:                   ItemData(),
-    ItemName.GoldNugget:                            ItemData(),
-    ItemName.HandmadeRiceBall:                      ItemData(),
-    ItemName.AlrondsPromissoryNote:                 ItemData(),
-    ItemName.Dumbbell:                              ItemData(),
-    ItemName.ThickMagicTome:                        ItemData(),
-    ItemName.SunkenGoldStatue:                      ItemData(),
-    ItemName.LumpofSilver:                          ItemData(),
-    ItemName.SilverIngot:                           ItemData(),
-    ItemName.PurseofHope:                           ItemData(),
-    ItemName.AntiqueCoin:                           ItemData(),
-    ItemName.OldCloth:                              ItemData(),
-    ItemName.Raspberry:                             ItemData(),
-    ItemName.RareStone:                             ItemData(),
-    ItemName.VividJewel:                            ItemData(),
-    ItemName.HeavyCoinPouch:                        ItemData(),
-    ItemName.SilverFilledPouch:                     ItemData(),
-    ItemName.AntiqueCoin_11088:                     ItemData(),
-    ItemName.SilverRimmedMonocle:                   ItemData(),
-    ItemName.GoldPocketWatch:                       ItemData(),
-    ItemName.GoldRing:                              ItemData(),
-    ItemName.CuriousAntique:                        ItemData(),
-    ItemName.DazzlingArtwork:                       ItemData(),
-    ItemName.SilverCoin:                            ItemData(),
-    ItemName.WheatBread:                            ItemData(),
-    ItemName.BewitchingPerfume:                     ItemData(),
-    ItemName.EmptyCoinPouch:                        ItemData(),
-    ItemName.HandmadeBouquet:                       ItemData(),
-    ItemName.OldLocket:                             ItemData(),
-    ItemName.SilverPlatedKnife:                     ItemData(),
-    ItemName.HomemadeCake:                          ItemData(),
-    ItemName.ExoticRemedy:                          ItemData(),
-    ItemName.BottledToxins:                         ItemData(),
-    ItemName.NoxiousNeedle:                         ItemData(),
-    ItemName.GoldDust:                              ItemData(),
-    ItemName.SlumberSage:                           ItemData(),
-    ItemName.HerbofSerenity:                        ItemData(),
-    ItemName.StylishNut:                            ItemData(),
-    ItemName.LousyRock:                             ItemData(),
-    ItemName.InventorsHandbookVolumeI:              ItemData(),
-}
-  
+
 Weapons = {
+    # Swords
     ItemName.ConquerorsSword:                       ItemData(),
     ItemName.SerpentSlayer:                         ItemData(),
     ItemName.BattleTestedBlade:                     ItemData(),
@@ -279,6 +296,8 @@ Weapons = {
     ItemName.DistinguishedLance:                    ItemData(),
     ItemName.HandmadeSpear:                         ItemData(),
     ItemName.MakeshiftSpear:                        ItemData(),
+
+    # Daggers
     ItemName.DancersBlade:                          ItemData(),
     ItemName.BattleTestedDagger:                    ItemData(),
     ItemName.LostTribesDagger:                      ItemData(),
@@ -320,12 +339,15 @@ Weapons = {
     ItemName.BronzeKnife:                           ItemData(),
     ItemName.Dagger:                                ItemData(),
     ItemName.SilverPlatedKnife_11127:               ItemData(),
+    ItemName.SilverPlatedKnife:                     ItemData(),
     ItemName.ThiefsDagger:                          ItemData(),
     ItemName.Snakebite:                             ItemData(),
     ItemName.FruitKnife:                            ItemData(),
     ItemName.SharpStone:                            ItemData(),
     ItemName.SharpStone_10059:                      ItemData(),
     ItemName.MakeshiftKnife:                        ItemData(),
+
+    # Axes
     ItemName.LionheartsAxe:                         ItemData(),
     ItemName.BattleTestedAxe:                       ItemData(),
     ItemName.LostTribesAxe:                         ItemData(),
@@ -371,6 +393,8 @@ Weapons = {
     ItemName.SmallAxe:                              ItemData(),
     ItemName.SnakeFang:                             ItemData(),
     ItemName.MakeshiftAxe:                          ItemData(),
+
+    # Bows
     ItemName.HuntersBow:                            ItemData(),
     ItemName.BattleTestedBow:                       ItemData(),
     ItemName.LostTribesBow:                         ItemData(),
@@ -414,6 +438,8 @@ Weapons = {
     ItemName.Bow:                                   ItemData(),
     ItemName.HandmadeBow:                           ItemData(),
     ItemName.MakeshiftBow:                          ItemData(),
+
+    # Staves
     ItemName.SpiritlordsStaff:                      ItemData(),
     ItemName.BattleTestedStaff:                     ItemData(),
     ItemName.LostTribesStaff:                       ItemData(),
@@ -460,7 +486,7 @@ Weapons = {
     ItemName.Flail:                                 ItemData(),
     ItemName.MakeshiftStaff:                        ItemData(),
 }
-  
+
 Shields = {
     ItemName.CursedShield:                          ItemData(),
     ItemName.BattleTestedShield:                    ItemData(),
@@ -555,7 +581,7 @@ Helms = {
     ItemName.LeatherHat:                            ItemData(),
     ItemName.OrdinaryHat:                           ItemData(),
 }
-  
+
 Armors = {
     ItemName.CursedArmor:                           ItemData(),
     ItemName.DragonMail:                            ItemData(),
@@ -618,7 +644,7 @@ Armors = {
     ItemName.ApothecarysAttire:                     ItemData(),
     ItemName.VillagersClothes:                      ItemData(),
 }
-  
+
 Accessories = {
     ItemName.SpurningRibbon:                        ItemData(),
     ItemName.AlluringRibbon:                        ItemData(),
@@ -721,10 +747,9 @@ Accessories = {
     ItemName.ConsciousStone:                        ItemData(),
     ItemName.VivifyingStone:                        ItemData(),
 }
-  
-Main_Quests_Items = {
-    ItemName.CloudyMirror:                          ItemData(1),
-    ItemName.ShinyMirror:                           ItemData(1),
+
+Journals = {
+    # Separated these from story items since they are optional lore content
     ItemName.TanzysJournal:                         ItemData(1),
     ItemName.OborosJournal:                         ItemData(1),
     ItemName.JournalFragmentI:                      ItemData(1),
@@ -746,6 +771,11 @@ Main_Quests_Items = {
     ItemName.JournalFragmentXVII:                   ItemData(1),
     ItemName.DancersJournal:                        ItemData(1),
     ItemName.WornJournal:                           ItemData(1),
+}
+
+Main_Story_Items = {
+    ItemName.CloudyMirror:                          ItemData(1),
+    ItemName.ShinyMirror:                           ItemData(1),
     ItemName.WineOffering:                          ItemData(1),
     ItemName.SacredWood:                            ItemData(1),
     ItemName.DancersMask:                           ItemData(1),
@@ -808,9 +838,11 @@ Main_Quests_Items = {
     ItemName.BrothelGirlsClothes:                   ItemData(1),
     ItemName.MamasDress:                            ItemData(1),
     ItemName.Tip:                                   ItemData(1),
+    ItemName.Wallet:                                ItemData(),
+    ItemName.EscapeRouteMap:                        ItemData()
 }
-  
-Job_Licenses
+
+Job_Licenses = {
     ItemName.MerchantLicense:                       ItemData(3),
     ItemName.ThiefLicense:                          ItemData(3),
     ItemName.WarriorLicense:                        ItemData(3),
@@ -824,7 +856,7 @@ Job_Licenses
     ItemName.ProofoftheConjurer:                    ItemData(1),
     ItemName.ProofoftheInventor:                    ItemData(1),
 }
-  
+
 Songs = {
     #ItemName.1.CaitsTheme–PianoVersion–: ItemData(1),
     #ItemName.2.CaitsTheme–GuitarVersion–: ItemData(1),
@@ -857,21 +889,28 @@ Songs = {
     #ItemName.29.GilontheKeys: ItemData(1),
     #ItemName.30.ScarletFolkSong–BytheLightoftheHeart–: ItemData(1),
 }
-  
-Side_Quests_Items =
+
+Job_License_Items = {
+    # Items specifically required to get bonus licenses.
     ItemName.ThievesGem:                            ItemData(),
     ItemName.MasterThiefsSapphireStone:             ItemData(),
     ItemName.HighPriestsAmulet:                     ItemData(),
     ItemName.HighPriestsBookofScripture:            ItemData(),
     ItemName.QuicksandMonstersLiver:                ItemData(),
-    ItemName.SeaMonstersWhisker:                    ItemData(),
+    ItemName.SeaMonstersWhisker:                    ItemData()
+}
+
+Rusty_Weapons = {
     ItemName.RustySword:                            ItemData(),
     ItemName.RustyPolearm:                          ItemData(),
     ItemName.RustyDagger:                           ItemData(),
     ItemName.RustyAxe:                              ItemData(),
     ItemName.RustyBow:                              ItemData(),
-    ItemName.RustyStaff:                            ItemData(),
-    ItemName.ChangeableCatapultDesign:              ItemData(),
+    ItemName.RustyStaff:                            ItemData()
+}
+
+Inventor_Items = {
+    ItemName.ChangeableCatapultDesign:              ItemData(),  # Getting Inventor skills w/o making them seems cool?
     ItemName.SpringyBootsDesign:                    ItemData(),
     ItemName.CriticalScopeDesign:                   ItemData(),
     ItemName.ElementalBombBottleDesign:             ItemData(),
@@ -884,7 +923,10 @@ Side_Quests_Items =
     ItemName.TinToy:                                ItemData(),
     ItemName.ScrapMetal:                            ItemData(),
     ItemName.AncientCog:                            ItemData(),
-    ItemName.NaturalMagnetite:                      ItemData(),
+    ItemName.NaturalMagnetite:                      ItemData()
+}
+
+Side_Story_Items = {
     ItemName.LetterfromtheSnowhares:                ItemData(),
     ItemName.Lute:                                  ItemData(),
     ItemName.PaperPlay:                             ItemData(),
@@ -917,11 +959,9 @@ Side_Quests_Items =
     ItemName.AelmoriteReflector:                    ItemData(),
     ItemName.SturdyPickaxe:                         ItemData(),
     ItemName.AlsBag:                                ItemData(),
-    ItemName.StolenSword:                           ItemData(),
-    ItemName.Wallet:                                ItemData(),
-    ItemName.EscapeRouteMap:                        ItemData(),
+    ItemName.StolenSword:                           ItemData()
 }
-  
+
 Concoct_Ingredients = {
     ItemName.GrapeLeaf:                             ItemData(),
     ItemName.PlumLeaf:                              ItemData(),
@@ -942,12 +982,12 @@ Concoct_Ingredients = {
     ItemName.DreamyFlower:                          ItemData(),
     ItemName.EnfeeblingFlower:                      ItemData(),
     ItemName.DualFlower:                            ItemData(),
-    ItemName.Weeds_10588:                           ItemData(),
+    ItemName.Weeds_10588:                           ItemData(),  # Basic Weeds option in Concoct menu?
     ItemName.DiffusingSerum:                        ItemData(),
-    ItemName.StrengtheningSerum:                    ItemData(),
+    ItemName.StrengtheningSerum:                    ItemData()
 }
-  
-Inquiries = {
+
+NPC_Info = {
     ItemName.BalesWeakness:                         ItemData(),
     ItemName.LaborReportWhereabouts:                ItemData(),
     ItemName.AnEyewitnesstoHarvey:                  ItemData(),
@@ -1440,9 +1480,9 @@ Inquiries = {
     ItemName.AHiddenItem_11460:                     ItemData(),
     ItemName.AHiddenItem_11461:                     ItemData(),
     ItemName.AHiddenItem_11462:                     ItemData(),
-    ItemName.AHiddenItem_11544:                     ItemData(),
+    ItemName.AHiddenItem_11544:                     ItemData()
 }
-  
+
 Foods = {
     ItemName.Jerky:                                 ItemData(),
     ItemName.QualityJerky:                          ItemData(),
@@ -1461,6 +1501,7 @@ Foods = {
     ItemName.CreamySauté:                           ItemData(),
     ItemName.SaltedSeafood:                         ItemData(),
     ItemName.Bone_11071:                            ItemData(),
+    ItemName.Bone:                                  ItemData(),
     ItemName.MetalMedley:                           ItemData(),
     ItemName.StoneRoastedRice:                      ItemData(),
     ItemName.Salad:                                 ItemData(),
@@ -1480,9 +1521,10 @@ Region_Unlocks = {
     ItemName.HarborlandsUnlock:                     ItemData(),
     ItemName.HinoeumaUnlock:                        ItemData(),
     ItemName.WildlandsUnlock:                       ItemData(),
-    ItemName.LeaflandsUnlock:                       ItemData(),
+    ItemName.LeaflandsUnlock:                       ItemData()
+}
 
-Characters_Unlocks = {
+Character_Unlocks = {
     ItemName.OchetteUnlock:                         ItemData(),
     ItemName.ThroneUnlock:                          ItemData(),
     ItemName.TemenosUnlock:                         ItemData(),
@@ -1490,10 +1532,10 @@ Characters_Unlocks = {
     ItemName.CasttiUnlock:                          ItemData(),
     ItemName.HikariUnlock:                          ItemData(),
     ItemName.PartitioUnlock:                        ItemData(),
-    ItemName.AgneaUnlock:                           ItemData(),
+    ItemName.AgneaUnlock:                           ItemData()
 }
 
-Quests_Unlocks = {
+Story_Chapter_Unlocks = {
     ItemName.OchetteCh1:                            ItemData(),
     ItemName.OchetteCh2Acta:                        ItemData(),
     ItemName.OchetteCh2Tera:                        ItemData(),
@@ -1518,7 +1560,7 @@ Quests_Unlocks = {
     ItemName.CasttiCh2Sai:                          ItemData(),
     ItemName.CasttiCh2Winterbloom:                  ItemData(),
     ItemName.CasttiCh3:                             ItemData(),
-    ItemName.CasttiCh4:                             ItemData(),                 
+    ItemName.CasttiCh4:                             ItemData(),
     ItemName.HikariCh1:                             ItemData(),
     ItemName.HikariCh2:                             ItemData(),
     ItemName.HikariCh3:                             ItemData(),
@@ -1528,19 +1570,18 @@ Quests_Unlocks = {
     ItemName.PartitioCh2:                           ItemData(),
     ItemName.PartitioCh3:                           ItemData(),
     ItemName.PartitioCh4:                           ItemData(),
-    ItemName.PartitioShip:                        ItemData(),
-    ItemName.PartitioGramophone:                  ItemData(),
-    ItemName.PartitioArchives:                    ItemData(),
+    ItemName.PartitioTotohaha:                      ItemData(),
+    ItemName.PartitioWinterbloom:                   ItemData(),
+    ItemName.PartitioSai:                           ItemData(),
     ItemName.AgneaCh1:                              ItemData(),
     ItemName.AgneaCh2:                              ItemData(),
     ItemName.AgneaCh3:                              ItemData(),
     ItemName.AgneaCh4:                              ItemData(),
-    ItemName.AgneaCh5:                              ItemData(),
+    ItemName.AgneaCh5:                              ItemData()
 }
 
-#Do those need a section really? Dunno where to put them
+# Do those need a section really? Dunno where to put them
 Others = {
-    ItemName.Ship:                                  ItemData(),
-    ItemName.Boat:                                  ItemData(),
-    ItemName.TimeChange:                              ItemData(),
+    ItemName.Boat:                                  ItemData(),  # Does this refer to Ferries?
+    ItemName.TimeChange:                            ItemData()
 }
