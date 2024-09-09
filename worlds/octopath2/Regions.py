@@ -5,18 +5,6 @@ from BaseClasses import MultiWorld, Region
 from .Locations import KH2Location, event_location_to_item
 from . import LocationName, RegionName, Events_Table
 
-# Regions done
-
-# Winterlands       Done
-# Crestlands        Done
-# Brightlands       Done
-# Totohaha          Done
-# Harborlands       Done
-# Hinoeuma          Done
-# Leaflands         Done
-# Wildlands         Not done
-# Sea               Not done
-
 OT2REGIONS: typing.Dict[str, typing.List[str]] = {
     "Menu":
     # Winterlands        
@@ -257,7 +245,7 @@ OT2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.SunkenMawQuartzRod,
         LocationName.SunkenMaw13500L
     ],
-    RegionName.AbandonnedVillage:                [
+    RegionName.AbandonedVillage:                [
         LocationName.MountLiphiaDiffusingSerum,
         LocationName.MountLiphiaOliveofLifeL,
         LocationName.MountLiphiaEnergizingPomegranate,
@@ -871,6 +859,11 @@ OT2REGIONS: typing.Dict[str, typing.List[str]] = {
     ],
 }
 
+
+
+
+
+
 # Old KH2 code
 
 
@@ -882,94 +875,7 @@ def create_regions(self):
     player = self.player
     active_locations = self.location_name_to_id
 
-    for level_region_name in level_region_list:
-        KH2REGIONS[level_region_name] = []
-    if multiworld.LevelDepth[player] == "level_50":
-        KH2REGIONS[RegionName.LevelsVS1] = [LocationName.Lvl2, LocationName.Lvl4, LocationName.Lvl7, LocationName.Lvl9,
-                                            LocationName.Lvl10]
-        KH2REGIONS[RegionName.LevelsVS3] = [LocationName.Lvl12, LocationName.Lvl14, LocationName.Lvl15,
-                                            LocationName.Lvl17,
-                                            LocationName.Lvl20]
-        KH2REGIONS[RegionName.LevelsVS6] = [LocationName.Lvl23, LocationName.Lvl25, LocationName.Lvl28,
-                                            LocationName.Lvl30]
-        KH2REGIONS[RegionName.LevelsVS9] = [LocationName.Lvl32, LocationName.Lvl34, LocationName.Lvl36,
-                                            LocationName.Lvl39, LocationName.Lvl41]
-        KH2REGIONS[RegionName.LevelsVS12] = [LocationName.Lvl44, LocationName.Lvl46, LocationName.Lvl48]
-        KH2REGIONS[RegionName.LevelsVS15] = [LocationName.Lvl50]
-
-    # level 99
-    elif multiworld.LevelDepth[player] == "level_99":
-        KH2REGIONS[RegionName.LevelsVS1] = [LocationName.Lvl7, LocationName.Lvl9]
-        KH2REGIONS[RegionName.LevelsVS3] = [LocationName.Lvl12, LocationName.Lvl15, LocationName.Lvl17,
-                                            LocationName.Lvl20]
-        KH2REGIONS[RegionName.LevelsVS6] = [LocationName.Lvl23, LocationName.Lvl25, LocationName.Lvl28]
-        KH2REGIONS[RegionName.LevelsVS9] = [LocationName.Lvl31, LocationName.Lvl33, LocationName.Lvl36,
-                                            LocationName.Lvl39]
-        KH2REGIONS[RegionName.LevelsVS12] = [LocationName.Lvl41, LocationName.Lvl44, LocationName.Lvl47,
-                                             LocationName.Lvl49]
-        KH2REGIONS[RegionName.LevelsVS15] = [LocationName.Lvl53, LocationName.Lvl59]
-        KH2REGIONS[RegionName.LevelsVS18] = [LocationName.Lvl65]
-        KH2REGIONS[RegionName.LevelsVS21] = [LocationName.Lvl73]
-        KH2REGIONS[RegionName.LevelsVS24] = [LocationName.Lvl85]
-        KH2REGIONS[RegionName.LevelsVS26] = [LocationName.Lvl99]
-    # level sanity
-    # has to be [] instead of {} for in
-    elif multiworld.LevelDepth[player] in ["level_50_sanity", "level_99_sanity"]:
-        KH2REGIONS[RegionName.LevelsVS1] = [LocationName.Lvl2, LocationName.Lvl3, LocationName.Lvl4, LocationName.Lvl5,
-                                            LocationName.Lvl6,
-                                            LocationName.Lvl7, LocationName.Lvl8, LocationName.Lvl9, LocationName.Lvl10]
-        KH2REGIONS[RegionName.LevelsVS3] = [LocationName.Lvl11, LocationName.Lvl12, LocationName.Lvl13,
-                                            LocationName.Lvl14, LocationName.Lvl15,
-                                            LocationName.Lvl16, LocationName.Lvl17, LocationName.Lvl18,
-                                            LocationName.Lvl19, LocationName.Lvl20]
-        KH2REGIONS[RegionName.LevelsVS6] = [LocationName.Lvl21, LocationName.Lvl22, LocationName.Lvl23,
-                                            LocationName.Lvl24, LocationName.Lvl25,
-                                            LocationName.Lvl26, LocationName.Lvl27, LocationName.Lvl28,
-                                            LocationName.Lvl29, LocationName.Lvl30]
-        KH2REGIONS[RegionName.LevelsVS9] = [LocationName.Lvl31, LocationName.Lvl32, LocationName.Lvl33,
-                                            LocationName.Lvl34, LocationName.Lvl35,
-                                            LocationName.Lvl36, LocationName.Lvl37, LocationName.Lvl38,
-                                            LocationName.Lvl39, LocationName.Lvl40]
-        KH2REGIONS[RegionName.LevelsVS12] = [LocationName.Lvl41, LocationName.Lvl42, LocationName.Lvl43,
-                                             LocationName.Lvl44, LocationName.Lvl45,
-                                             LocationName.Lvl46, LocationName.Lvl47, LocationName.Lvl48,
-                                             LocationName.Lvl49, LocationName.Lvl50]
-        # level 99 sanity
-        if multiworld.LevelDepth[player] == "level_99_sanity":
-            KH2REGIONS[RegionName.LevelsVS15] = [LocationName.Lvl51, LocationName.Lvl52, LocationName.Lvl53,
-                                                 LocationName.Lvl54,
-                                                 LocationName.Lvl55, LocationName.Lvl56, LocationName.Lvl57,
-                                                 LocationName.Lvl58,
-                                                 LocationName.Lvl59, LocationName.Lvl60]
-            KH2REGIONS[RegionName.LevelsVS18] = [LocationName.Lvl61, LocationName.Lvl62, LocationName.Lvl63,
-                                                 LocationName.Lvl64,
-                                                 LocationName.Lvl65, LocationName.Lvl66, LocationName.Lvl67,
-                                                 LocationName.Lvl68,
-                                                 LocationName.Lvl69, LocationName.Lvl70]
-            KH2REGIONS[RegionName.LevelsVS21] = [LocationName.Lvl71, LocationName.Lvl72, LocationName.Lvl73,
-                                                 LocationName.Lvl74,
-                                                 LocationName.Lvl75, LocationName.Lvl76, LocationName.Lvl77,
-                                                 LocationName.Lvl78,
-                                                 LocationName.Lvl79, LocationName.Lvl80]
-            KH2REGIONS[RegionName.LevelsVS24] = [LocationName.Lvl81, LocationName.Lvl82, LocationName.Lvl83,
-                                                 LocationName.Lvl84,
-                                                 LocationName.Lvl85, LocationName.Lvl86, LocationName.Lvl87,
-                                                 LocationName.Lvl88,
-                                                 LocationName.Lvl89, LocationName.Lvl90]
-            KH2REGIONS[RegionName.LevelsVS26] = [LocationName.Lvl91, LocationName.Lvl92, LocationName.Lvl93,
-                                                 LocationName.Lvl94,
-                                                 LocationName.Lvl95, LocationName.Lvl96, LocationName.Lvl97,
-                                                 LocationName.Lvl98, LocationName.Lvl99]
-    KH2REGIONS[RegionName.Summon] = []
-    if multiworld.SummonLevelLocationToggle[player]:
-        KH2REGIONS[RegionName.Summon] = [LocationName.Summonlvl2,
-                                         LocationName.Summonlvl3,
-                                         LocationName.Summonlvl4,
-                                         LocationName.Summonlvl5,
-                                         LocationName.Summonlvl6,
-                                         LocationName.Summonlvl7]
-    multiworld.regions += [create_region(multiworld, player, active_locations, region, locations) for region, locations in
-                           KH2REGIONS.items()]
+    multiworld.regions += [create_region(multiworld, player, active_locations, region, locations) for region, locations in OT2REGIONS.items()]
     # fill the event locations with events
     multiworld.worlds[player].item_name_to_id.update({event_name: None for event_name in Events_Table})
     for location, item in event_location_to_item.items():
@@ -981,132 +887,70 @@ def connect_regions(self):
     multiworld = self.multiworld
     player = self.player
     # connecting every first visit to the GoA
-    KH2RegionConnections: typing.Dict[str, typing.Set[str]] = {
-        "Menu":                        {RegionName.GoA},
-        RegionName.GoA:                {RegionName.Sp, RegionName.Pr, RegionName.Tt, RegionName.Oc, RegionName.Ht,
-                                        RegionName.LoD,
-                                        RegionName.Twtnw, RegionName.Bc, RegionName.Ag, RegionName.Pl, RegionName.Hb,
-                                        RegionName.Dc, RegionName.Stt,
-                                        RegionName.Ha1, RegionName.Keyblade, RegionName.LevelsVS1,
-                                        RegionName.Valor, RegionName.Wisdom, RegionName.Limit, RegionName.Master,
-                                        RegionName.Final, RegionName.Summon, RegionName.AtlanticaSongOne},
-        RegionName.LoD:                {RegionName.ShanYu},
-        RegionName.ShanYu:             {RegionName.LoD2},
-        RegionName.LoD2:               {RegionName.AnsemRiku},
-        RegionName.AnsemRiku:          {RegionName.StormRider},
-        RegionName.StormRider:         {RegionName.DataXigbar},
-        RegionName.Ag:                 {RegionName.TwinLords},
-        RegionName.TwinLords:          {RegionName.Ag2},
-        RegionName.Ag2:                {RegionName.GenieJafar},
-        RegionName.GenieJafar:         {RegionName.DataLexaeus},
-        RegionName.Dc:                 {RegionName.Tr},
-        RegionName.Tr:                 {RegionName.OldPete},
-        RegionName.OldPete:            {RegionName.FuturePete},
-        RegionName.FuturePete:         {RegionName.Terra, RegionName.DataMarluxia},
-        RegionName.Ha1:                {RegionName.Ha2},
-        RegionName.Ha2:                {RegionName.Ha3},
-        RegionName.Ha3:                {RegionName.Ha4},
-        RegionName.Ha4:                {RegionName.Ha5},
-        RegionName.Ha5:                {RegionName.Ha6},
-        RegionName.Pr:                 {RegionName.Barbosa},
-        RegionName.Barbosa:            {RegionName.Pr2},
-        RegionName.Pr2:                {RegionName.GrimReaper1},
-        RegionName.GrimReaper1:        {RegionName.GrimReaper2},
-        RegionName.GrimReaper2:        {RegionName.DataLuxord},
-        RegionName.Oc:                 {RegionName.Cerberus},
-        RegionName.Cerberus:           {RegionName.OlympusPete},
-        RegionName.OlympusPete:        {RegionName.Hydra},
-        RegionName.Hydra:              {RegionName.OcPainAndPanicCup, RegionName.OcCerberusCup, RegionName.Oc2},
-        RegionName.Oc2:                {RegionName.Hades},
-        RegionName.Hades:              {RegionName.Oc2TitanCup, RegionName.Oc2GofCup, RegionName.DataZexion},
-        RegionName.Oc2GofCup:          {RegionName.HadesCups},
-        RegionName.Bc:                 {RegionName.Thresholder},
-        RegionName.Thresholder:        {RegionName.Beast},
-        RegionName.Beast:              {RegionName.DarkThorn},
-        RegionName.DarkThorn:          {RegionName.Bc2},
-        RegionName.Bc2:                {RegionName.Xaldin},
-        RegionName.Xaldin:             {RegionName.DataXaldin},
-        RegionName.Sp:                 {RegionName.HostileProgram},
-        RegionName.HostileProgram:     {RegionName.Sp2},
-        RegionName.Sp2:                {RegionName.Mcp},
-        RegionName.Mcp:                {RegionName.DataLarxene},
-        RegionName.Ht:                 {RegionName.PrisonKeeper},
-        RegionName.PrisonKeeper:       {RegionName.OogieBoogie},
-        RegionName.OogieBoogie:        {RegionName.Ht2},
-        RegionName.Ht2:                {RegionName.Experiment},
-        RegionName.Experiment:         {RegionName.DataVexen},
-        RegionName.Hb:                 {RegionName.Hb2},
-        RegionName.Hb2:                {RegionName.CoR, RegionName.HBDemyx},
-        RegionName.HBDemyx:            {RegionName.ThousandHeartless},
-        RegionName.ThousandHeartless:  {RegionName.Mushroom13, RegionName.DataDemyx, RegionName.Sephi},
-        RegionName.CoR:                {RegionName.CorFirstFight},
-        RegionName.CorFirstFight:      {RegionName.CorSecondFight},
-        RegionName.CorSecondFight:     {RegionName.Transport},
-        RegionName.Pl:                 {RegionName.Scar},
-        RegionName.Scar:               {RegionName.Pl2},
-        RegionName.Pl2:                {RegionName.GroundShaker},
-        RegionName.GroundShaker:       {RegionName.DataSaix},
-        RegionName.Stt:                {RegionName.TwilightThorn},
-        RegionName.TwilightThorn:      {RegionName.Axel1},
-        RegionName.Axel1:              {RegionName.Axel2},
-        RegionName.Axel2:              {RegionName.DataRoxas},
-        RegionName.Tt:                 {RegionName.Tt2},
-        RegionName.Tt2:                {RegionName.Tt3},
-        RegionName.Tt3:                {RegionName.DataAxel},
-        RegionName.Twtnw:              {RegionName.Roxas},
-        RegionName.Roxas:              {RegionName.Xigbar},
-        RegionName.Xigbar:             {RegionName.Luxord},
-        RegionName.Luxord:             {RegionName.Saix},
-        RegionName.Saix:               {RegionName.Twtnw2},
-        RegionName.Twtnw2:             {RegionName.Xemnas},
-        RegionName.Xemnas:             {RegionName.ArmoredXemnas, RegionName.DataXemnas},
-        RegionName.ArmoredXemnas:      {RegionName.ArmoredXemnas2},
-        RegionName.ArmoredXemnas2:     {RegionName.FinalXemnas},
-        RegionName.LevelsVS1:          {RegionName.LevelsVS3},
-        RegionName.LevelsVS3:          {RegionName.LevelsVS6},
-        RegionName.LevelsVS6:          {RegionName.LevelsVS9},
-        RegionName.LevelsVS9:          {RegionName.LevelsVS12},
-        RegionName.LevelsVS12:         {RegionName.LevelsVS15},
-        RegionName.LevelsVS15:         {RegionName.LevelsVS18},
-        RegionName.LevelsVS18:         {RegionName.LevelsVS21},
-        RegionName.LevelsVS21:         {RegionName.LevelsVS24},
-        RegionName.LevelsVS24:         {RegionName.LevelsVS26},
-        RegionName.AtlanticaSongOne:   {RegionName.AtlanticaSongTwo},
-        RegionName.AtlanticaSongTwo:   {RegionName.AtlanticaSongThree},
-        RegionName.AtlanticaSongThree: {RegionName.AtlanticaSongFour},
+    OT2RegionConnections: typing.Dict[str, typing.Set[str]] = {
+        #"Menu":                        {RegionName.GoA},
+        RegionName.Winterlands1:            {RegionName.CapeCold, RegionName.Ruffians, RegionName.Winterbloom, RegionName.Crestlands, 
+                                             RegionName.Brightlands},
+        RegionName.Ruffians:                {RegionName.RuffiansBoss},
+        RegionName.CapeCold:                {RegionName.Winterlands1, RegionName.OsvaldCh1},
+        RegionName.Winterbloom:             {RegionName.WinterbloomKO, RegionName.ThroneCh2Father, RegionName.Winterlands1},
+        RegionName.Winterlands2:            {RegionName.Stormhail, RegionName.InfernalCastle, RegionName.CrestlandsPass},
+        RegionName.Stormhail:               {RegionName.StormhailKO, RegionName.Winterlands2, RegionName.OchetteCh3Glacis, 
+                                             RegionName.HikariCh4, RegionName.TemenosCh3Stormhail},
+        RegionName.Crestlands:              {RegionName.Winterlands1, RegionName.Brightlands, RegionName.CrestlandsPass, 
+                                             RegionName.Flamechurch, RegionName.Montwise, RegionName.SpriteCave, RegionName.MerryHills},
+        RegionName.CrestlandsPass:          {RegionName.Winterlands2, RegionName.Crestlands},
+        RegionName.Flamechurch:             {RegionName.Crestlands, RegionName.FlamechurchKO, RegionName.TemenosThroneCh1, RegionName.TemenosCh1},
+        RegionName.MerryHills:              {RegionName.AgneaCh5, RegionName.Crestlands},
+        RegionName.Brightlands:             {RegionName.AbandonedVillage, RegionName.SunkenMaw, RegionName.Waterway, RegionName.Clockbank, 
+                                             RegionName.NewDelsta, RegionName.SunderingSea, RegionName.Totohaha, RegionName.Canalbrine, 
+                                             RegionName.Wildlands2},
+        RegionName.Clockbank:               {RegionName.PartitioCh2, RegionName.Clocktower},
+        RegionName.NewDelsta:               {RegionName.AgneaCh2, RegionName.LostseedPass, RegionName.NewDelstaAmbush, RegionName.NewDelstaKO},
+        RegionName.LostseedPass:            {RegionName.Lostseed, RegionName.NewDelsta},
+        RegionName.Totohaha:                {RegionName.Brightlands, RegionName.Canalbrine, RegionName.Wildlands2, RegionName.SunderingSea, 
+                                             RegionName.BeastingVillage, RegionName.Tropuhopu, RegionName.TotohahaPass, RegionName.CavernOfWaves},
+        RegionName.Beasting:                {RegionName.Totohaha, RegionName.BeastingVillageKO, RegionName.OchetteCh3},
+        RegionName.Tropuhopu:               {RegionName.Totohaha, RegionName.TropuhopuKO, RegionName.TropuhopuKOBoat},
+        RegionName.TotohahaPass:            {RegionName.Totohaha, RegionName.NamelessVillage, RegionName.SinkingRuins},
+        RegionName.NamelessVillage:         {RegionName.TotohahaPass, RegionName.NamelessVillageKO, RegionName.TemenosCh4},
+        RegionName.Harborlands:             {RegionName.Canalbrine, RegionName.Hinoeuma1, RegionName.Hinoeuma2, RegionName.SunMoonCave, 
+                                             RegionName.HarborlandsBoat, RegionName.HarborlandsKO, RegionName.ConningCreek},
+        RegionName.Canalbrine:              {RegionName.Harborlands, RegionName.Totohaha, RegionName.Brightlands, RegionName.SunderingSea, 
+                                             RegionName.CanalbrineBoat, RegionName.CanalbrineBoatKO, RegionName.TemenosCh2},
+        RegionName.ConningCreek:            {RegionName.Harborlands, RegionName.OsvaldCh3, RegionName.OchetteCh2Acta},
+        RegionName.Winterlands1:            {RegionName.CapeCold, RegionName.Ruffians, RegionName.Winterbloom, RegionName.Crestlands, 
+                                             RegionName.Brightlands},
+        RegionName.RoqueIsland:             {RegionName.SunderingSea, RegionName.RoqueIslandKO, RegionName.PartitioCh4},
+        RegionName.Hinoeuma1:               {RegionName.Harborlands, RegionName.Wildlands1, RegionName.Ryu},
+        RegionName.Ryu:                     {RegionName.Hinoeuma1},
+        RegionName.Hinoeuma2:               {RegionName.Harborlands, RegionName.Leaflands, RegionName.Sai, RegionName.Ku},
+        RegionName.Sai:                     {RegionName.Hinoeuma2, RegionName.SaiKO, RegionName.SaiRuins, RegionName.CasttiCh2Sai},
+        RegionName.Ku:                      {RegionName.Hinoeuma2, RegionName.HikariCh5},
+        RegionName.Wildlands1:              {RegionName.Hinoeuma1, RegionName.Leaflands, RegionName.Oresrush},
+        RegionName.Oresrush:                {RegionName.Wildlands1, RegionName.PartitioCh1, RegionName.OresrushKO},
+        RegionName.Wildlands2:              {RegionName.Leaflands, RegionName.Brightlands, RegionName.Totohaha, RegionName.SunderingSea, 
+                                             RegionName.Tunnels, RegionName.Crackridge, RegionName.Gravell},
+        RegionName.Crackridge:              {RegionName.Wildlands2, RegionName.CrackridgeKO, RegionName.TemenosCh3Crackridge, RegionName.OchetteCh2Tera},
+        RegionName.Leaflands:               {RegionName.Hinoeuma2, RegionName.Wildlands1, RegionName.Wildlands2, RegionName.Spring, RegionName.Cropdale, 
+                                             RegionName.LeaflandsBoat, RegionName.Wellgrove, RegionName.Timberain},
+        RegionName.Cropdale:                {RegionName.Leaflands, RegionName.CropdaleBoat},
+        RegionName.Wellgrove:               {RegionName.Leaflands, RegionName.ThroneCh3Mother},
+        RegionName.Timberain:               {RegionName.Leaflands, RegionName.TimberainKO, RegionName.CasttiCh4},
     }
 
-    for source, target in KH2RegionConnections.items():
+    for source, target in OT2RegionConnections.items():
         source_region = multiworld.get_region(source, player)
         source_region.add_exits(target)
 
-
-# cave fight:fire/guard
-# hades escape logic:fire,blizzard,slide dash, base tools
-# windows:chicken little.fire element,base tools
-# chasm of challenges:reflect, blizzard, trinity limit,chicken little
-# living bones: magnet
-# some things for barbosa(PR), chicken little
-# hyneas(magnet,reflect)
-# tt2: reflect,chicken,form, guard,aerial recovery,finising plus,
-# corridors,dancers:chicken little or stitch +demyx tools
-# 1k: guard,once more,limit form,
-# snipers +before: stitch, magnet, finishing leap, base tools, reflect
-# dragoons:stitch, magnet, base tools, reflect
-# oc2 tournament thing: stitch, magnet, base tools, reflera
-# lock,shock and barrel: reflect, base tools
-# carpet section: magnera, reflect, base tools,
-# sp2: reflera, stitch, basse tools, reflera, thundara, fantasia/duck flare,once more.
-# tt3: stitch/chicken little, magnera,reflera,base tools,finishing leap,limit form
-# cor
 
 def create_region(multiworld, player: int, active_locations, name: str, locations=None):
     ret = Region(name, player, multiworld)
     if locations:
         loc_to_id = {loc: active_locations.get(loc, 0) for loc in locations if active_locations.get(loc, None)}
-        ret.add_locations(loc_to_id, KH2Location)
+        ret.add_locations(loc_to_id, OT2Location)
         loc_to_event = {loc: active_locations.get(loc, None) for loc in locations if
                         not active_locations.get(loc, None)}
-        ret.add_locations(loc_to_event, KH2Location)
+        ret.add_locations(loc_to_event, OT2Location)
 
     return ret

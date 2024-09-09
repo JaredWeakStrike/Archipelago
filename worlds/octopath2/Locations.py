@@ -82,7 +82,7 @@ Totohaha_Checks={
 
 }
 
-Harborlands_Checks:{
+Harborlands_Checks={
     LocationName.CanalbrineResistantNut:                            LocationData("Canalbrine"),
     LocationName.CanalbrineSlumberSage:                             LocationData("Canalbrine"),
     LocationName.CanalbrineWoodcuttersGreatAxe:                     LocationData("Canalbrine"),
@@ -170,7 +170,7 @@ Harborlands_Checks:{
 
 }
     
-Brightlands_Checks{=
+Brightlands_Checks={
     LocationName.NewDelstaEnergizingPomegranate:                    LocationData("New Delsta"),
     LocationName.NewDelstaHealingGrape:                             LocationData("New Delsta"),
     LocationName.NewDelstaBackstreetsDagger:                        LocationData("New Delsta: Backstreets"),
@@ -478,7 +478,7 @@ Leaflands_Checks={
 
 }
     
-Creslands_Checks={
+Crestlands_Checks={
     LocationName.Flamechurch400L:                                   LocationData("Flamechurch"),
     LocationName.FlamechurchGuardsShield:                           LocationData("Flamechurch"),
     LocationName.FlamechurchHealingGrape:                           LocationData("Flamechurch"),
@@ -682,4 +682,16 @@ OpenSeas_Checks={
     LocationName.SunderingSeaCuriousNestTornadoGlaive:                          LocationData("Sundering Sea: Curious Nest"),
     LocationName.SunderingSeaCuriousNestDecayingDragonsEssence:                 LocationData("Sundering Sea: Curious Nest"),
 
+}
+
+all_locations = {
+    **Totohaha_Checks,
+    **Harborlands_Checks,
+    **Brightlands_Checks,
+    **Winterlands_Checks,
+    **Wildlands_Checks,
+    **Leaflands_Checks,
+    **Crestlands_Checks,
+    **Hinoeuma_Checks,
+    **OpenSeas_Checks
 }
