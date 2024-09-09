@@ -30,14 +30,14 @@ class Octopath2World(World):
     It is the sequel to Kingdom Hearts and Kingdom Hearts: Chain of Memories, and like the two previous games,
     focuses on Sora and his friends' continued battle against the Darkness.
     """
-    game = "Octopath 2"
+    game = "Octopath Traveler 2"
     web = Octopath2Web()
 
     #required_client_version = (0, 4, 4)
     options_dataclass = Octopath2Options
     options: Octopath2Options
     item_name_to_id = {item: item_id
-                       for item_id, item in enumerate(item_dictionary_table.keys(), 0x88888888)}
+                       for item_id, item in enumerate(item_table.keys(), 0x88888888)}
     location_name_to_id = {item: location
                            for location, item in enumerate(all_locations.keys(), 0x88888888)}
     item_name_groups = item_groups
@@ -56,18 +56,16 @@ class Octopath2World(World):
 
     def create_item(self, name: str) -> Item:
         """
-        Returns created KH2Item
+        Returns created OT2Item
         """
-        # data = item_dictionary_table[name]
-        if name in progression_set:
-            item_classification = ItemClassification.progression
-        elif name in useful_set:
-            item_classification = ItemClassification.useful
-        else:
-            item_classification = ItemClassification.filler
+        data = item_table[name]
+        created_item = OT2Item(name, name.classification, self.item_name_to_id[name], self.player)
 
-        created_item = OT2Item(name, item_classification, self.item_name_to_id[name], self.player)
+        return created_item
 
+    def create_event_item(self, name: str) -> Item:
+        item_classification = ItemClassification.progression
+        created_item = OT2Item(name, item_classification, None, self.player)
         return created_item
 
     def create_items(self) -> None:
@@ -75,7 +73,13 @@ class Octopath2World(World):
         Fills ItemPool and manages schmovement, random growth, visit locking and random starting visit locking.
         """
 
-        #self.multiworld.itempool += itempool
+        itempool = [self.create_item(item) for item, data in self.item_quantity_dict.items() for _ in range(data)]
+
+        # Creating filler for unfilled locations
+        itempool += [self.create_filler() for _ in range(self.total_locations - len(itempool))]
+
+        self.multiworld.itempool += itempool
+
         pass
 
     def generate_early(self) -> None:
@@ -101,12 +105,8 @@ class Octopath2World(World):
         """
         Sets the Logic for the Regions and Locations.
         """
-        universal_logic = Rules.KH2WorldRules(self)
-        form_logic = Rules.KH2FormRules(self)
-        fight_rules = Rules.KH2FightRules(self)
-        fight_rules.set_kh2_fight_rules()
-        universal_logic.set_kh2_rules()
-        form_logic.set_kh2_form_rules()
+        universal_logic = Rules.OT2WorldRules(self)
+        universal_logic.set_ot2_rules()
 
     def generate_output(self, output_directory: str):
         """
