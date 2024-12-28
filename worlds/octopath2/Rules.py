@@ -5,6 +5,7 @@ from BaseClasses import CollectionState
 from .Items import item_table
 from .Locations import all_chests
 from .Names import LocationName, ItemName, RegionName
+from .Options import StartingCharacter
 from worlds.generic.Rules import add_rule, forbid_items, add_item_rule
 
 # I don't know what is going on here, but it works.
@@ -29,11 +30,11 @@ class OT2Rules:
 
     def can_be_daytime(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.TimeChange, self.player, Amount)
-                or self.multiworld.startingtime[self.player] == "Day")
+                or self.world.starting_time == "Day")
 
     def can_be_nighttime(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.TimeChange, self.player, Amount)
-                or self.multiworld.startingtime[self.player] == "Night")
+                or self.world.starting_time == "Night")
 
     # Regions access
 
@@ -41,13 +42,13 @@ class OT2Rules:
         return (state.has(ItemName.WinterlandsUnlock, self.player, Amount)
                 and (self.can_access_brightlands(state, 1)
                      or self.can_access_crestlands(state, 1))
-                or self.multiworld.startingcharacter[self.player] == "Osvald")
+                or self.world.options.StartingCharacter == StartingCharacter.option_osvald)
 
     def can_access_crestlands(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.CrestlandsUnlock, self.player, Amount)
                 and (self.can_access_brightlands(state, 1)
                      or self.can_access_winterlands1(state, 1))
-                or self.multiworld.startingcharacter[self.player] == "Temenos")
+                or self.world.options.StartingCharacter == StartingCharacter.option_temenos)
 
     def can_access_brightlands(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.BrightlandsUnlock, self.player, Amount)
@@ -55,39 +56,39 @@ class OT2Rules:
                      or self.can_access_crestlands(state,1)
                      or self.can_access_totohaha(state, 1)
                      or self.can_access_wildlands2(state, 1))
-                or self.multiworld.startingcharacter[self.player] == "Throne")
+                or self.world.options.StartingCharacter == StartingCharacter.option_throne)
 
     def can_access_totohaha(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.TotohahaUnlock, self.player, Amount)
                 and (self.can_access_brightlands(state, 1)
                     or self.can_access_wildlands2(state, 1))
-                or self.multiworld.startingcharacter[self.player] == "Ochette")
+                or self.world.options.StartingCharacter == StartingCharacter.option_ochette)
 
     def can_access_harborlands(self, state: CollectionState, Amount) -> bool:
         return ((state.has(ItemName.HarborlandsUnlock, self.player, Amount)
                 and (self.can_access_brightlands(state, 1)
                     or self.can_access_hinoeuma1(state,1)
                     or self.can_access_hinoeuma2(state, 1)))
-                or self.multiworld.startingcharacter[self.player] == "Castti")
+                or self.world.options.StartingCharacter == StartingCharacter.option_castti)
 
     def can_access_hinoeuma1(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.HinoeumaUnlock, self.player, Amount)
                 and (self.can_access_harbolands(state, 1)
                     or self.can_access_wildlands1(state, 1))
-                or self.multiworld.startingcharacter[self.player] == "Hikari")
+                or self.world.options.StartingCharacter == StartingCharacter.option_hikari)
 
     def can_access_leaflands(self, state: CollectionState, Amount) -> bool:
         return ((state.has(ItemName.LeaflandsUnlock, self.player, Amount)
                 and (self.can_access_wildlands1(state, 1)
                     or self.can_access_wildlands2(state,1)
                     or self.can_access_hinoeuma2(state, 1)))
-                or self.multiworld.startingcharacter[self.player] == "Agnea")
+                or self.world.options.StartingCharacter == StartingCharacter.option_agnea)
 
     def can_access_wildlands1(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.WildlandsUnlock, self.player, Amount)
                 and (self.can_access_hinoeuma1(state, 1)
                     or self.can_access_leaflands(state, 1))
-                or self.multiworld.startingcharacter[self.player] == "Partitio")
+                or self.world.options.StartingCharacter == StartingCharacter.option_partitio)
 
     def can_access_winterlands2(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.WinterlandsUnlock, self.player, Amount)
@@ -232,7 +233,7 @@ class OT2Rules:
     def capecold_unlock(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.OsvaldUnlock, self.player, Amount)
                 and state.has(ItemName.OsvaldCh1, self.player,Amount)
-                or self.multiworld.startingcharacter[self.player] == "Osvald")
+                or self.world.options.StartingCharacter == StartingCharacter.option_osvald)
 
     def winterbloom_unlock(self, state: CollectionState, Amount) -> bool:
         return ((state.has(ItemName.ThroneUnlock, self.player, Amount)
@@ -256,7 +257,7 @@ class OT2Rules:
                 or (state.has(ItemName.TemenosUnlock, self.player, Amount)
                     and state.has(ItemName.ThroneUnlock,self.player,Amount)
                     and state.has(ItemName.TemenosThroneCh1, self.player, Amount))
-                or self.multiworld.startingcharacter[self.player] == "Temenos")
+                or self.world.options.StartingCharacter == StartingCharacter.option_temenos)
 
     def montwise_unlock(self, state: CollectionState, Amount) -> bool:
         return ((state.has(ItemName.ThroneUnlock, self.player, Amount)
@@ -283,7 +284,7 @@ class OT2Rules:
                 or (state.has(ItemName.OsvaldUnlock, self.player, Amount)
                     and state.has(ItemName.PartitioUnlock,self.player,Amount)
                     and state.has(ItemName.PartitioOsvaldCh1, self.player, Amount))
-                or self.multiworld.startingcharacter[self.player] == "Throne")
+                or self.world.options.StartingCharacter == StartingCharacter.option_throne)
 
     def abandonedvillage_unlock(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.CasttiUnlock, self.player, Amount)
@@ -302,7 +303,7 @@ class OT2Rules:
                  and state.has(ItemName.OchetteCh1, self.player,Amount))
                 or (state.has(ItemName.OchetteUnlock, self.player, Amount)
                     and state.has(ItemName.OchetteCh3, self.player, Amount))
-                or self.multiworld.startingcharacter[self.player] == "Ochette")
+                or self.world.options.StartingCharacter == StartingCharacter.option_ochette)
 
     def tropuhopu_unlock(self, state: CollectionState, Amount) -> bool:
         return ((state.has(ItemName.AgneaUnlock, self.player, Amount)
@@ -319,7 +320,7 @@ class OT2Rules:
                  and state.has(ItemName.CasttiCh1, self.player,Amount))
                 or (state.has(ItemName.TemenosUnlock, self.player, Amount)
                     and state.has(ItemName.TemenosCh2,self.player, Amount))
-                or self.multiworld.startingcharacter[self.player] == "Castti")
+                or self.world.options.StartingCharacter == StartingCharacter.option_castti)
 
     def conningcreek_unlock(self, state: CollectionState, Amount) -> bool:
         return ((state.has(ItemName.OchetteUnlock, self.player, Amount)
@@ -340,7 +341,7 @@ class OT2Rules:
                 or (state.has(ItemName.HikariUnlock, self.player, Amount)
                     and state.has(ItemName.AgneaUnlock,self.player,Amount)
                     and state.has(ItemName.HikariAgneaCh1, self.player, Amount))
-                or self.multiworld.startingcharacter[self.player] == "Hikari")
+                or self.world.options.StartingCharacter == StartingCharacter.option_hikari)
 
     def sai_unlock(self, state: CollectionState, Amount) -> bool:
         return ((state.has(ItemName.CasttiUnlock, self.player, Amount)
@@ -364,7 +365,7 @@ class OT2Rules:
                     and state.has(ItemName.OchetteUnlock,self.player, Amount)
                     and (state.has(ItemName.CasttiOchetteCh1, self.player, Amount)
                          or state.has(ItemName.CasttiOchetteCh2, self.player, Amount)))
-                or self.multiworld.startingcharacter[self.player] == "Agnea")
+                or self.world.options.StartingCharacter == StartingCharacter.option_agnea)
 
     def wellgrove_unlock(self, state: CollectionState, Amount) -> bool:
         return ((state.has(ItemName.ThroneUnlock, self.player, Amount)
@@ -383,7 +384,7 @@ class OT2Rules:
                  and state.has(ItemName.PartitioCh1, self.player,Amount))
                 or (state.has(ItemName.ThroneUnlock, self.player, Amount)
                     and state.has(ItemName.ThroneCh2Mother, self.player, Amount))
-        or self.multiworld.startingcharacter[self.player] == "Partitio")
+        or self.world.options.StartingCharacter == StartingCharacter.option_partitio)
 
     def crackridge_unlock(self, state: CollectionState, Amount) -> bool:
         return ((state.has(ItemName.TemenosUnlock, self.player, Amount)
@@ -987,11 +988,11 @@ class OT2WorldRules(OT2Rules):
             
             #Harborlands
             RegionName.Harborlands: lambda state: self.can_access_harborlands(state, 1),
-            RegionName.HarborlandsBoat: lambda state: (self.can_access_harborlands(state, 1) and state.has(ItemName.Boat, self.player, Amount)),
+            RegionName.HarborlandsBoat: lambda state: (self.can_access_harborlands(state, 1) and state.has(ItemName.Boat, self.player, 1)),
             RegionName.HarborlandsKO: lambda state: (self.can_access_totohaha(state, 1) and self.can_KO(state, 1)),
             RegionName.SunMoonCave: lambda state: (self.can_access_harborlands(state, 1) and self.can_be_daytime(state, 1) and self.can_be_nighttime(state,1)),
             RegionName.Canalbrine: lambda state: self.can_access_canalbrine(state, 1),
-            RegionName.CanalbrineBoat: lambda state: (self.can_access_canalbrine(state, 1) and state.has(ItemName.Boat, self.player, Amount)),            
+            RegionName.CanalbrineBoat: lambda state: (self.can_access_canalbrine(state, 1) and state.has(ItemName.Boat, self.player, 1)),            
             RegionName.CanalbrineBoatKO: lambda state: (self.can_access_totohaha(state, 1) and state.has(ItemName.Boat, self.player, Amount) and self.can_KO(state, 1)),
             RegionName.TemenosCh2: lambda state: self.can_clear_temenosch2(state, 1),
             RegionName.ConningCreek: lambda state: self.can_access_conningcreek(state, 1),

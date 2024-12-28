@@ -1047,7 +1047,7 @@ def connect_regions(self):
     player = self.player
     # Connections to review, I fucked up.
     OT2RegionConnections: typing.Dict[str, typing.Set[str]] = {
-        #"Menu":                        {RegionName.GoA},
+        "Menu":                             {RegionName.GameStart},
         RegionName.GameStart:               {RegionName.CapeCold, RegionName.Flamechurch, RegionName.NewDelsta, RegionName.BeastingVillage,     
                                              RegionName.Canalbrine, RegionName.Ryu, RegionName.Oresrush, RegionName.Cropdale},
         RegionName.Winterlands1:            {RegionName.CapeCold, RegionName.Ruffians, RegionName.Winterbloom, RegionName.Crestlands, 

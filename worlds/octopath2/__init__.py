@@ -8,7 +8,7 @@ from worlds.AutoWorld import World, WebWorld
 from .Items import *
 from .Locations import *
 from .Names import ItemName, LocationName, RegionName
-from .Options import Octopath2Options
+from .Options import Octopath2Options, StartingCharacter
 from .Regions import create_regions, connect_regions
 from .Rules import *
 from .Logic import *
@@ -43,13 +43,17 @@ class Octopath2World(World):
     total_locations: int
     exclude: List[str]
     # growth_list: list[str]
+    starting_character: str
+    starting_time: str
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
         self.exclude = []
+        self.starting_character = ""
+        self.starting_time = "Day"
         # random_super_boss_list List[str]
         # has to be in __init__ or else other players affect each other's bounties
-        pass
+        # pass
 
 
     def create_item(self, name: str) -> Item:
@@ -95,46 +99,46 @@ class Octopath2World(World):
         precollected = [item.name for item in self.multiworld.precollected_items[self.player]]
         # That's horrible code but it'll have to do for now
         # Need to handle a add_location on game start for the starter char unlock, and then
-        if self.options.StartingCharacter == 1:
+        if self.options.StartingCharacter == StartingCharacter.option_osvald:
             self.__pre_fill_item("Osvald Unlock", "Game Start Character", precollected)
             self.__pre_fill_item("Osvald Chapter1 Unlock", "Game Start Chapter", precollected)
             self.__pre_fill_item("Winterlands Region Unlock", "Game Start Region", precollected)
-            self.multiworld.startingcharacter = "Osvald"
-        elif self.options.StartingCharacter == 2:
+            self.starting_character = "Osvald"
+        elif self.options.StartingCharacter == StartingCharacter.option_castti:
             self.__pre_fill_item("Castti Unlock", "Game Start Character", precollected)
             self.__pre_fill_item("Castti Chapter1 Unlock", "Game Start Chapter", precollected)
             self.__pre_fill_item("Harborlands Region Unlock", "Game Start Region", precollected)
-            self.multiworld.startingcharacter = "Castti"
-        elif self.options.StartingCharacter == 3:
+            self.starting_character = "Castti"
+        elif self.options.StartingCharacter == StartingCharacter.option_temenos:
             self.__pre_fill_item("Temenos Unlock", "Game Start Character", precollected)
             self.__pre_fill_item("Temenos Chapter1 Unlock", "Game Start Chapter", precollected)
             self.__pre_fill_item("Crestlands Region Unlock", "Game Start Region", precollected)
-            self.multiworld.startingcharacter = "Temenos"
-        elif self.options.StartingCharacter == 4:
+            self.starting_character = "Temenos"
+        elif self.options.StartingCharacter == StartingCharacter.option_ochette:
             self.__pre_fill_item("Ochette Unlock", "Game Start Character", precollected)
             self.__pre_fill_item("Ochette Chapter1 Unlock", "Game Start Chapter", precollected)
             self.__pre_fill_item("Totohaha Region Unlock", "Game Start Region", precollected)
-            self.multiworld.startingcharacter = "Ochette"
-        elif self.options.StartingCharacter == 5:
+            self.starting_character = "Ochette"
+        elif self.options.StartingCharacter == StartingCharacter.option_partitio:
             self.__pre_fill_item("Partitio Unlock", "Game Start Character", precollected)
             self.__pre_fill_item("Partitio Chapter1 Unlock", "Game Start Chapter", precollected)
             self.__pre_fill_item("WildlandsUnlock", "Game Start Region", precollected)
-            self.multiworld.startingcharacter = "Partitio"
-        elif self.options.StartingCharacter == 6:
+            self.starting_character = "Partitio"
+        elif self.options.StartingCharacter == StartingCharacter.option_agnea:
             self.__pre_fill_item("Agnea Unlock", "Game Start Character", precollected)
             self.__pre_fill_item("Agnea Chapter1 Unlock", "Game Start Chapter", precollected)
             self.__pre_fill_item("Leaflands Region Unlock", "Game Start Region", precollected)
-            self.multiworld.startingcharacter = "Agnea"
-        elif self.options.StartingCharacter == 7:
+            self.starting_character = "Agnea"
+        elif self.options.StartingCharacter == StartingCharacter.option_throne:
             self.__pre_fill_item("Throne Unlock", "Game Start Character", precollected)
             self.__pre_fill_item("Throne Chapter1 Unlock", "Game Start Chapter", precollected)
             self.__pre_fill_item("Brightlands Region Unlock", "Game Start Region", precollected)
-            self.multiworld.startingcharacter = "Throne"
-        elif self.options.StartingCharacter == 8:
+            self.starting_character = "Throne"
+        elif self.options.StartingCharacter == StartingCharacter.option_hikari:
             self.__pre_fill_item("Hikari Unlock", "Game Start Character", precollected)
             self.__pre_fill_item("Hikari Chapter1 Unlock", "Game Start Chapter", precollected)
             self.__pre_fill_item("Hinoeuma Region Unlock", "Game Start Region", precollected)
-            self.multiworld.startingcharacter = "Hikari"
+            self.starting_character = "Hikari"
         
         for name, data in item_table.items():
             if name not in self.exclude:
@@ -154,9 +158,10 @@ class Octopath2World(World):
 
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        return {
-                "minibosses_to_kill": self.options.StartingCharacter.value
-                }
+        pass
+        #return {
+                #"minibosses_to_kill": self.options.StartingCharacter.value
+        #        }
 
     def generate_early(self) -> None:
         """
