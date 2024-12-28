@@ -2,11 +2,10 @@
 from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from .Items import exclusion_item_table, visit_locking_dict, DonaldAbility_Table, GoofyAbility_Table
-from .Locations import exclusion_table, popups_set, Goofy_Checks, Donald_Checks
+from .Items import item_table
+from .Locations import all_chests
 from .Names import LocationName, ItemName, RegionName
 from worlds.generic.Rules import add_rule, forbid_items, add_item_rule
-from .Logic import *
 
 # I don't know what is going on here, but it works.
 if TYPE_CHECKING:
@@ -20,7 +19,7 @@ else:
 
 class OT2Rules:
     player: int
-    world: OT2World
+    world: Octopath2World
     # Those are copy-paste from kh2 I tried to mimic into categories, but currently makes no sense
 
     def __init__(self, world: Octopath2World) -> None:
@@ -577,7 +576,7 @@ class OT2Rules:
         return (state.has(ItemName.ThroneUnlock, self.player, Amount)
                 and state.has(ItemName.ThroneCh2Father,self.player,Amount)
                 and self.can_access_winterbloom(state, 1)
-                and self.can_ambush(state, 1)
+                and self.can_ambush(state, 1))
 
     def can_clear_thronech3mother(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.ThroneUnlock, self.player, Amount)
@@ -589,12 +588,12 @@ class OT2Rules:
     def can_clear_thronech3father(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.ThroneUnlock, self.player, Amount)
                 and state.has(ItemName.ThroneCh3Father,self.player,Amount)
-                and self.can_access_montwise(state, 1)
+                and self.can_access_montwise(state, 1))
 
     def can_clear_thronech4(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.ThroneUnlock, self.player, Amount)
                 and state.has(ItemName.ThroneCh4, self.player,Amount)
-                and self.can_access_newdelsta(state, 1)
+                and self.can_access_newdelsta(state, 1))
 
     def can_clear_ochettech1(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.OchetteUnlock, self.player, Amount)
@@ -614,13 +613,13 @@ class OT2Rules:
         return (state.has(ItemName.OchetteUnlock, self.player, Amount)
                 and state.has(ItemName.OchetteCh2Tera,self.player,Amount)
                 and self.can_access_crackridge(state, 1)
-                and self.can_befriend(state, 1)
+                and self.can_befriend(state, 1))
 
     def can_clear_ochettech2glacis(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.OchetteUnlock, self.player, Amount)
                 and state.has(ItemName.OchetteCh2Glacis,self.player,Amount)
                 and self.can_access_stormhail(state, 1)
-                and self.can_provoke(state, 1)
+                and self.can_provoke(state, 1))
 
     def can_clear_ochettech3(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.OchetteUnlock, self.player, Amount)
@@ -846,7 +845,7 @@ class OT2Rules:
                 and state.has(ItemName.TemenosThroneCh1, self.player, Amount)
                 and self.can_access_flamechurch(state,1)
                 and self.can_coerce(state, 1)
-                and self.can_guide(state, 1)
+                and self.can_guide(state, 1))
 
     def can_clear_temenosthronech2(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.TemenosUnlock, self.player, Amount)
@@ -855,7 +854,7 @@ class OT2Rules:
                 and self.can_access_conningcreek(state,1)
                 and self.can_access_harborlands(state, 1)
                 and self.can_ambush(state, 1)
-                and self.can_steal(state, 1)
+                and self.can_steal(state, 1))
 
     def can_clear_hikariagneach1(self, state: CollectionState, Amount) -> bool:
         return (state.has(ItemName.HikariUnlock, self.player, Amount)
@@ -909,7 +908,7 @@ class OT2Rules:
 
 
 class OT2WorldRules(OT2Rules):
-    def __init__(self, ot2world: OT2World) -> None:
+    def __init__(self, ot2world: Octopath2World) -> None:
         # These Rules are Always in effect
         super().__init__(ot2world)
         self.region_rules = {
@@ -929,11 +928,13 @@ class OT2WorldRules(OT2Rules):
             RegionName.TemenosCh3Stormhail: lambda state: self.can_clear_temenosch3stormhail(state, 1),
             RegionName.HikariCh4: lambda state: self.can_clear_hikarich4(state, 1),
             RegionName.OchetteCh2Glacis: lambda state: self.can_clear_ochettech2glacis(state, 1),
+            RegionName.CasttiCh2Winterbloom: lambda state: self.can_clear_casttich2winterbloom(state, 1),
+            RegionName.PartitioWinterbloom: lambda state: self.can_clear_partitiowinterbloom(state, 1),
             
             # Crestlands regions
             RegionName.Crestlands: lambda state: self.can_access_crestlands(state, 1),
             RegionName.CrestlandsPass: lambda state: (self.can_access_crestlands(state, 1) and self.can_KO(state,1)),
-            RegionName.SpriteCave: lambda state: (self.can_access_crestlands(state, 1) and state.has(ItemName.Boat, self.player, Amount),
+            RegionName.SpriteCave: lambda state: (self.can_access_crestlands(state, 1) and state.has(ItemName.Boat, self.player, Amount)),
             RegionName.Flamechurch: lambda state: self.can_access_flamechurch(state, 1),
             RegionName.FlamechurchKO: lambda state: (self.can_access_flamechurch(state, 1) and self.can_KO(state,1)),
             RegionName.TemenosCh1: lambda state: self.can_clear_temenosch1(state, 1),
@@ -942,13 +943,15 @@ class OT2WorldRules(OT2Rules):
             RegionName.HikariCh2: lambda state: self.can_clear_hikarich2(state, 1),
             RegionName.OsvaldCh4: lambda state: self.can_clear_osvaldch4(state, 1),
             RegionName.MerryHills: lambda state: self.can_access_merryhills(state, 1),
-            RegionName.AgneaCh5: lambda state: self.can_clear_AgneaCh5(state, 1),
+            RegionName.AgneaCh5: lambda state: self.can_clear_agneach5(state, 1),
+            RegionName.ThroneCh3Father: lambda state: self.can_clear_thronech3father(state, 1),
+            RegionName.AgneaClear: lambda state: self.can_clear_agneastory(state, 1),
             
             #Brightlands regions
             RegionName.Brightlands: lambda state: self.can_access_brightlands(state, 1),
             RegionName.Waterway: lambda state: self.can_access_brightlands(state, 1),
             RegionName.SunkenMaw: lambda state: (self.can_access_brightlands(state, 1) and state.has(ItemName.Boat, self.player, Amount)),
-            RegionName.AbandonnedVillage: lambda state: self.can_access_abandonedvillage(state, 1),
+            RegionName.AbandonedVillage: lambda state: self.can_access_abandonedvillage(state, 1),
             RegionName.NewDelsta: lambda state: self.can_access_newdelsta(state, 1),
             RegionName.NewDelstaAmbush: lambda state: (self.can_access_newdelsta(state, 1) and self.can_ambush(state,1)),
             RegionName.NewDelstaKO: lambda state: (self.can_access_newdelsta(state, 1) and self.can_KO(state,1)),
@@ -958,6 +961,9 @@ class OT2WorldRules(OT2Rules):
             RegionName.Clocktower: lambda state: (self.can_access_clockbank(state, 1) and state.has(ItemName.Boat, self.player, Amount)),
             RegionName.LostseedPass: lambda state: self.can_access_lostseed(state, 1),
             RegionName.Lostseed: lambda state: self.can_access_lostseed(state, 1),
+            RegionName.ThroneCh1: lambda state: self.can_clear_thronech1(state, 1),
+            RegionName.ThroneClear: lambda state: self.can_clear_thronestory(state, 1),
+            RegionName.CasttiCh3: lambda state: self.can_clear_casttich3(state, 1),
             
             # Totohaha regions
             RegionName.Totohaha: lambda state: self.can_access_totohaha(state, 1),
@@ -973,6 +979,11 @@ class OT2WorldRules(OT2Rules):
             RegionName.NamelessVillage: lambda state: self.can_access_nameless(state, 1),
             RegionName.NamelessVillageKO: lambda state: (self.can_access_nameless(state, 1) and self.can_KO(state, 1)),
             RegionName.TemenosCh4: lambda state: self.can_clear_temenosch4(state, 1),
+            RegionName.TemenosClear: lambda state: self.can_clear_temenosstory(state, 1),
+            RegionName.OchetteCh1: lambda state: self.can_clear_ochettech1(state, 1),
+            RegionName.OchetteClear: lambda state: self.can_clear_ochettestory(state, 1),
+            RegionName.PartitioTropuhopu: lambda state: self.can_clear_partitiototohaha(state, 1),
+            RegionName.AgneaCh3: lambda state: self.can_clear_agneach3(state, 1),
             
             #Harborlands
             RegionName.Harborlands: lambda state: self.can_access_harborlands(state, 1),
@@ -985,10 +996,12 @@ class OT2WorldRules(OT2Rules):
             RegionName.TemenosCh2: lambda state: self.can_clear_temenosch2(state, 1),
             RegionName.ConningCreek: lambda state: self.can_access_conningcreek(state, 1),
             RegionName.OsvaldCh3: lambda state: self.can_clear_osvaldch3(state, 1),
-            RegionName.OchetteCh2: lambda state: self.can_clear_ochettech2Acta(state, 1),
+            RegionName.OchetteCh2Acta: lambda state: self.can_clear_ochettech2Acta(state, 1),
             RegionName.RoqueIsland: lambda state: self.can_access_roqueisland(state, 1),
             RegionName.RoqueIslandKO: lambda state: (self.can_access_roqueisland(state, 1) and self.can_KO(state, 1)),
             RegionName.PartitioCh4: lambda state: self.can_clear_partitioch4(state, 1),
+            RegionName.CasttiCh1: lambda state: self.can_clear_casttich1(state, 1),
+            RegionName.PartitioClear: lambda state: self.can_clear_partitiostory(state, 1),
             
             # Hinoeuma Regions
             RegionName.Hinoeuma1: lambda state: self.can_access_hinoeuma1(state, 1),
@@ -996,11 +1009,15 @@ class OT2WorldRules(OT2Rules):
             RegionName.Hinoeuma2: lambda state: self.can_access_hinoeuma2(state, 1),
             RegionName.Sai: lambda state: self.can_access_sai(state, 1),
             RegionName.SaiRuins: lambda state: self.can_access_sai(state, 1), # Must add requirements for ruins sidequest here
-            RegionName.SaiKO: lambda state: (self.can_access_sai(state, 1) and self.can_KO(state, 1),
+            RegionName.SaiKO: lambda state: (self.can_access_sai(state, 1) and self.can_KO(state, 1)),
             RegionName.CasttiCh2Sai: lambda state: self.can_clear_casttich2sai(state, 1),
             RegionName.CasttiCh2SaiKO: lambda state: (self.can_clear_casttich2sai(state, 1) and self.can_KO(state, 1)),
             RegionName.Ku: lambda state: self.can_access_ku(state, 1),
-            RegionName.Hikarich5: lambda state: self.can_clear_hikarich5(state, 1),
+            RegionName.HikariCh5: lambda state: self.can_clear_hikarich5(state, 1),
+            RegionName.HikariCh1: lambda state: self.can_clear_hikarich1(state, 1),
+            RegionName.HikariClear: lambda state: self.can_clear_hikaristory(state, 1),
+            RegionName.PartitioSai: lambda state: self.can_clear_partitiosai(state, 1),
+            RegionName.AgneaCh4: lambda state: self.can_clear_agneach4(state, 1),
             
             # Leaflands regions
             RegionName.Leaflands: lambda state: self.can_access_leaflands(state, 1),
@@ -1013,6 +1030,11 @@ class OT2WorldRules(OT2Rules):
             RegionName.Timberain: lambda state: self.can_access_timberain(state, 1),
             RegionName.TimberainKO: lambda state: (self.can_access_timberain(state, 1) and self.can_KO(state, 1)),
             RegionName.CasttiCh4: lambda state: self.can_clear_casttich4(state, 1),
+            RegionName.CasttiClear: lambda state: self.can_clear_casttistory(state, 1),
+            RegionName.HikariCh3: lambda state: self.can_clear_hikarich3(state, 1),
+            RegionName.PartitioCh3: lambda state: self.can_clear_partitioch3(state, 1),
+            RegionName.AgneaCh1: lambda state: self.can_clear_agneach1(state, 1),
+            RegionName.ThroneCh2Mother: lambda state: self.can_clear_thronech2mother(state, 1),
             
             # Wildlands Regions
             RegionName.Wildlands1: lambda state: self.can_access_wildlands1(state, 1),
@@ -1026,6 +1048,9 @@ class OT2WorldRules(OT2Rules):
             RegionName.TemenosCh3Crackridge: lambda state: self.can_clear_temenosch3crackridge(state, 1),
             RegionName.OchetteCh2Tera: lambda state: self.can_clear_ochettech2tera(state, 1),
             RegionName.Gravell: lambda state: self.can_access_gravell(state, 1),
+            RegionName.OsvaldCh5: lambda state: self.can_clear_osvaldch5(state, 1),
+            RegionName.OsvaldClear: lambda state: self.can_clear_osvaldstory(state, 1),
+            
             
             # Sea Regions
             RegionName.SunderingSea: lambda state: self.can_access_sea(state, 1),
@@ -1033,84 +1058,40 @@ class OT2WorldRules(OT2Rules):
             RegionName.SeaIslands: lambda state: self.can_access_sea(state, 1),
             RegionName.SeaBehindShark: lambda state: self.can_access_sea(state, 1),
             RegionName.TyranodrakesLair: lambda state: (self.can_access_sea(state, 1) and state.has(ItemName.Boat, self.player, Amount)),
+            
+            #Side-Stories
+            RegionName.ThroneTemenosCh2: lambda state: self.can_clear_temenosthronech2(state, 1),
+            RegionName.AgneaHikariCh1: lambda state: self.can_clear_hikariagneach1(state, 1),
+            RegionName.AgneaHikariCh2: lambda state: self.can_clear_hikariagneach2(state, 1),
+            RegionName.PartitioOsvaldCh1: lambda state: self.can_clear_osvaldpartitioch1(state, 1),
+            RegionName.PartitioOsvaldCh2: lambda state: self.can_clear_osvaldpartitioch2(state, 1),
+            RegionName.OchetteCasttiCh1: lambda state: self.can_clear_casttiochettech1(state, 1),
+            RegionName.OchetteCasttiCh2: lambda state: self.can_clear_casttiochettech2(state, 1),
+            
+            #Endbosses quests, quests requirements are borked
+            RegionName.Vide: lambda state: (self.can_clear_casttiochettech2(state, 1) and self.can_clear_temenosthronech2(state, 1) and self.can_clear_hikariagneach2(state, 1) and self.can_clear_osvaldpartitioch2(state, 1)),
+            RegionName.TravelersBag: lambda state: (self.can_clear_casttiochettech2(state, 1) and self.can_clear_temenosthronech2(state, 1) and self.can_clear_hikariagneach2(state, 1) and self.can_clear_osvaldpartitioch2(state, 1)),
+            RegionName.PeculiarTomes: lambda state: (self.can_clear_casttiochettech2(state, 1) and self.can_clear_temenosthronech2(state, 1) and self.can_clear_hikariagneach2(state, 1) and self.can_clear_osvaldpartitioch2(state, 1)),
+            RegionName.ReachesOfHell: lambda state: (self.can_clear_casttiochettech2(state, 1) and self.can_clear_temenosthronech2(state, 1) and self.can_clear_hikariagneach2(state, 1) and self.can_clear_osvaldpartitioch2(state, 1)),
+            RegionName.Galdera: lambda state: (self.can_clear_casttiochettech2(state, 1) and self.can_clear_temenosthronech2(state, 1) and self.can_clear_hikariagneach2(state, 1) and self.can_clear_osvaldpartitioch2(state, 1)),
         }
+# I didn't change that one much, need to review it
+    def set_ot2_rules(self) -> None:
+        for region_name, rules in self.region_rules.items():
+            region = self.multiworld.get_region(region_name, self.player)
+            for entrance in region.entrances:
+                entrance.access_rule = rules
+        self.set_ot2_goal()
 
+    def set_ot2_goal(self):
+        vide_location = self.multiworld.get_location(LocationName.DefeatVide, self.player)
 
-
-
-
-
-
+# We might want to add some fighting rules to split Chapters in tiers (lvl1-10, 11-20, 21-30, 31-40 and final chapters).
 
         # Old KH2 logic down there
 
 
-    def kh2_list_count_sum(self, item_name_set: list, state: CollectionState) -> int:
-        """
-        Returns the sum of state.count() for each item in the list.
-        """
-        return sum(
-            [state.count(item_name, self.player) for item_name in item_name_set]
-        )
-
-    def kh2_list_any_sum(self, list_of_item_name_list: list, state: CollectionState) -> int:
-        """
-        Returns sum that increments by 1 if state.has_any
-        """
-        return sum(
-            [1 for item_list in list_of_item_name_list if
-             state.has_any(set(item_list), self.player)]
-        )
-
-    def kh2_dict_count(self, item_name_to_count: dict, state: CollectionState) -> bool:
-        """
-        simplifies count to a dictionary.
-        """
-        return all(
-            [state.count(item_name, self.player) >= item_amount for item_name, item_amount in
-             item_name_to_count.items()]
-        )
-
-    def kh2_dict_one_count(self, item_name_to_count: dict, state: CollectionState) -> int:
-        """
-        simplifies count to a dictionary.
-        """
-        return sum(
-            [1 for item_name, item_amount in
-             item_name_to_count.items() if state.count(item_name, self.player) >= item_amount]
-        )
-
-    def kh2_can_reach_any(self, loc_set: list, state: CollectionState):
-        """
-        Can reach any locations in the set.
-        """
-        return any(
-            [self.kh2_can_reach(location, state) for location in
-             loc_set]
-        )
-
-    def kh2_can_reach_all(self, loc_list: list, state: CollectionState):
-        """
-        Can reach all locations in the set.
-        """
-        return all(
-            [self.kh2_can_reach(location, state) for location in loc_list]
-        )
-
-    def kh2_can_reach(self, loc: str, state: CollectionState):
-        """
-        Returns bool instead of collection state.
-        """
-        return state.can_reach(self.multiworld.get_location(loc, self.player), "location", self.player)
-
-    def kh2_has_all(self, items: list, state: CollectionState):
-        """If state has at least one of all."""
-        return state.has_all(set(items), self.player)
-
-    def kh2_has_any(self, items: list, state: CollectionState):
-        return state.has_any(set(items), self.player)
-
-
+"""
     def set_kh2_rules(self) -> None:
         for region_name, rules in self.region_rules.items():
             region = self.multiworld.get_region(region_name, self.player)
@@ -1185,4 +1166,4 @@ class OT2WorldRules(OT2Rules):
                                                                                             self.multiworld.LuckyEmblemsRequired[
                                                                                                 self.player].value)
 
-
+"""
