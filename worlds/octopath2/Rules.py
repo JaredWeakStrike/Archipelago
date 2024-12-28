@@ -73,7 +73,7 @@ class OT2Rules:
 
     def can_access_hinoeuma1(self, state: CollectionState) -> bool:
         return (state.has(ItemName.HinoeumaUnlock, self.player)
-                and (self.can_access_harbolands(state)
+                and (self.can_access_harborlands(state)
                     or self.can_access_wildlands1(state))
                 or self.world.options.StartingCharacter == StartingCharacter.option_hikari)
 
@@ -97,7 +97,7 @@ class OT2Rules:
 
     def can_access_hinoeuma2(self, state: CollectionState) -> bool:
         return (state.has(ItemName.HinoeumaUnlock, self.player)
-                and (self.can_access_harbolands(state))
+                and (self.can_access_harborlands(state))
                 or self.can_access_leaflands(state))
 
     def can_access_wildlands2(self, state: CollectionState) -> bool:
@@ -268,7 +268,7 @@ class OT2Rules:
                     and state.has(ItemName.OsvaldCh4, self.player))
                 or (state.has(ItemName.OsvaldUnlock, self.player)
                     and state.has(ItemName.PartitioUnlock, self.player)
-                    and state.has(ItemName.PartitioOsvaldCh2, self.player)))
+                    and state.has(ItemName.OsvaldPartitioCh2, self.player)))
 
     def merryhills_unlock(self, state: CollectionState) -> bool:
         return (state.has(ItemName.AgneaUnlock, self.player)
@@ -283,7 +283,7 @@ class OT2Rules:
                     and state.has(ItemName.AgneaCh2, self.player))
                 or (state.has(ItemName.OsvaldUnlock, self.player)
                     and state.has(ItemName.PartitioUnlock,self.player)
-                    and state.has(ItemName.PartitioOsvaldCh1, self.player))
+                    and state.has(ItemName.OsvaldPartitioCh1, self.player))
                 or self.world.options.StartingCharacter == StartingCharacter.option_throne)
 
     def abandonedvillage_unlock(self, state: CollectionState) -> bool:
@@ -997,7 +997,7 @@ class OT2WorldRules(OT2Rules):
             RegionName.TemenosCh2: lambda state: self.can_clear_temenosch2(state),
             RegionName.ConningCreek: lambda state: self.can_access_conningcreek(state),
             RegionName.OsvaldCh3: lambda state: self.can_clear_osvaldch3(state),
-            RegionName.OchetteCh2Acta: lambda state: self.can_clear_ochettech2Acta(state),
+            RegionName.OchetteCh2Acta: lambda state: self.can_clear_ochettech2acta(state),
             RegionName.RoqueIsland: lambda state: self.can_access_roqueisland(state),
             RegionName.RoqueIslandKO: lambda state: (self.can_access_roqueisland(state) and self.can_KO(state)),
             RegionName.PartitioCh4: lambda state: self.can_clear_partitioch4(state),
