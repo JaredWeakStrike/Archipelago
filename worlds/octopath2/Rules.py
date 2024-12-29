@@ -22,11 +22,51 @@ class OT2Rules:
     player: int
     world: Octopath2World
     # Those are copy-paste from kh2 I tried to mimic into categories, but currently makes no sense
+    # Regions accesses to prevent recursions
+    Winterlands1Access: int
+    BrightlandsAccess: int
+    CrestlandsAccess: int
+    TotohahaAccess: int
+    HarborlandsAccess: int
+    Hinoeuma1Access: int
+    Hinoeuma2Access: int
+    LeaflandsAccess: int
+    Wildlands1Access: int
+    Wildlands2Access: int
+    CapeColdAccess: int
+    FlameChurchAccess: int
+    NewDelstaAccess: int
+    BeastingVillageAccess: int
+    CanalbrineAccess: int
+    RyuAccess: int
+    OresrushAccess: int
+    CropdaleAccess: int
+    SeaAccess: int
 
     def __init__(self, world: Octopath2World) -> None:
         self.player = world.player
         self.world = world
         self.multiworld = world.multiworld
+        
+        self.Winterlands1Access=0
+        self.BrightlandsAccess=0
+        self.CrestlandsAccess=0
+        self.TotohahaAccess=0
+        self.HarborlandsAccess=0
+        self.Hinoeuma1Access=0
+        self.Hinoeuma2Access=0
+        self.LeaflandsAccess=0
+        self.Wildlands1Access=0
+        self.Wildlands2Access=0
+        self.CapeColdAccess=0
+        self.FlameChurchAccess=0
+        self.NewDelstaAccess=0
+        self.BeastingVillageAccess=0
+        self.CanalbrineAccess=0
+        self.RyuAccess=0
+        self.OresrushAccess=0
+        self.CropdaleAccess=0
+        self.SeaAccess=0
 
     def can_be_daytime(self, state: CollectionState) -> bool:
         return (state.has(ItemName.TimeChange, self.player)
@@ -36,59 +76,124 @@ class OT2Rules:
         return (state.has(ItemName.TimeChange, self.player)
                 or self.world.starting_time == "Night")
 
-    # Regions access
+    # Regions access, need to check if we already went through that requirement to avoid infinite loops
 
     def can_access_winterlands1(self, state: CollectionState) -> bool:
-        return (state.has(ItemName.WinterlandsUnlock, self.player)
-                and (self.can_access_brightlands(state)
-                     or self.can_access_crestlands(state))
-                or self.world.options.StartingCharacter == StartingCharacter.option_osvald)
+        if self.Winterlands1Access == 1:
+            return True
+        elif self.Winterlands1Access == -1:
+            return False
+        else:
+            self.Winterlands1Access = -1
+            tempvar = (state.has(ItemName.WinterlandsUnlock, self.player)
+                                  and (self.can_access_brightlands(state)
+                                       or self.can_access_crestlands(state))
+                                  or self.world.options.StartingCharacter == StartingCharacter.option_osvald)
+            self.Winterlands1Access = tempvar  
+            return self.Winterlands1Access ==1
+            
 
     def can_access_crestlands(self, state: CollectionState) -> bool:
-        return (state.has(ItemName.CrestlandsUnlock, self.player)
-                and (self.can_access_brightlands(state)
-                     or self.can_access_winterlands1(state))
-                or self.world.options.StartingCharacter == StartingCharacter.option_temenos)
+        if self.CrestlandsAccess == 1:
+            return True
+        elif self.CrestlandsAccess == -1:
+            return False
+        else:
+            self.CrestlandsAccess = -1
+            tempvar = (state.has(ItemName.CrestlandsUnlock, self.player)
+                        and (self.can_access_brightlands(state)
+                            or self.can_access_winterlands1(state))
+                        or self.world.options.StartingCharacter == StartingCharacter.option_temenos)
+            self.CrestlandsAccess = tempvar  
+            return self.CrestlandsAccess == 1
 
     def can_access_brightlands(self, state: CollectionState) -> bool:
-        return (state.has(ItemName.BrightlandsUnlock, self.player)
-                and (self.can_access_winterlands1(state)
-                     or self.can_access_crestlands(state)
-                     or self.can_access_totohaha(state)
-                     or self.can_access_wildlands2(state))
-                or self.world.options.StartingCharacter == StartingCharacter.option_throne)
+        if self.BrightlandsAccess == 1:
+            return True
+        elif self.BrightlandsAccess == -1:
+            return False
+        else:
+            self.BrightlandsAccess = -1
+            tempvar = (state.has(ItemName.BrightlandsUnlock, self.player)
+                        and (self.can_access_winterlands1(state)
+                            or self.can_access_crestlands(state)
+                            or self.can_access_totohaha(state)
+                            or self.can_access_wildlands2(state))
+                        or self.world.options.StartingCharacter == StartingCharacter.option_throne)
+            self.BrightlandsAccess = tempvar  
+            return self.BrightlandsAccess == 1
 
     def can_access_totohaha(self, state: CollectionState) -> bool:
-        return (state.has(ItemName.TotohahaUnlock, self.player)
-                and (self.can_access_brightlands(state)
-                    or self.can_access_wildlands2(state))
-                or self.world.options.StartingCharacter == StartingCharacter.option_ochette)
+        if self.TotohahaAccess == 1:
+            return True
+        elif self.TotohahaAccess == -1:
+            return False
+        else:
+            self.TotohahaAccess = -1
+            tempvar = (state.has(ItemName.TotohahaUnlock, self.player)
+                        and (self.can_access_brightlands(state)
+                            or self.can_access_wildlands2(state))
+                        or self.world.options.StartingCharacter == StartingCharacter.option_ochette)
+            self.TotohahaAccess = tempvar  
+            return self.TotohahaAccess == 1
 
     def can_access_harborlands(self, state: CollectionState) -> bool:
-        return ((state.has(ItemName.HarborlandsUnlock, self.player)
-                and (self.can_access_brightlands(state)
-                    or self.can_access_hinoeuma1(state)
-                    or self.can_access_hinoeuma2(state)))
-                or self.world.options.StartingCharacter == StartingCharacter.option_castti)
+        if self.HarborlandsAccess == 1:
+            return True
+        elif self.HarborlandsAccess == -1:
+            return False
+        else:
+            self.HarborlandsAccess = -1
+            tempvar = ((state.has(ItemName.HarborlandsUnlock, self.player)
+                        and (self.can_access_brightlands(state)
+                            or self.can_access_hinoeuma1(state)
+                            or self.can_access_hinoeuma2(state)))
+                        or self.world.options.StartingCharacter == StartingCharacter.option_castti)
+            self.HarborlandsAccess = tempvar  
+            return self.HarborlandsAccess == 1
 
     def can_access_hinoeuma1(self, state: CollectionState) -> bool:
-        return (state.has(ItemName.HinoeumaUnlock, self.player)
-                and (self.can_access_harborlands(state)
-                    or self.can_access_wildlands1(state))
-                or self.world.options.StartingCharacter == StartingCharacter.option_hikari)
+        if self.Hinoeuma1Access == 1:
+            return True
+        elif self.Hinoeuma1Access == -1:
+            return False
+        else:
+            self.Hinoeuma1Access = -1
+            tempvar = (state.has(ItemName.HinoeumaUnlock, self.player)
+                        and (self.can_access_harborlands(state)
+                            or self.can_access_wildlands1(state))
+                        or self.world.options.StartingCharacter == StartingCharacter.option_hikari)
+            self.Hinoeuma1Access = tempvar  
+            return self.Hinoeuma1Access == 1
 
     def can_access_leaflands(self, state: CollectionState) -> bool:
-        return ((state.has(ItemName.LeaflandsUnlock, self.player)
-                and (self.can_access_wildlands1(state)
-                    or self.can_access_wildlands2(state)
-                    or self.can_access_hinoeuma2(state)))
-                or self.world.options.StartingCharacter == StartingCharacter.option_agnea)
+        if self.LeaflandsAccess == 1:
+            return True
+        elif self.LeaflandsAccess == -1:
+            return False
+        else:
+            self.LeaflandsAccess = -1
+            tempvar = ((state.has(ItemName.LeaflandsUnlock, self.player)
+                        and (self.can_access_wildlands1(state)
+                            or self.can_access_wildlands2(state)
+                            or self.can_access_hinoeuma2(state)))
+                        or self.world.options.StartingCharacter == StartingCharacter.option_agnea)
+            self.LeaflandsAccess = tempvar  
+            return self.LeaflandsAccess == 1
 
     def can_access_wildlands1(self, state: CollectionState) -> bool:
-        return (state.has(ItemName.WildlandsUnlock, self.player)
+        if self.Wildlands1Access == 1:
+            return True
+        elif self.Wildlands1Access == -1:
+            return False
+        else:
+            self.Wildlands1Access = -1
+            tempvar = (state.has(ItemName.WildlandsUnlock, self.player)
                 and (self.can_access_hinoeuma1(state)
                     or self.can_access_leaflands(state))
                 or self.world.options.StartingCharacter == StartingCharacter.option_partitio)
+            self.Wildlands1Access = tempvar  
+            return self.Wildlands1Access == 1
 
     def can_access_winterlands2(self, state: CollectionState) -> bool:
         return (state.has(ItemName.WinterlandsUnlock, self.player)
@@ -96,21 +201,45 @@ class OT2Rules:
                 and self.can_KO(state))
 
     def can_access_hinoeuma2(self, state: CollectionState) -> bool:
-        return (state.has(ItemName.HinoeumaUnlock, self.player)
-                and (self.can_access_harborlands(state))
-                or self.can_access_leaflands(state))
+        if self.Hinoeuma2Access == 1:
+            return True
+        elif self.Hinoeuma2Access == -1:
+            return False
+        else:
+            self.Hinoeuma2Access = -1
+            tempvar = (state.has(ItemName.HinoeumaUnlock, self.player)
+                        and (self.can_access_harborlands(state))
+                        or self.can_access_leaflands(state))
+            self.Hinoeuma2Access = tempvar  
+            return self.Hinoeuma2Access == 1
 
     def can_access_wildlands2(self, state: CollectionState) -> bool:
-        return (state.has(ItemName.WildlandsUnlock, self.player)
-                and (self.can_access_leaflands(state)
-                    or self.can_access_totohaha(state)
-                    or self.can_access_brightlands(state)))
+        if self.Wildlands2Access == 1:
+            return True
+        elif self.Wildlands2Access == -1:
+            return False
+        else:
+            self.Wildlands2Access = -1
+            tempvar = (state.has(ItemName.WildlandsUnlock, self.player)
+                        and (self.can_access_leaflands(state)
+                            or self.can_access_totohaha(state)
+                            or self.can_access_brightlands(state)))
+            self.Wildlands2Access = tempvar  
+            return self.Wildlands2Access == 1
 
     def can_access_sea(self, state: CollectionState) -> bool:
-        return (state.has(ItemName.TheGrandTerry, self.player)
-                and (self.can_access_brightlands(state)
-                     or self.can_access_totohaha(state)
-                     or self.can_access_wildlands2(state)))
+        if self.SeaAccess == 1:
+            return True
+        elif self.SeaAccess == -1:
+            return False
+        else:
+            self.SeaAccess = -1
+            tempvar = (state.has(ItemName.TheGrandTerry, self.player)
+                        and (self.can_access_brightlands(state)
+                            or self.can_access_totohaha(state)
+                            or self.can_access_wildlands2(state)))
+            self.SeaAccess = tempvar  
+            return self.SeaAccess == 1
 
     # Individual Path Action access
 

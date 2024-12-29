@@ -61,9 +61,9 @@ class Octopath2World(World):
         Returns created OT2Item
         """
         data = item_table[name]
-        if data.type == 1:
+        if data.type == ItemType.progression:
             data_classification = ItemClassification.progression
-        elif data.type == 0:
+        elif data.type == ItemType.useful:
             data_classification = ItemClassification.useful
         else:
             data_classification = ItemClassification.filler
@@ -85,9 +85,9 @@ class Octopath2World(World):
         if item_name not in precollected:
             self.exclude.append(item_name)
             data = item_table[item_name]
-            if data.type == 1:
+            if data.type == ItemType.progression:
                 data_classification = ItemClassification.progression
-            elif data.type == 0:
+            elif data.type == ItemType.useful:
                 data_classification = ItemClassification.useful
             else:
                 data_classification = ItemClassification.filler
@@ -149,7 +149,7 @@ class Octopath2World(World):
         itempool = []
                     
         # Creating filler for unfilled locations
-        size = len(all_chests) - len(self.multiworld.itempool)
+        size = len(all_chests) - len(self.multiworld.itempool)-3
         for i in range(size):
             filler = self.random.choice(list(filler_items)) 
             itempool += [self.create_item(filler)]

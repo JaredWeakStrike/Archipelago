@@ -832,7 +832,6 @@ Main_Story_Items_Table = {
     ItemName.HorseCoin:                             ItemData(0,ItemType.progression),
     ItemName.TheaterTicket:                         ItemData(0,ItemType.progression),
     ItemName.TicketStub:                            ItemData(0,ItemType.progression),
-    ItemName.TheGrandTerry:                         ItemData(0,ItemType.progression),
     ItemName.ShipAlterationTicket:                  ItemData(0,ItemType.progression),
     ItemName.UnfinishedVessel:                      ItemData(0,ItemType.progression),
     ItemName.MercantileManuscriptArchiveKey:        ItemData(0,ItemType.progression),
@@ -1590,13 +1589,22 @@ Story_Chapter_Unlocks_Table = {
     ItemName.AgneaCh2:                              ItemData(1,ItemType.progression),
     ItemName.AgneaCh3:                              ItemData(1,ItemType.progression),
     ItemName.AgneaCh4:                              ItemData(1,ItemType.progression),
-    ItemName.AgneaCh5:                              ItemData(1,ItemType.progression)
+    ItemName.AgneaCh5:                              ItemData(1,ItemType.progression),
+    ItemName.TemenosThroneCh1:                      ItemData(1,ItemType.progression),
+    ItemName.TemenosThroneCh2:                      ItemData(1,ItemType.progression),
+    ItemName.HikariAgneaCh1:                        ItemData(1,ItemType.progression),
+    ItemName.HikariAgneaCh2:                        ItemData(1,ItemType.progression),
+    ItemName.CasttiOchetteCh1:                      ItemData(1,ItemType.progression),
+    ItemName.CasttiOchetteCh2:                      ItemData(1,ItemType.progression),
+    ItemName.OsvaldPartitioCh1:                     ItemData(1,ItemType.progression),
+    ItemName.OsvaldPartitioCh2:                     ItemData(1,ItemType.progression),
 }
 
 # Do those need a section really? Dunno where to put them
 Other_Items_Table = {
     ItemName.Boat:                                  ItemData(1,ItemType.progression),  # Does this refer to Ferries? No, it's the little boat that lets you move in rivers.
-    ItemName.TimeChange:                            ItemData(1,ItemType.progression)
+    ItemName.TimeChange:                            ItemData(1,ItemType.progression),
+    ItemName.TheGrandTerry:                         ItemData(1,ItemType.progression),
 }
 
 # OT2 Events : to change for OT2 Events (Sidequests, main chapters, etc) 
@@ -1686,6 +1694,7 @@ item_table = {
     **Region_Unlocks_Table,
     **Character_Unlocks_Table,
     **Story_Chapter_Unlocks_Table,
+    **Other_Items_Table,
 }
 
 filler_items = {
