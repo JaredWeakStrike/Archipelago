@@ -1,8 +1,8 @@
 from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from .Items import item_table
-from .Locations import all_chests
+from .Items import item_table, Character_Unlocks_Table, Job_Licenses_Table, Region_Unlocks_Table
+from .Locations import all_chests 
 from .Names import LocationName, ItemName, RegionName
 from .Options import StartingCharacter, Goal
 from worlds.generic.Rules import add_rule, forbid_items, add_item_rule
@@ -474,20 +474,23 @@ class OT2Rules:
     def can_clear_osvaldch3(self, state: CollectionState) -> bool:
         return (state.has(ItemName.OsvaldUnlock, self.player)
                 and state.has(ItemName.OsvaldCh3, self.player)
-                and self.can_access_conningcreek(state) and self.can_scrutinize(state))
+                and self.can_access_conningcreek(state) and self.can_scrutinize(state)
+                and self.get_lvl1plus_rules(state))
 
     def can_clear_osvaldch4(self, state: CollectionState) -> bool:
         return (state.has(ItemName.OsvaldUnlock, self.player)
                 and state.has(ItemName.OsvaldCh4, self.player)
                 and self.can_access_montwise(state)
-                and self.can_scrutinize(state))
+                and self.can_scrutinize(state)
+                and self.get_lvl20plus_rules(state))
 
     def can_clear_osvaldch5(self, state: CollectionState) -> bool:
         return (state.has(ItemName.OsvaldUnlock, self.player)
                 and state.has(ItemName.OsvaldCh5, self.player)
                 and self.can_access_gravell(state)
                 and self.can_mug(state)
-                and self.can_scrutinize(state))
+                and self.can_scrutinize(state)
+                and self.get_lvl40plus_rules(state))
 
     def can_clear_temenosch1(self, state: CollectionState) -> bool:
         return (state.has(ItemName.TemenosUnlock, self.player)
@@ -502,27 +505,31 @@ class OT2Rules:
                 and state.has(ItemName.TemenosCh2, self.player)
                 and self.can_access_canalbrine(state)
                 and self.can_guide(state)
-                and self.can_coerce(state))
+                and self.can_coerce(state)
+                and self.get_lvl1plus_rules(state))
 
     def can_clear_temenosch3crackridge(self, state: CollectionState) -> bool:
         return (state.has(ItemName.TemenosUnlock, self.player)
                 and state.has(ItemName.TemenosCh3Crackridge,self.player)
                 and self.can_access_crackridge(state)
                 and self.can_guide(state)
-                and self.can_coerce(state))
+                and self.can_coerce(state)
+                and self.get_lvl20plus_rules(state))
 
     def can_clear_temenosch3stormhail(self, state: CollectionState) -> bool:
         return (state.has(ItemName.TemenosUnlock, self.player)
                 and state.has(ItemName.TemenosCh3Stormhail,self.player)
                 and self.can_access_stormhail(state)
                 and self.can_guide(state)
-                and self.can_coerce(state))
+                and self.can_coerce(state)
+                and self.get_lvl20plus_rules(state))
 
     def can_clear_temenosch4(self, state: CollectionState) -> bool:
         return (state.has(ItemName.TemenosUnlock, self.player)
                 and state.has(ItemName.TemenosCh4, self.player)
                 and self.can_access_nameless(state)
-                and self.can_guide(state))
+                and self.can_guide(state)
+                and self.get_lvl40plus_rules(state))
 
     def can_clear_thronech1(self, state: CollectionState) -> bool:
         return (state.has(ItemName.ThroneUnlock, self.player)
@@ -542,24 +549,28 @@ class OT2Rules:
         return (state.has(ItemName.ThroneUnlock, self.player)
                 and state.has(ItemName.ThroneCh2Father,self.player)
                 and self.can_access_winterbloom(state)
-                and self.can_ambush(state))
+                and self.can_ambush(state)
+                and self.get_lvl1plus_rules(state))
 
     def can_clear_thronech3mother(self, state: CollectionState) -> bool:
         return (state.has(ItemName.ThroneUnlock, self.player)
                 and state.has(ItemName.ThroneCh3Mother,self.player)
                 and self.can_access_wellgrove(state)
                 and self.can_steal(state)
-                and self.can_ambush(state))
+                and self.can_ambush(state)
+                and self.get_lvl20plus_rules(state))
 
     def can_clear_thronech3father(self, state: CollectionState) -> bool:
         return (state.has(ItemName.ThroneUnlock, self.player)
                 and state.has(ItemName.ThroneCh3Father,self.player)
-                and self.can_access_montwise(state))
+                and self.can_access_montwise(state)
+                and self.get_lvl20plus_rules(state))
 
     def can_clear_thronech4(self, state: CollectionState) -> bool:
         return (state.has(ItemName.ThroneUnlock, self.player)
                 and state.has(ItemName.ThroneCh4, self.player)
-                and self.can_access_newdelsta(state))
+                and self.can_access_newdelsta(state)
+                and self.get_lvl40plus_rules(state))
 
     def can_clear_ochettech1(self, state: CollectionState) -> bool:
         return (state.has(ItemName.OchetteUnlock, self.player)
@@ -573,25 +584,29 @@ class OT2Rules:
                 and state.has(ItemName.OchetteCh2Acta,self.player)
                 and self.can_access_conningcreek(state)
                 and self.can_provoke(state)
-                and state.has(ItemName.Boat, self.player))
+                and state.has(ItemName.Boat, self.player)
+                and self.get_lvl1plus_rules(state))
 
     def can_clear_ochettech2tera(self, state: CollectionState) -> bool:
         return (state.has(ItemName.OchetteUnlock, self.player)
                 and state.has(ItemName.OchetteCh2Tera,self.player)
                 and self.can_access_crackridge(state)
-                and self.can_befriend(state))
+                and self.can_befriend(state)
+                and self.get_lvl20plus_rules(state))
 
     def can_clear_ochettech2glacis(self, state: CollectionState) -> bool:
         return (state.has(ItemName.OchetteUnlock, self.player)
                 and state.has(ItemName.OchetteCh2Glacis,self.player)
                 and self.can_access_stormhail(state)
-                and self.can_provoke(state))
+                and self.can_provoke(state)
+                and self.get_lvl20plus_rules(state))
 
     def can_clear_ochettech3(self, state: CollectionState) -> bool:
         return (state.has(ItemName.OchetteUnlock, self.player)
                 and state.has(ItemName.OchetteCh3, self.player)
                 and self.can_access_beasting(state)
-                and self.can_befriend(state))
+                and self.can_befriend(state)
+                and self.get_lvl40plus_rules(state))
 
     def can_clear_casttich1(self, state: CollectionState) -> bool:
         return (state.has(ItemName.CasttiUnlock, self.player)
@@ -606,27 +621,31 @@ class OT2Rules:
                 and state.has(ItemName.CasttiCh2Sai, self.player)
                 and self.can_access_sai(state)
                 and self.can_inquire(state)
-                and self.can_soothe(state))
+                and self.can_soothe(state)
+                and self.get_lvl1plus_rules(state))
 
     def can_clear_casttich2winterbloom(self, state: CollectionState) -> bool:
         return (state.has(ItemName.CasttiUnlock, self.player)
                 and state.has(ItemName.CasttiCh2Winterbloom, self.player)
                 and self.can_access_winterbloom(state)
                 and self.can_inquire(state)
-                and self.can_soothe(state))
+                and self.can_soothe(state)
+                and self.get_lvl20plus_rules(state))
 
     def can_clear_casttich3(self, state: CollectionState) -> bool:
         return (state.has(ItemName.CasttiUnlock, self.player)
                 and state.has(ItemName.CasttiCh3, self.player)
                 and self.can_access_abandonedvillage(state)
-                and self.can_inquire(state))
+                and self.can_inquire(state)
+                and self.get_lvl20plus_rules(state))
 
     def can_clear_casttich4(self, state: CollectionState) -> bool:
         return (state.has(ItemName.CasttiUnlock, self.player) 
                 and state.has(ItemName.CasttiCh4, self.player)
                 and self.can_access_timberain(state) 
                 and self.can_inquire(state) 
-                and self.can_soothe(state))
+                and self.can_soothe(state)
+                and self.get_lvl40plus_rules(state))
 
     def can_clear_hikarich1(self, state: CollectionState) -> bool:
         return (state.has(ItemName.HikariUnlock, self.player) 
@@ -640,26 +659,30 @@ class OT2Rules:
                 and state.has(ItemName.HikariCh2, self.player)
                 and self.can_access_montwise(state) 
                 and self.can_bribe(state) 
-                and self.can_challenge(state))
+                and self.can_challenge(state)
+                and self.get_lvl1plus_rules(state))
 
     def can_clear_hikarich3(self, state: CollectionState) -> bool:
         return (state.has(ItemName.HikariUnlock, self.player) 
                 and state.has(ItemName.HikariCh3, self.player)
                 and self.can_access_wellgrove(state) 
                 and self.can_bribe(state) 
-                and self.can_challenge(state))
+                and self.can_challenge(state)
+                and self.get_lvl20plus_rules(state))
 
     def can_clear_hikarich4(self, state: CollectionState) -> bool:
         return (state.has(ItemName.HikariUnlock, self.player) 
                 and state.has(ItemName.HikariCh4, self.player)
                 and self.can_access_stormhail(state) 
-                and self.can_challenge(state)) # Challenge needed for the flashback duel
+                and self.can_challenge(state)
+                and self.get_lvl20plus_rules(state)) # Challenge needed for the flashback duel
 
     def can_clear_hikarich5(self, state: CollectionState) -> bool:
         return (state.has(ItemName.HikariUnlock, self.player) 
                 and state.has(ItemName.HikariCh5, self.player)
                 and self.can_access_ku(state)
-                and self.can_challenge(state))
+                and self.can_challenge(state)
+                and self.get_lvl40plus_rules(state))
 
     def can_clear_partitioch1(self, state: CollectionState) -> bool:
         return (state.has(ItemName.PartitioUnlock, self.player) 
@@ -673,7 +696,8 @@ class OT2Rules:
                 and state.has(ItemName.PartitioCh2, self.player)
                 and self.can_access_clockbank(state)
                 and self.can_purchase(state)
-                and self.can_hire(state))
+                and self.can_hire(state)
+                and self.get_lvl1plus_rules(state))
 
     def can_clear_partitioch3(self, state: CollectionState) -> bool:
         return ((state.has(ItemName.PartitioUnlock, self.player)
@@ -683,14 +707,16 @@ class OT2Rules:
                  and self.can_hire(state))
                 and (self.can_clear_partitiowinterbloom(state) # You don't need to finish these?
                     or self.can_clear_partitiototohaha(state)       # You only need the item, afaik.
-                    or self.can_clear_partitiosai(state)))
+                    or self.can_clear_partitiosai(state))
+                and self.get_lvl20plus_rules(state))
 
     def can_clear_partitioch4(self, state: CollectionState) -> bool:
         return (state.has(ItemName.PartitioUnlock, self.player)
                 and state.has(ItemName.PartitioCh4, self.player)
                 and self.can_access_roqueisland(state)
                 and self.can_purchase(state)
-                and self.can_hire(state))
+                and self.can_hire(state)
+                and self.get_lvl40plus_rules(state))
 
     def can_clear_partitiowinterbloom(self, state: CollectionState) -> bool:
         return (state.has(ItemName.PartitioUnlock, self.player)
@@ -727,7 +753,8 @@ class OT2Rules:
                 and state.has(ItemName.AgneaCh2, self.player)
                 and self.can_access_newdelsta(state)
                 and self.can_entreat(state)
-                and self.can_allure(state))
+                and self.can_allure(state)
+                and self.get_lvl1plus_rules(state))
 
     def can_clear_agneach3(self, state: CollectionState) -> bool:
         return (state.has(ItemName.AgneaUnlock, self.player)
@@ -740,13 +767,15 @@ class OT2Rules:
         return (state.has(ItemName.AgneaUnlock, self.player)
                 and state.has(ItemName.AgneaCh4, self.player)
                 and self.can_access_sai(state)
-                and self.can_entreat(state))
+                and self.can_entreat(state)
+                and self.get_lvl20plus_rules(state))
 
     def can_clear_agneach5(self, state: CollectionState) -> bool:
         return (state.has(ItemName.AgneaUnlock, self.player)
                 and state.has(ItemName.AgneaCh5, self.player)
                 and self.can_access_merryhills(state)
-                and self.can_allure(state))
+                and self.can_allure(state)
+                and self.get_lvl40plus_rules(state))
 
     # Can Clear Full stories
 
@@ -874,6 +903,8 @@ class OT2WorldRules(OT2Rules):
     def __init__(self, ot2world: Octopath2World) -> None:
         # These Rules are Always in effect
         super().__init__(ot2world)
+        self.fight_logic = self.world.options.Difficulty.current_key
+        
         self.region_rules = {
             # Winterlands regions
             RegionName.Winterlands1: lambda state: self.can_access_winterlands1(state),
@@ -1017,10 +1048,10 @@ class OT2WorldRules(OT2Rules):
             
             # Sea Regions
             RegionName.SunderingSea: lambda state: self.can_access_sea(state),
-            RegionName.SeaBehindScourge: lambda state: self.can_access_sea(state),
+            RegionName.SeaBehindScourge: lambda state: self.can_access_sea(state) and self.get_lvl20plus_rules(state),
             RegionName.SeaIslands: lambda state: self.can_access_sea(state),
-            RegionName.SeaBehindShark: lambda state: self.can_access_sea(state),
-            RegionName.TyranodrakesLair: lambda state: (self.can_access_sea(state) and state.has(ItemName.Boat, self.player)),
+            RegionName.SeaBehindShark: lambda state: self.can_access_sea(state) and self.get_lvl20plus_rules(state),
+            RegionName.TyranodrakesLair: lambda state: (self.can_access_sea(state) and state.has(ItemName.Boat, self.player) and self.get_lvl40plus_rules(state)),
             
             #Side-Stories
             RegionName.ThroneTemenosCh2: lambda state: self.can_clear_temenosthronech2(state),
@@ -1032,12 +1063,12 @@ class OT2WorldRules(OT2Rules):
             RegionName.OchetteCasttiCh2: lambda state: self.can_clear_casttiochettech2(state),
             
             #Endbosses quests, quests requirements are borked
-            RegionName.Vide: lambda state: (self.can_clear_casttiochettech2(state) and self.can_clear_temenosthronech2(state) and self.can_clear_hikariagneach2(state) and self.can_clear_osvaldpartitioch2(state)),
+            RegionName.Vide: lambda state: (self.can_clear_casttiochettech2(state) and self.can_clear_temenosthronech2(state) and self.can_clear_hikariagneach2(state) and self.can_clear_osvaldpartitioch2(state) and self.get_finalboss_rules(state)),
             
             RegionName.TravelersBag: lambda state: (self.can_be_nighttime(state)),
             RegionName.PeculiarTomes: lambda state: (self.can_get_npcitems(state) and state.can_reach(RegionName.Crackridge, player=self.player) and state.can_reach(RegionName.BeastingVillage, player=self.player) and state.can_reach(RegionName.Winterlands2, player=self.player)),
             RegionName.ReachesOfHell: lambda state: (state.can_reach(RegionName.PeculiarTomes, player=self.player) and self.can_get_info(state) and state.can_reach(RegionName.SunderingSea, player=self.player) and state.has(ItemName.Boat, self.player)),
-            RegionName.Galdera: lambda state: (state.can_reach(RegionName.SunderingSea, player=self.player) and state.can_reach(RegionName.TravelersBag, player=self.player) and state.can_reach(RegionName.PeculiarTomes, player=self.player) and state.can_reach(RegionName.ReachesOfHell, player=self.player)),
+            RegionName.Galdera: lambda state: (state.can_reach(RegionName.SunderingSea, player=self.player) and state.can_reach(RegionName.TravelersBag, player=self.player) and state.can_reach(RegionName.PeculiarTomes, player=self.player) and state.can_reach(RegionName.ReachesOfHell, player=self.player) and self.get_finalboss_rules(state)),
             
         }
         
@@ -1084,8 +1115,112 @@ class OT2WorldRules(OT2Rules):
         add_rule(self.multiworld.get_entrance("Leaflands Trails -> Al's Traveler's Bag Subquest", self.player),
                  lambda state: self.world.options.StartingCharacter == StartingCharacter.option_agnea)
                  
+                 
+        # ABABABABA
+     #   easy_logic = [
+    #state.has_from_list_unique(Character_Unlocks_Table, self.player, 4) # for any chapter
+#    has.multiple(self.character_unlock, 8) for chapters 20+
+#    has.multiple(self.region_unlock,4) for chapters 1+
+#    has.multiple(self.region_unlock, 6) for chapters 20+
+#    has.multiple(self.region_unlock, 8) for chapters 40+
+#    has.multiple(self.job_licenses, 4) for any chapter
+#    has.multiple(self.job_licenses, 6) for chapters 20+
+#    has.multiple(self.job_licenses, 12) for chapters 40+
+#]
+
+#normal_logic = [
+#    has.multiple(self.character_unlock, 2) for any chapter
+#    has.multiple(self.character_unlock, 4) for chapters 20+
+#    has.multiple(self.region_unlock,2) for chapters 1+
+#    has.multiple(self.region_unlock, 4) for chapters 20+
+#    has.multiple(self.job_licenses, 2) for any chapter
+#    has.multiple(self.job_licenses, 4) for chapters 20+
+
+#hard_logic = [
+#    has.multiple(self.character_unlock, 2) for chapters 20+
+#    has.multiple(self.character_unlock, 4) for chapters 40+
+#    has.multiple(self.region_unlock,2) for chapters 20+
+#    has.multiple(self.region_unlock, 4) for chapters 40+
+#    has.multiple(self.job_licenses, 2) for chapters 20+
+#    has.multiple(self.job_licenses, 4) for chapters 40+
+
+#no logic = [
+#    Did you expect something here?
+
+    
+                 
+                 
+                 
                      
         self.set_ot2_goal()
+        
+    def get_lvl1plus_rules(self, state: CollectionState) -> bool:
+        level1plus_rules = {
+            "easy":     state.has_from_list_unique(Character_Unlocks_Table, self.player, 4) 
+                        and state.has_from_list_unique(Region_Unlocks_Table, self.player, 4)
+                        and state.has_from_list_unique(Job_Licenses_Table, self.player, 4),
+            "normal":   state.has_from_list_unique(Character_Unlocks_Table, self.player, 2) 
+                        and state.has_from_list_unique(Region_Unlocks_Table, self.player, 2)
+                        and state.has_from_list_unique(Job_Licenses_Table, self.player, 2),
+            "hard":     state.has_from_list_unique(Character_Unlocks_Table, self.player, 1) 
+                        and state.has_from_list_unique(Region_Unlocks_Table, self.player, 1)
+                        and state.has_from_list_unique(Job_Licenses_Table, self.player, 0),
+            "no logic": state.has_from_list_unique(Character_Unlocks_Table, self.player, 1) 
+                        and state.has_from_list_unique(Region_Unlocks_Table, self.player, 1)
+                        and state.has_from_list(Job_Licenses_Table, self.player, 0)
+        }
+        return level1plus_rules[self.fight_logic]
+    
+    def get_lvl20plus_rules(self, state: CollectionState) -> bool:
+        level20plus_rules = {
+            "easy":     state.has_from_list_unique(Character_Unlocks_Table, self.player, 8) 
+                        and state.has_from_list_unique(Region_Unlocks_Table, self.player, 6)
+                        and state.has_from_list_unique(Job_Licenses_Table, self.player, 6),
+            "normal":   state.has_from_list_unique(Character_Unlocks_Table, self.player, 4) 
+                        and state.has_from_list_unique(Region_Unlocks_Table, self.player, 4)
+                        and state.has_from_list_unique(Job_Licenses_Table, self.player, 4),
+            "hard":     state.has_from_list_unique(Character_Unlocks_Table, self.player, 2) 
+                        and state.has_from_list_unique(Region_Unlocks_Table, self.player, 2)
+                        and state.has_from_list_unique(Job_Licenses_Table, self.player, 2),
+            "no logic": state.has_from_list_unique(Character_Unlocks_Table, self.player, 1) 
+                        and state.has_from_list_unique(Region_Unlocks_Table, self.player, 1)
+                        and state.has_from_list_unique(Job_Licenses_Table, self.player, 0)
+        }
+        return level20plus_rules[self.fight_logic] 
+        
+    def get_lvl40plus_rules(self, state: CollectionState) -> bool:
+        level40plus_rules = {
+            "easy":     state.has_from_list_unique(Character_Unlocks_Table, self.player, 8) 
+                        and state.has_from_list_unique(Region_Unlocks_Table, self.player, 8)
+                        and state.has_from_list_unique(Job_Licenses_Table, self.player, 12),
+            "normal":   state.has_from_list_unique(Character_Unlocks_Table, self.player, 4) 
+                        and state.has_from_list_unique(Region_Unlocks_Table, self.player, 4)
+                        and state.has_from_list_unique(Job_Licenses_Table, self.player, 4),
+            "hard":     state.has_from_list_unique(Character_Unlocks_Table, self.player, 4) 
+                        and state.has_from_list_unique(Region_Unlocks_Table, self.player, 4)
+                        and state.has_from_list_unique(Job_Licenses_Table, self.player, 4),
+            "no logic": state.has_from_list_unique(Character_Unlocks_Table, self.player, 1) 
+                        and state.has_from_list_unique(Region_Unlocks_Table, self.player, 1)
+                        and state.has_from_list_unique(Job_Licenses_Table, self.player, 0)
+        }
+        return level40plus_rules[self.fight_logic]    
+        
+    def get_finalboss_rules(self, state: CollectionState) -> bool:
+        finalboss_rules = {
+            "easy":     state.has_from_list_unique(Character_Unlocks_Table, self.player, 8) 
+                        and state.has_from_list_unique(Region_Unlocks_Table, self.player, 8)
+                        and state.has_from_list_unique(Job_Licenses_Table, self.player, 12),
+            "normal":   state.has_from_list_unique(Character_Unlocks_Table, self.player, 8) 
+                        and state.has_from_list_unique(Region_Unlocks_Table, self.player, 8)
+                        and state.has_from_list_unique(Job_Licenses_Table, self.player, 8),
+            "hard":     state.has_from_list_unique(Character_Unlocks_Table, self.player, 8) 
+                        and state.has_from_list_unique(Region_Unlocks_Table, self.player, 8)
+                        and state.has_from_list_unique(Job_Licenses_Table, self.player, 4),
+            "no logic": state.has_from_list_unique(Character_Unlocks_Table, self.player, 8) 
+                        and state.has_from_list_unique(Region_Unlocks_Table, self.player, 1)
+                        and state.has_from_list_unique(Job_Licenses_Table, self.player, 0)
+        }
+        return finalboss_rules[self.fight_logic]
 
     def set_ot2_goal(self):
         vide_location = self.multiworld.get_location(LocationName.DefeatVide, self.player)

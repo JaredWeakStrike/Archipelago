@@ -30,6 +30,7 @@ class Octopath2World(World):
     Octopath Traveler 2 is a turn-based role-playing game developed and published by Square Enix and released in 2023.
     """
     game = "Octopath Traveler 2"
+    topology_present = True
     web = Octopath2Web()
 
     #required_client_version = (0, 5, 1)

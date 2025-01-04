@@ -65,14 +65,14 @@ class StartingCharacter(Choice):
     option_hikari = 8
     default = 2
 
-#class Difficulty(Choice):
-#    """Sets up what is expected for later regions. Easy forces later regions to be later in logic, while hard may force you to go through hard regions early."""
-#    display_name = "Difficulty"
-#    option_easy = 0
-#    option_normal = 1
-#    option_hard = 2
-#    option_no_logic = 3
-#    default = 1
+class Difficulty(Choice):
+    """Sets up what is expected for later regions. Easy forces later regions to be later in logic, while hard may force you to go through hard regions early."""
+    display_name = "Difficulty"
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    option_no_logic = 3
+    default = 1
 
 #class ShuffleSkills(Choice):
 #    """Shuffles which job has which active abilities (job commands)
@@ -156,7 +156,7 @@ class Octopath2Options(PerGameCommonOptions):
 #    IncludeNPCInfo: IncludeNPCInfo
 #    IncludeNPCItems: IncludeNPCItems
     StartingCharacter: StartingCharacter
-#    Difficulty: Difficulty
+    Difficulty: Difficulty
 #    ShuffleSkills: ShuffleSkills
 #    ShuffleSupports: ShuffleSupports
 #    RandomizeProficiencies: RandomizeProficiencies
