@@ -17,11 +17,11 @@ from .Logic import *
 class Octopath2Web(WebWorld):
     tutorials = [Tutorial(
             "Multiworld Setup Guide",
-            "A guide to playing Kingdom Hearts 2 Final Mix with Archipelago.",
+            "A guide to playing Octopath Traveler 2 with Archipelago.",
             "English",
             "setup_en.md",
             "setup/en",
-            ["JaredWeakStrike"]
+            ["Probably HappyArtea"]
     )]
 
 
@@ -32,17 +32,15 @@ class Octopath2World(World):
     game = "Octopath Traveler 2"
     web = Octopath2Web()
 
-    #required_client_version = (0, 4, 4)
+    #required_client_version = (0, 5, 1)
     options_dataclass = Octopath2Options
     options: Octopath2Options
     item_name_to_id = {item: item_id
                        for item_id, item in enumerate(item_table.keys(), 0x88888888)}
     location_name_to_id = {item: location
                            for location, item in enumerate(all_chests.keys(), 0x88888888)}
-    #item_name_groups = item_groups
     total_locations: int
     exclude: List[str]
-    # growth_list: list[str]
     starting_character: str
     starting_time: str
 
@@ -51,9 +49,6 @@ class Octopath2World(World):
         self.exclude = []
         self.starting_character = ""
         self.starting_time = "Day"
-        # random_super_boss_list List[str]
-        # has to be in __init__ or else other players affect each other's bounties
-        # pass
 
 
     def create_item(self, name: str) -> Item:
@@ -75,7 +70,6 @@ class Octopath2World(World):
         """
         Returns created events "items"
         """
-        #data = Events_Table[name]
         item_classification = ItemClassification.progression
         created_item = OT2Item(name, item_classification, None, self.player)
         return created_item
@@ -140,16 +134,19 @@ class Octopath2World(World):
             self.__pre_fill_item("Hinoeuma Region Unlock", "Game Start Region", precollected)
             self.starting_character = "Hikari"
         
+        non_fillers=0
+        
         for name, data in item_table.items():
             if name not in self.exclude:
                 for i in range(data.quantity):
                     item = self.create_item(name)
                     self.multiworld.itempool.append(item)
+                    non_fillers = non_fillers+1
                     
         itempool = []
                     
-        # Creating filler for unfilled locations
-        size = len(all_chests) - len(self.multiworld.itempool)-3
+        # Creating fillers for unfilled locations
+        size = len(all_chests) - non_fillers-3
         for i in range(size):
             filler = self.random.choice(list(filler_items)) 
             itempool += [self.create_item(filler)]
@@ -159,9 +156,7 @@ class Octopath2World(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         pass
-        #return {
-                #"minibosses_to_kill": self.options.StartingCharacter.value
-        #        }
+        
 
     def generate_early(self) -> None:
         """
@@ -182,16 +177,3 @@ class Octopath2World(World):
         """
         universal_logic = Rules.OT2WorldRules(self)
         universal_logic.set_ot2_rules()
-
-#    def generate_output(self, output_directory: str):
-        """
-        Generates the .zip for OpenKH (The KH Mod Manager)
-        """
-#        pass
-
-
-    def get_filler_item_name(self) -> str:
-        """
-        Returns random filler item name.
-        """
-        return self.random.choice(filler_items)

@@ -4,6 +4,8 @@ from BaseClasses import MultiWorld, Region
 
 from .Locations import *
 from . import LocationName, RegionName, Events_Table, Locations
+from .Rules import *
+from worlds.generic.Rules import add_rule, set_rule
 
 OT2REGIONS: typing.Dict[str, typing.List[str]] = {
     "Menu":                                 [],
@@ -538,11 +540,11 @@ OT2REGIONS: typing.Dict[str, typing.List[str]] = {
     RegionName.ConningCreek:                [
         LocationName.ConningCreekBottleofBefuddlingDust,
         LocationName.ConningCreekBlazonofProtection,
-        LocationName.ConningCreekOutskirtsInspiritingPlumM, #Triggers unknown
         LocationName.ConningCreekHarborRainbowGlassBottle
     ],
     RegionName.OsvaldCh3:                [
         LocationName.ConningCreekOutskirtsFireSoulstoneM,
+        LocationName.ConningCreekOutskirtsInspiritingPlumM,
         LocationName.GuardOutpostFireSoulstone,
         LocationName.GuardOutpostGuardsArmor,
         LocationName.GuardOutpostEmpoweringLycheeM,
@@ -1003,30 +1005,7 @@ OT2REGIONS: typing.Dict[str, typing.List[str]] = {
     RegionName.Galdera:                    [
         LocationName.GalderaDefeated
     ],
-    # Regions to add
-    # Osvald 5 St 
-    # Temenos St 
-    # Throne 1 2M 3F 4 St
-    # Ochette 1 St
-    # Castti 1 2W 3 St
-    # Partitio 3 A S G St 
-    # Hikari 1 3 St
-    # Agnea 1 3 4 St
-    
-    # HA 1 2
-    # OP 1 2
-    # TT 2
-    # CO 1 2
-    
-    # Vide Bag Book Hell Galdy
 }
-
-
-
-
-
-
-# Old KH2 code
 
 
 def create_regions(self):
@@ -1036,7 +1015,6 @@ def create_regions(self):
 
     multiworld.regions += [create_region(multiworld, player, active_locations, region, locations) for region, locations in OT2REGIONS.items()]
     # fill the event locations with events
-    #multiworld.worlds[player].item_name_to_id.update({event_name: None for event_name in Events_Table})
     for location, item in Locations.event_location_to_item.items():
         multiworld.get_location(location, player).place_locked_item(
                 multiworld.worlds[player].create_event_item(item))
@@ -1045,7 +1023,7 @@ def create_regions(self):
 def connect_regions(self):
     multiworld = self.multiworld
     player = self.player
-    # Connections to review, I fucked up.
+    # Connections to review, most are coded one-ways
     OT2RegionConnections: typing.Dict[str, typing.Set[str]] = {
         "Menu":                             {RegionName.GameStart},
         RegionName.GameStart:               {RegionName.CapeCold, RegionName.Flamechurch, RegionName.NewDelsta, RegionName.BeastingVillage,     
@@ -1067,7 +1045,7 @@ def connect_regions(self):
         RegionName.MerryHills:              {RegionName.AgneaCh5, RegionName.AgneaClear},
         RegionName.Brightlands:             {RegionName.AbandonedVillage, RegionName.SunkenMaw, RegionName.Waterway, RegionName.Clockbank, 
                                              RegionName.NewDelsta, RegionName.SunderingSea, RegionName.Totohaha, RegionName.Canalbrine, 
-                                             RegionName.Wildlands2, RegionName.TravelersBag},
+                                             RegionName.Wildlands2, RegionName.TravelersBag, RegionName.Winterlands1, RegionName.Crestlands},
         RegionName.AbandonedVillage:        {RegionName.CasttiCh3},
         RegionName.Clockbank:               {RegionName.PartitioCh2, RegionName.Clocktower},
         RegionName.NewDelsta:               {RegionName.Brightlands, RegionName.AgneaCh2, RegionName.LostseedPass, RegionName.NewDelstaAmbush, RegionName.NewDelstaKO, RegionName.ThroneCh1, RegionName.PartitioOsvaldCh1},
