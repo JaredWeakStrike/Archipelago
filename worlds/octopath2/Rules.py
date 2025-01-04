@@ -1,11 +1,10 @@
-# Imports will need to be changed accordingly
 from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from .Items import item_table
 from .Locations import all_chests
 from .Names import LocationName, ItemName, RegionName
-from .Options import StartingCharacter
+from .Options import StartingCharacter, Goal
 from worlds.generic.Rules import add_rule, forbid_items, add_item_rule
 
 # I don't know what is going on here, but it works.
@@ -15,58 +14,18 @@ else:
     Octopath2World = object
 
 
-# Shamelessly Stolen from Messanger
+# Shamelessly Stolen from Messenger
 
 
 class OT2Rules:
     player: int
     world: Octopath2World
-    # Those are copy-paste from kh2 I tried to mimic into categories, but currently makes no sense
-    # Regions accesses to prevent recursions
-    Winterlands1Access: int
-    BrightlandsAccess: int
-    CrestlandsAccess: int
-    TotohahaAccess: int
-    HarborlandsAccess: int
-    Hinoeuma1Access: int
-    Hinoeuma2Access: int
-    LeaflandsAccess: int
-    Wildlands1Access: int
-    Wildlands2Access: int
-    CapeColdAccess: int
-    FlameChurchAccess: int
-    NewDelstaAccess: int
-    BeastingVillageAccess: int
-    CanalbrineAccess: int
-    RyuAccess: int
-    OresrushAccess: int
-    CropdaleAccess: int
-    SeaAccess: int
 
     def __init__(self, world: Octopath2World) -> None:
         self.player = world.player
         self.world = world
         self.multiworld = world.multiworld
-        
-        self.Winterlands1Access=0
-        self.BrightlandsAccess=0
-        self.CrestlandsAccess=0
-        self.TotohahaAccess=0
-        self.HarborlandsAccess=0
-        self.Hinoeuma1Access=0
-        self.Hinoeuma2Access=0
-        self.LeaflandsAccess=0
-        self.Wildlands1Access=0
-        self.Wildlands2Access=0
-        self.CapeColdAccess=0
-        self.FlameChurchAccess=0
-        self.NewDelstaAccess=0
-        self.BeastingVillageAccess=0
-        self.CanalbrineAccess=0
-        self.RyuAccess=0
-        self.OresrushAccess=0
-        self.CropdaleAccess=0
-        self.SeaAccess=0
+       
 
     def can_be_daytime(self, state: CollectionState) -> bool:
         return (state.has(ItemName.TimeChange, self.player)
@@ -76,170 +35,54 @@ class OT2Rules:
         return (state.has(ItemName.TimeChange, self.player)
                 or self.world.starting_time == "Night")
 
-    # Regions access, need to check if we already went through that requirement to avoid infinite loops
+    # Regions access
 
-    def can_access_winterlands1(self, state: CollectionState) -> bool:
-        if self.Winterlands1Access == 1:
-            return True
-        elif self.Winterlands1Access == -1:
-            return False
-        else:
-            self.Winterlands1Access = -1
-            tempvar = (state.has(ItemName.WinterlandsUnlock, self.player)
-                                  and (self.can_access_brightlands(state)
-                                       or self.can_access_crestlands(state))
-                                  or self.world.options.StartingCharacter == StartingCharacter.option_osvald)
-            self.Winterlands1Access = tempvar  
-            return self.Winterlands1Access ==1
+    def can_access_winterlands1(self, state: CollectionState) -> bool: 
+        return (state.has(ItemName.WinterlandsUnlock, self.player)
+                or self.world.options.StartingCharacter == StartingCharacter.option_osvald)
             
 
     def can_access_crestlands(self, state: CollectionState) -> bool:
-        if self.CrestlandsAccess == 1:
-            return True
-        elif self.CrestlandsAccess == -1:
-            return False
-        else:
-            self.CrestlandsAccess = -1
-            tempvar = (state.has(ItemName.CrestlandsUnlock, self.player)
-                        and (self.can_access_brightlands(state)
-                            or self.can_access_winterlands1(state))
-                        or self.world.options.StartingCharacter == StartingCharacter.option_temenos)
-            self.CrestlandsAccess = tempvar  
-            return self.CrestlandsAccess == 1
+        return (state.has(ItemName.CrestlandsUnlock, self.player)
+                or self.world.options.StartingCharacter == StartingCharacter.option_temenos)
 
     def can_access_brightlands(self, state: CollectionState) -> bool:
-        if self.BrightlandsAccess == 1:
-            return True
-        elif self.BrightlandsAccess == -1:
-            return False
-        else:
-            self.BrightlandsAccess = -1
-            tempvar = (state.has(ItemName.BrightlandsUnlock, self.player)
-                        and (self.can_access_winterlands1(state)
-                            or self.can_access_crestlands(state)
-                            or self.can_access_totohaha(state)
-                            or self.can_access_wildlands2(state))
-                        or self.world.options.StartingCharacter == StartingCharacter.option_throne)
-            self.BrightlandsAccess = tempvar  
-            return self.BrightlandsAccess == 1
+        return (state.has(ItemName.BrightlandsUnlock, self.player)
+                or self.world.options.StartingCharacter == StartingCharacter.option_throne)
 
     def can_access_totohaha(self, state: CollectionState) -> bool:
-        if self.TotohahaAccess == 1:
-            return True
-        elif self.TotohahaAccess == -1:
-            return False
-        else:
-            self.TotohahaAccess = -1
-            tempvar = (state.has(ItemName.TotohahaUnlock, self.player)
-                        and (self.can_access_brightlands(state)
-                            or self.can_access_wildlands2(state))
-                        or self.world.options.StartingCharacter == StartingCharacter.option_ochette)
-            self.TotohahaAccess = tempvar  
-            return self.TotohahaAccess == 1
+        return (state.has(ItemName.TotohahaUnlock, self.player)
+                or self.world.options.StartingCharacter == StartingCharacter.option_ochette)
 
     def can_access_harborlands(self, state: CollectionState) -> bool:
-        if self.HarborlandsAccess == 1:
-            return True
-        elif self.HarborlandsAccess == -1:
-            return False
-        else:
-            self.HarborlandsAccess = -1
-            tempvar = ((state.has(ItemName.HarborlandsUnlock, self.player)
-                        and (self.can_access_brightlands(state)
-                            or self.can_access_hinoeuma1(state)
-                            or self.can_access_hinoeuma2(state)))
-                        or self.world.options.StartingCharacter == StartingCharacter.option_castti)
-            self.HarborlandsAccess = tempvar  
-            return self.HarborlandsAccess == 1
+        return (state.has(ItemName.HarborlandsUnlock, self.player)
+                or self.world.options.StartingCharacter == StartingCharacter.option_castti)
 
-    def can_access_hinoeuma1(self, state: CollectionState) -> bool:
-        if self.Hinoeuma1Access == 1:
-            return True
-        elif self.Hinoeuma1Access == -1:
-            return False
-        else:
-            self.Hinoeuma1Access = -1
-            tempvar = (state.has(ItemName.HinoeumaUnlock, self.player)
-                        and (self.can_access_harborlands(state)
-                            or self.can_access_wildlands1(state))
-                        or self.world.options.StartingCharacter == StartingCharacter.option_hikari)
-            self.Hinoeuma1Access = tempvar  
-            return self.Hinoeuma1Access == 1
+    def can_access_hinoeuma1(self, state: CollectionState) -> bool:  
+        return (state.has(ItemName.HinoeumaUnlock, self.player)
+                or self.world.options.StartingCharacter == StartingCharacter.option_hikari)
 
     def can_access_leaflands(self, state: CollectionState) -> bool:
-        if self.LeaflandsAccess == 1:
-            return True
-        elif self.LeaflandsAccess == -1:
-            return False
-        else:
-            self.LeaflandsAccess = -1
-            tempvar = ((state.has(ItemName.LeaflandsUnlock, self.player)
-                        and (self.can_access_wildlands1(state)
-                            or self.can_access_wildlands2(state)
-                            or self.can_access_hinoeuma2(state)))
-                        or self.world.options.StartingCharacter == StartingCharacter.option_agnea)
-            self.LeaflandsAccess = tempvar  
-            return self.LeaflandsAccess == 1
+        return (state.has(ItemName.LeaflandsUnlock, self.player)
+                or self.world.options.StartingCharacter == StartingCharacter.option_agnea)
 
     def can_access_wildlands1(self, state: CollectionState) -> bool:
-        if self.Wildlands1Access == 1:
-            return True
-        elif self.Wildlands1Access == -1:
-            return False
-        else:
-            self.Wildlands1Access = -1
-            tempvar = (state.has(ItemName.WildlandsUnlock, self.player)
-                and (self.can_access_hinoeuma1(state)
-                    or self.can_access_leaflands(state))
+        return (state.has(ItemName.WildlandsUnlock, self.player)
                 or self.world.options.StartingCharacter == StartingCharacter.option_partitio)
-            self.Wildlands1Access = tempvar  
-            return self.Wildlands1Access == 1
 
     def can_access_winterlands2(self, state: CollectionState) -> bool:
         return (state.has(ItemName.WinterlandsUnlock, self.player)
                 and self.can_access_crestlands(state)
                 and self.can_KO(state))
 
-    def can_access_hinoeuma2(self, state: CollectionState) -> bool:
-        if self.Hinoeuma2Access == 1:
-            return True
-        elif self.Hinoeuma2Access == -1:
-            return False
-        else:
-            self.Hinoeuma2Access = -1
-            tempvar = (state.has(ItemName.HinoeumaUnlock, self.player)
-                        and (self.can_access_harborlands(state))
-                        or self.can_access_leaflands(state))
-            self.Hinoeuma2Access = tempvar  
-            return self.Hinoeuma2Access == 1
+    def can_access_hinoeuma2(self, state: CollectionState) -> bool: 
+        return state.has(ItemName.HinoeumaUnlock, self.player)
 
     def can_access_wildlands2(self, state: CollectionState) -> bool:
-        if self.Wildlands2Access == 1:
-            return True
-        elif self.Wildlands2Access == -1:
-            return False
-        else:
-            self.Wildlands2Access = -1
-            tempvar = (state.has(ItemName.WildlandsUnlock, self.player)
-                        and (self.can_access_leaflands(state)
-                            or self.can_access_totohaha(state)
-                            or self.can_access_brightlands(state)))
-            self.Wildlands2Access = tempvar  
-            return self.Wildlands2Access == 1
+        return (state.has(ItemName.WildlandsUnlock, self.player))
 
     def can_access_sea(self, state: CollectionState) -> bool:
-        if self.SeaAccess == 1:
-            return True
-        elif self.SeaAccess == -1:
-            return False
-        else:
-            self.SeaAccess = -1
-            tempvar = (state.has(ItemName.TheGrandTerry, self.player)
-                        and (self.can_access_brightlands(state)
-                            or self.can_access_totohaha(state)
-                            or self.can_access_wildlands2(state)))
-            self.SeaAccess = tempvar  
-            return self.SeaAccess == 1
+        return (state.has(ItemName.TheGrandTerry, self.player))
 
     # Individual Path Action access
 
@@ -528,8 +371,7 @@ class OT2Rules:
     # Towns Accesses
 
     def can_access_capecold(self, state: CollectionState) -> bool:
-        return (self.capecold_unlock(state)
-                and self.can_access_winterlands1(state))
+        return (self.capecold_unlock(state))
 
     def can_access_winterbloom(self, state: CollectionState) -> bool:
         return (self.winterbloom_unlock(state)
@@ -540,8 +382,7 @@ class OT2Rules:
                 and self.can_access_winterlands2(state))
 
     def can_access_flamechurch(self, state: CollectionState) -> bool:
-        return (self.flamechurch_unlock(state)
-                and self.can_access_crestlands(state))
+        return (self.flamechurch_unlock(state))
 
     def can_access_montwise(self, state: CollectionState) -> bool:
         return (self.montwise_unlock(state)
@@ -552,8 +393,7 @@ class OT2Rules:
                 and self.can_access_crestlands(state))
 
     def can_access_newdelsta(self, state: CollectionState) -> bool:
-        return (self.newdelsta_unlock(state)
-                and self.can_access_brightlands(state))
+        return (self.newdelsta_unlock(state))
 
     def can_access_clockbank(self, state: CollectionState) -> bool:
         return (self.clockbank_unlock(state)
@@ -568,8 +408,7 @@ class OT2Rules:
                 and self.can_access_brightlands(state))
 
     def can_access_beasting(self, state: CollectionState) -> bool:
-        return (self.beasting_unlock(state)
-                and self.can_access_totohaha(state))
+        return (self.beasting_unlock(state))
 
     def can_access_tropuhopu(self, state: CollectionState) -> bool:
         return (self.tropuhopu_unlock(state)
@@ -581,20 +420,17 @@ class OT2Rules:
                 and state.has(ItemName.Boat, self.player))
 
     def can_access_canalbrine(self, state: CollectionState) -> bool:
-        return (self.canalbrine_unlock(state)
-                and self.can_access_harborlands(state))
+        return (self.canalbrine_unlock(state))
 
     def can_access_conningcreek(self, state: CollectionState) -> bool:
         return (self.conningcreek_unlock(state)
                 and self.can_access_harborlands(state))
 
     def can_access_roqueisland(self, state: CollectionState) -> bool:
-        return (self.roqueisland_unlock(state)
-                and self.can_access_sea(state))
+        return (self.roqueisland_unlock(state))
 
     def can_access_ryu(self, state: CollectionState) -> bool:
-        return (self.ryu_unlock(state)
-                and self.can_access_hinoeuma1(state))
+        return (self.ryu_unlock(state))
 
     def can_access_sai(self, state: CollectionState) -> bool:
         return (self.sai_unlock(state)
@@ -605,8 +441,7 @@ class OT2Rules:
                 and self.can_access_hinoeuma2(state))
 
     def can_access_cropdale(self, state: CollectionState) -> bool:
-        return (self.cropdale_unlock(state)
-                and self.can_access_leaflands(state))
+        return (self.cropdale_unlock(state))
 
     def can_access_wellgrove(self, state: CollectionState) -> bool:
         return (self.wellgrove_unlock(state)
@@ -617,8 +452,7 @@ class OT2Rules:
                 and self.can_access_leaflands(state))
 
     def can_access_oresrush(self, state: CollectionState) -> bool:
-        return (self.oresrush_unlock(state)
-                and self.can_access_wildlands1(state))
+        return (self.oresrush_unlock(state))
 
     def can_access_crackridge(self, state: CollectionState) -> bool:
         return (self.crackridge_unlock(state)
@@ -628,11 +462,12 @@ class OT2Rules:
         return (self.gravell_unlock(state)
                 and self.can_access_wildlands2(state))
 
-    # Can Clear Story chapters, unfinished
+    # Can Clear Story chapters
 
     def can_clear_osvaldch1(self, state: CollectionState) -> bool:
         return (state.has(ItemName.OsvaldUnlock, self.player)
                 and state.has(ItemName.OsvaldCh1, self.player)
+                and state.has(ItemName.Boat, self.player)
                 and self.can_access_capecold(state) and self.can_mug(state)
                 and self.can_scrutinize(state))
 
@@ -657,6 +492,7 @@ class OT2Rules:
     def can_clear_temenosch1(self, state: CollectionState) -> bool:
         return (state.has(ItemName.TemenosUnlock, self.player)
                 and state.has(ItemName.TemenosCh1, self.player)
+                and state.has(ItemName.Boat, self.player)
                 and self.can_access_flamechurch(state)
                 and self.can_guide(state)
                 and self.can_coerce(state))
@@ -760,6 +596,7 @@ class OT2Rules:
     def can_clear_casttich1(self, state: CollectionState) -> bool:
         return (state.has(ItemName.CasttiUnlock, self.player)
                 and state.has(ItemName.CasttiCh1, self.player)
+                and state.has(ItemName.Boat, self.player)
                 and self.can_access_canalbrine(state)
                 and self.can_inquire(state)
                 and self.can_soothe(state))
@@ -911,7 +748,7 @@ class OT2Rules:
                 and self.can_access_merryhills(state)
                 and self.can_allure(state))
 
-        # Can Clear Full stories
+    # Can Clear Full stories
 
     def can_clear_osvaldstory(self, state: CollectionState) -> bool:
         return (self.can_clear_osvaldch1(state)
@@ -1003,9 +840,6 @@ class OT2Rules:
                 and self.can_challenge(state)
                 and self.can_entreat(state))
 
-    # Unsure on the Path Actions required for both castti-ochette dual quests, so I put all of them.
-        # A: Only Provoke is needed for CasttiOchette2
-
     def can_clear_casttiochettech1(self, state: CollectionState) -> bool:
         return (state.has(ItemName.CasttiUnlock, self.player)
                 and state.has(ItemName.OchetteUnlock, self.player)
@@ -1024,15 +858,14 @@ class OT2Rules:
                 and state.has(ItemName.PartitioUnlock, self.player)
                 and state.has(ItemName.OsvaldPartitioCh1, self.player)
                 and self.can_access_newdelsta(state)
-                and self.can_purchase(state))  # Only need Purchase for pt1
+                and self.can_purchase(state))
 
     def can_clear_osvaldpartitioch2(self, state: CollectionState) -> bool:
         return (state.has(ItemName.OsvaldUnlock, self.player)
                 and state.has(ItemName.PartitioUnlock,self.player)
                 and state.has(ItemName.OsvaldPartitioCh2, self.player)
                 and self.can_access_montwise(state)
-                and self.can_mug(state))  # Only need Mug for pt2
-
+                and self.can_mug(state))
 
 
 
@@ -1200,100 +1033,63 @@ class OT2WorldRules(OT2Rules):
             
             #Endbosses quests, quests requirements are borked
             RegionName.Vide: lambda state: (self.can_clear_casttiochettech2(state) and self.can_clear_temenosthronech2(state) and self.can_clear_hikariagneach2(state) and self.can_clear_osvaldpartitioch2(state)),
-            RegionName.TravelersBag: lambda state: (self.can_clear_casttiochettech2(state) and self.can_clear_temenosthronech2(state) and self.can_clear_hikariagneach2(state) and self.can_clear_osvaldpartitioch2(state)),
-            RegionName.PeculiarTomes: lambda state: (self.can_clear_casttiochettech2(state) and self.can_clear_temenosthronech2(state) and self.can_clear_hikariagneach2(state) and self.can_clear_osvaldpartitioch2(state)),
-            RegionName.ReachesOfHell: lambda state: (self.can_clear_casttiochettech2(state) and self.can_clear_temenosthronech2(state) and self.can_clear_hikariagneach2(state) and self.can_clear_osvaldpartitioch2(state)),
-            RegionName.Galdera: lambda state: (self.can_clear_casttiochettech2(state) and self.can_clear_temenosthronech2(state) and self.can_clear_hikariagneach2(state) and self.can_clear_osvaldpartitioch2(state)),
+            
+            RegionName.TravelersBag: lambda state: (self.can_be_nighttime(state)),
+            RegionName.PeculiarTomes: lambda state: (self.can_get_npcitems(state) and state.can_reach(RegionName.Crackridge, player=self.player) and state.can_reach(RegionName.BeastingVillage, player=self.player) and state.can_reach(RegionName.Winterlands2, player=self.player)),
+            RegionName.ReachesOfHell: lambda state: (state.can_reach(RegionName.PeculiarTomes, player=self.player) and self.can_get_info(state) and state.can_reach(RegionName.SunderingSea, player=self.player) and state.has(ItemName.Boat, self.player)),
+            RegionName.Galdera: lambda state: (state.can_reach(RegionName.SunderingSea, player=self.player) and state.can_reach(RegionName.TravelersBag, player=self.player) and state.can_reach(RegionName.PeculiarTomes, player=self.player) and state.can_reach(RegionName.ReachesOfHell, player=self.player)),
+            
         }
-# I didn't change that one much, need to review it
+        
     def set_ot2_rules(self) -> None:
         for region_name, rules in self.region_rules.items():
             region = self.multiworld.get_region(region_name, self.player)
             for entrance in region.entrances:
                 entrance.access_rule = rules
+                
+            # add rules to restrict starting zones depending on starting character
+        add_rule(self.multiworld.get_entrance("Starting Items -> Oresrush", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_partitio)
+        add_rule(self.multiworld.get_entrance("Starting Items -> New Delsta", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_throne)
+        add_rule(self.multiworld.get_entrance("Starting Items -> Beasting Village", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_ochette)
+        add_rule(self.multiworld.get_entrance("Starting Items -> Canalbrine", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_castti)
+        add_rule(self.multiworld.get_entrance("Starting Items -> Ryu", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_hikari)
+        add_rule(self.multiworld.get_entrance("Starting Items -> Flamechurch", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_temenos)
+        add_rule(self.multiworld.get_entrance("Starting Items -> Cropdale", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_agnea)
+        add_rule(self.multiworld.get_entrance("Starting Items -> Cape Cold", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_osvald)
+    
+
+    # Traveler's bag quest location
+        add_rule(self.multiworld.get_entrance("Winterlands Center Roads -> Al's Traveler's Bag Subquest", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_osvald)
+        add_rule(self.multiworld.get_entrance("Crestlands Roads -> Al's Traveler's Bag Subquest", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_temenos)
+        add_rule(self.multiworld.get_entrance("Brightlands Roads -> Al's Traveler's Bag Subquest", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_throne)
+        add_rule(self.multiworld.get_entrance("Toto'haha Trails -> Al's Traveler's Bag Subquest", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_ochette)
+        add_rule(self.multiworld.get_entrance("Harborlands Roads -> Al's Traveler's Bag Subquest", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_castti)
+        add_rule(self.multiworld.get_entrance("Central Hinoeuma Roads -> Al's Traveler's Bag Subquest", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_hikari)
+        add_rule(self.multiworld.get_entrance("Wildlands Southern Roads -> Al's Traveler's Bag Subquest", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_partitio)
+        add_rule(self.multiworld.get_entrance("Leaflands Trails -> Al's Traveler's Bag Subquest", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_agnea)
+                 
+                     
         self.set_ot2_goal()
 
     def set_ot2_goal(self):
         vide_location = self.multiworld.get_location(LocationName.DefeatVide, self.player)
+        #if self.world.Goal == option_vide:
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.VideDefeatedEvent, self.player, 1)
 
 # We might want to add some fighting rules to split Chapters in tiers (lvl1-10, 11-20, 21-30, 31-40 and final chapters).
-
-        # Old KH2 logic down there
-
-
-"""
-    def set_kh2_rules(self) -> None:
-        for region_name, rules in self.region_rules.items():
-            region = self.multiworld.get_region(region_name, self.player)
-            for entrance in region.entrances:
-                entrance.access_rule = rules
-
-        self.set_kh2_goal()
-
-        weapon_region = self.multiworld.get_region(RegionName.Keyblade, self.player)
-        for location in weapon_region.locations:
-            add_rule(location, lambda state: state.has(exclusion_table["WeaponSlots"][location.name], self.player))
-            if location.name in Goofy_Checks:
-                add_item_rule(location,
-                              lambda item: item.player == self.player and item.name in GoofyAbility_Table.keys())
-            elif location.name in Donald_Checks:
-                add_item_rule(location,
-                              lambda item: item.player == self.player and item.name in DonaldAbility_Table.keys())
-
-    def set_kh2_goal(self):
-
-        final_xemnas_location = self.multiworld.get_location(LocationName.FinalXemnas, self.player)
-        if self.multiworld.Goal[self.player] == "three_proofs":
-            final_xemnas_location.access_rule = lambda state: self.kh2_has_all(three_proofs, state)
-            if self.multiworld.FinalXemnas[self.player]:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory,
-                                                                                            self.player)
-            else:
-                self.multiworld.completion_condition[self.player] = lambda state: self.kh2_has_all(three_proofs, state)
-        # lucky emblem hunt
-        elif self.multiworld.Goal[self.player] == "lucky_emblem_hunt":
-            final_xemnas_location.access_rule = lambda state: state.has(ItemName.LuckyEmblem, self.player,
-                                                                        self.multiworld.LuckyEmblemsRequired[
-                                                                            self.player].value)
-            if self.multiworld.FinalXemnas[self.player]:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory,
-                                                                                            self.player)
-            else:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.LuckyEmblem,
-                                                                                            self.player,
-                                                                                            self.multiworld.LuckyEmblemsRequired[
-                                                                                                self.player].value)
-        # hitlist if == 2
-        elif self.multiworld.Goal[self.player] == "hitlist":
-            final_xemnas_location.access_rule = lambda state: state.has(ItemName.Bounty, self.player,
-                                                                        self.multiworld.BountyRequired[
-                                                                            self.player].value)
-            if self.multiworld.FinalXemnas[self.player]:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory,
-                                                                                            self.player)
-            else:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty,
-                                                                                            self.player,
-                                                                                            self.multiworld.BountyRequired[
-                                                                                                self.player].value)
-        else:
-            final_xemnas_location.access_rule = lambda state: state.has(ItemName.Bounty, self.player,
-                                                                        self.multiworld.BountyRequired[
-                                                                            self.player].value) and \
-                                                              state.has(ItemName.LuckyEmblem, self.player,
-                                                                        self.multiworld.LuckyEmblemsRequired[
-                                                                            self.player].value)
-            if self.multiworld.FinalXemnas[self.player]:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory,
-                                                                                            self.player)
-            else:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty,
-                                                                                            self.player,
-                                                                                            self.multiworld.BountyRequired[
-                                                                                                self.player].value) and \
-                                                                                  state.has(ItemName.LuckyEmblem,
-                                                                                            self.player,
-                                                                                            self.multiworld.LuckyEmblemsRequired[
-                                                                                                self.player].value)
-
-"""

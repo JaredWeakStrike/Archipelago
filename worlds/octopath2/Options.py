@@ -19,7 +19,7 @@ from Options import Choice, Range, Toggle, ItemDict, PerGameCommonOptions, Start
 
 #class OpenMode(Toggle):
 #    """Makes the world more open by removing some virtual barriers between regions"""
-#    display_name = "Open Wolrd Mode"
+#    display_name = "Open World Mode"
 #    default = false
 
 #class IncludeChests(Toggle):
@@ -30,7 +30,7 @@ from Options import Choice, Range, Toggle, ItemDict, PerGameCommonOptions, Start
 #class IncludeMainQuests(Toggle):
 #    """Allows Archipelago items to be rewards for ending main story chapters"""
 #    display_name = "Include Main Quests"
-#    default = 1
+#    default = 0
 
 #class IncludeSideQuests(Toggle):
 #    """Allows Archipelago items to be in side quests"""
@@ -109,20 +109,38 @@ class StartingCharacter(Choice):
 
 class Goal(Choice):
     """Win Condition
+    To access the win conditions, you always need to complete the amount of chapters set in the RequiredChapters option and 
+    the maount of stories set in the RequiredStories option.
     main: clear main character's story
     main_with_vide: Clear main character's story, then kill vide.
-    all: clear all available travelers story
     vide: kill vide
     galdera : defeat Galdera    
     """
     display_name = "Goal"
     option_vide = 0
 #    option_main = 1
-#    option_all = 2
 #    option_main_with_vide = 3
 #    option_galdera = 4
     default = 0
+#   monster_hunt?    
 
+#class RequiredChapters(Range):
+#    """Win Condition
+#    Amount of chapters required to be able to access Vide. Dual stories also count as chapters, and Osvald Chapter 1 counts for two chapters.   
+#    """
+#    display_name = "Goal"
+#    range_start = 0
+#    range_end = 51
+#    default = 51
+    
+#class RequiredStories(Range):
+#    """Win Condition
+#    Amount of chapters required to be able to access Vide. Dual stories also count as chapters, and Osvald Chapter 1 counts for two chapters.   
+#    """
+#    display_name = "Goal"
+#    range_start = 0
+#    range_end = 8
+#    default = 5
 
 # shamelessly stolen from the messenger
 @dataclass
