@@ -1,8 +1,11 @@
 from .Names import ItemName, RegionName, LocationName
+from BaseClasses import CollectionState
+from .Items import *
+
 
 #not sure what to put here tbh
 #easy_logic = [
-#    has.multiple(self.character_unlock, 4) for any chapter
+#    state.has_from_list_unique(Character_Unlocks_Table, self.player, 4) # for any chapter
 #    has.multiple(self.character_unlock, 8) for chapters 20+
 #    has.multiple(self.region_unlock,4) for chapters 1+
 #    has.multiple(self.region_unlock, 6) for chapters 20+
@@ -10,6 +13,7 @@ from .Names import ItemName, RegionName, LocationName
 #    has.multiple(self.job_licenses, 4) for any chapter
 #    has.multiple(self.job_licenses, 6) for chapters 20+
 #    has.multiple(self.job_licenses, 12) for chapters 40+
+#]
 
 #normal_logic = [
 #    has.multiple(self.character_unlock, 2) for any chapter
