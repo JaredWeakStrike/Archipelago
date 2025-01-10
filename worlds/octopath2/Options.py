@@ -47,10 +47,15 @@ from Options import Choice, Range, Toggle, ItemDict, PerGameCommonOptions, Start
 #    display_name = "Include NPC Items"
 #    default = 0
 
-#class RandomizedTime(Choice):
-#    """Locks the player in a specific time, with a progression item being the ability to change day/night."""
-#    display_name = "Include NPC Items"
-#    default = 0
+class LockedTime(Toggle):
+    """Locks the player in a specific time, with a progression item being the ability to change day/night."""
+    display_name = "Lock Time"
+    default = 0
+    
+class RandomizeCanoe(Toggle):
+    """Remove the ability to board the canoe by default which is unlocked with a progression item."""
+    display_name = "Randomize Canoe"
+    default = 0
 
 class StartingCharacter(Choice):
     """Sets which character you will start with and is gonna be locked as your main character"""
@@ -155,6 +160,8 @@ class Octopath2Options(PerGameCommonOptions):
 #    IncludeSideQuests: IncludeSideQuests
 #    IncludeNPCInfo: IncludeNPCInfo
 #    IncludeNPCItems: IncludeNPCItems
+    LockedTime: LockedTime
+    RandomizeCanoe: RandomizeCanoe
     StartingCharacter: StartingCharacter
     Difficulty: Difficulty
 #    ShuffleSkills: ShuffleSkills
