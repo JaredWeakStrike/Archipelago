@@ -1,1163 +1,1095 @@
 from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from .Items import exclusion_item_table, visit_locking_dict, DonaldAbility_Table, GoofyAbility_Table
-from .Locations import exclusion_table, popups_set, Goofy_Checks, Donald_Checks
+from .Items import item_table
+from .Locations import all_chests
 from .Names import LocationName, ItemName, RegionName
+from .Options import StartingCharacter, Goal
 from worlds.generic.Rules import add_rule, forbid_items, add_item_rule
-from .Logic import *
 
 # I don't know what is going on here, but it works.
 if TYPE_CHECKING:
-    from . import KH2World
+    from . import Octopath2World
 else:
-    KH2World = object
+    Octopath2World = object
 
 
-# Shamelessly Stolen from Messanger
+# Shamelessly Stolen from Messenger
 
 
-class KH2Rules:
+class OT2Rules:
     player: int
-    world: KH2World
-    # World Rules: Rules for the visit locks
-    # Location Rules: Deterministic of player settings.
-    # Form Rules: Rules for Drive Forms and Summon levels. These Are Locations
-    # Fight Rules: Rules for fights. These are regions in the worlds.
-    world_rules: Dict[str, Callable[[CollectionState], bool]]
-    location_rules: Dict[str, Callable[[CollectionState], bool]]
+    world: Octopath2World
 
-    fight_rules: Dict[str, Callable[[CollectionState], bool]]
-
-    def __init__(self, world: KH2World) -> None:
+    def __init__(self, world: Octopath2World) -> None:
         self.player = world.player
         self.world = world
         self.multiworld = world.multiworld
+       
 
-    def lod_unlocked(self, state: CollectionState, Amount) -> bool:
-        return state.has(ItemName.SwordoftheAncestor, self.player, Amount)
+    def can_be_daytime(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.TimeChange, self.player)
+                or self.world.starting_time == "Day")
 
-    def oc_unlocked(self, state: CollectionState, Amount) -> bool:
-        return state.has(ItemName.BattlefieldsofWar, self.player, Amount)
+    def can_be_nighttime(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.TimeChange, self.player)
+                or self.world.starting_time == "Night")
 
-    def twtnw_unlocked(self, state: CollectionState, Amount) -> bool:
-        return state.has(ItemName.WaytotheDawn, self.player, Amount)
+    # Regions access
 
-    def ht_unlocked(self, state: CollectionState, Amount) -> bool:
-        return state.has(ItemName.BoneFist, self.player, Amount)
+    def can_access_winterlands1(self, state: CollectionState) -> bool: 
+        return (state.has(ItemName.WinterlandsUnlock, self.player)
+                or self.world.options.StartingCharacter == StartingCharacter.option_osvald)
+            
 
-    def tt_unlocked(self, state: CollectionState, Amount) -> bool:
-        return state.has(ItemName.IceCream, self.player, Amount)
+    def can_access_crestlands(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.CrestlandsUnlock, self.player)
+                or self.world.options.StartingCharacter == StartingCharacter.option_temenos)
 
-    def pr_unlocked(self, state: CollectionState, Amount) -> bool:
-        return state.has(ItemName.SkillandCrossbones, self.player, Amount)
+    def can_access_brightlands(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.BrightlandsUnlock, self.player)
+                or self.world.options.StartingCharacter == StartingCharacter.option_throne)
 
-    def sp_unlocked(self, state: CollectionState, Amount) -> bool:
-        return state.has(ItemName.IdentityDisk, self.player, Amount)
+    def can_access_totohaha(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.TotohahaUnlock, self.player)
+                or self.world.options.StartingCharacter == StartingCharacter.option_ochette)
 
-    def stt_unlocked(self, state: CollectionState, Amount) -> bool:
-        return state.has(ItemName.NamineSketches, self.player, Amount)
+    def can_access_harborlands(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.HarborlandsUnlock, self.player)
+                or self.world.options.StartingCharacter == StartingCharacter.option_castti)
 
-    def dc_unlocked(self, state: CollectionState, Amount) -> bool:
-        return state.has(ItemName.CastleKey, self.player, Amount)  # Using Dummy 13 for this
+    def can_access_hinoeuma1(self, state: CollectionState) -> bool:  
+        return (state.has(ItemName.HinoeumaUnlock, self.player)
+                or self.world.options.StartingCharacter == StartingCharacter.option_hikari)
 
-    def hb_unlocked(self, state: CollectionState, Amount) -> bool:
-        return state.has(ItemName.MembershipCard, self.player, Amount)
+    def can_access_leaflands(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.LeaflandsUnlock, self.player)
+                or self.world.options.StartingCharacter == StartingCharacter.option_agnea)
 
-    def pl_unlocked(self, state: CollectionState, Amount) -> bool:
-        return state.has(ItemName.ProudFang, self.player, Amount)
+    def can_access_wildlands1(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.WildlandsUnlock, self.player)
+                or self.world.options.StartingCharacter == StartingCharacter.option_partitio)
 
-    def ag_unlocked(self, state: CollectionState, Amount) -> bool:
-        return state.has(ItemName.Scimitar, self.player, Amount)
+    def can_access_winterlands2(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.WinterlandsUnlock, self.player)
+                and self.can_access_crestlands(state)
+                and self.can_KO(state))
 
-    def bc_unlocked(self, state: CollectionState, Amount) -> bool:
-        return state.has(ItemName.BeastsClaw, self.player, Amount)
+    def can_access_hinoeuma2(self, state: CollectionState) -> bool: 
+        return state.has(ItemName.HinoeumaUnlock, self.player)
 
-    def at_three_unlocked(self, state: CollectionState) -> bool:
-        return state.has(ItemName.MagnetElement, self.player, 2)
+    def can_access_wildlands2(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.WildlandsUnlock, self.player))
 
-    def at_four_unlocked(self, state: CollectionState) -> bool:
-        return state.has(ItemName.ThunderElement, self.player, 3)
+    def can_access_sea(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.TheGrandTerry, self.player))
 
-    def hundred_acre_unlocked(self, state: CollectionState, amount) -> bool:
-        return state.has(ItemName.TornPages, self.player, amount)
+    # Individual Path Action access
 
-    def level_locking_unlock(self, state: CollectionState, amount):
-        return amount <= sum([state.count(item_name, self.player) for item_name in visit_locking_dict["2VisitLocking"]])
+    def can_hire(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player)
+                and self.can_be_nighttime(state))
 
-    def summon_levels_unlocked(self, state: CollectionState, amount) -> bool:
-        return amount <= sum([state.count(item_name, self.player) for item_name in summons])
+    def can_purchase(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player)
+                and self.can_be_daytime(state))
 
-    def kh2_list_count_sum(self, item_name_set: list, state: CollectionState) -> int:
-        """
-        Returns the sum of state.count() for each item in the list.
-        """
-        return sum(
-                [state.count(item_name, self.player) for item_name in item_name_set]
-        )
+    def can_allure(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player)
+                and self.can_be_daytime(state))
 
-    def kh2_list_any_sum(self, list_of_item_name_list: list, state: CollectionState) -> int:
-        """
-        Returns sum that increments by 1 if state.has_any
-        """
-        return sum(
-                [1 for item_list in list_of_item_name_list if
-                 state.has_any(set(item_list), self.player)]
-        )
+    def can_entreat(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player)
+                and self.can_be_nighttime(state))
 
-    def kh2_dict_count(self, item_name_to_count: dict, state: CollectionState) -> bool:
-        """
-        simplifies count to a dictionary.
-        """
-        return all(
-                [state.count(item_name, self.player) >= item_amount for item_name, item_amount in
-                 item_name_to_count.items()]
-        )
+    def can_befriend(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.OchetteUnlock, self.player)
+                and self.can_be_nighttime(state))
 
-    def kh2_dict_one_count(self, item_name_to_count: dict, state: CollectionState) -> int:
-        """
-        simplifies count to a dictionary.
-        """
-        return sum(
-                [1 for item_name, item_amount in
-                 item_name_to_count.items() if state.count(item_name, self.player) >= item_amount]
-        )
+    def can_provoke(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.OchetteUnlock, self.player)
+                and self.can_be_daytime(state))
 
-    def kh2_can_reach_any(self, loc_set: list, state: CollectionState):
-        """
-        Can reach any locations in the set.
-        """
-        return any(
-                [self.kh2_can_reach(location, state) for location in
-                 loc_set]
-        )
+    def can_guide(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player)
+                and self.can_be_daytime(state))
 
-    def kh2_can_reach_all(self, loc_list: list, state: CollectionState):
-        """
-        Can reach all locations in the set.
-        """
-        return all(
-                [self.kh2_can_reach(location, state) for location in loc_list]
-        )
+    def can_coerce(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player)
+                and self.can_be_nighttime(state))
 
-    def kh2_can_reach(self, loc: str, state: CollectionState):
-        """
-        Returns bool instead of collection state.
-        """
-        return state.can_reach(self.multiworld.get_location(loc, self.player), "location", self.player)
+    def can_steal(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player)
+                and self.can_be_daytime(state))
 
-    def kh2_has_all(self, items: list, state: CollectionState):
-        """If state has at least one of all."""
-        return state.has_all(set(items), self.player)
+    def can_ambush(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player)
+                and self.can_be_nighttime(state))
 
-    def kh2_has_any(self, items: list, state: CollectionState):
-        return state.has_any(set(items), self.player)
+    def can_inquire(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player)
+                and self.can_be_daytime(state))
 
-    def form_list_unlock(self, state: CollectionState, parent_form_list, level_required, fight_logic=False) -> bool:
-        form_access = {parent_form_list}
-        if self.multiworld.AutoFormLogic[self.player] and state.has(ItemName.SecondChance, self.player) and not fight_logic:
-            if parent_form_list == ItemName.MasterForm:
-                if state.has(ItemName.DriveConverter, self.player):
-                    form_access.add(auto_form_dict[parent_form_list])
-            else:
-                form_access.add(auto_form_dict[parent_form_list])
-        return state.has_any(form_access, self.player) \
-            and self.get_form_level_requirement(state, level_required)
+    def can_soothe(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player)
+                and self.can_be_nighttime(state))
 
-    def get_form_level_requirement(self, state, amount):
-        forms_available = 0
-        form_list = [ItemName.ValorForm, ItemName.WisdomForm, ItemName.LimitForm, ItemName.MasterForm,
-                     ItemName.FinalForm]
-        if self.world.multiworld.FinalFormLogic[self.player] != "no_light_and_darkness":
-            if self.world.multiworld.FinalFormLogic[self.player] == "light_and_darkness":
-                if state.has(ItemName.LightDarkness, self.player) and state.has_any(set(form_list), self.player):
-                    forms_available += 1
-                    form_list.remove(ItemName.FinalForm)
-            else:  # self.multiworld.FinalFormLogic=="just a form"
-                form_list.remove(ItemName.FinalForm)
-                if state.has_any(form_list, self.player):
-                    forms_available += 1
-        forms_available += sum([1 for form in form_list if state.has(form, self.player)])
-        return forms_available >= amount
+    def can_challenge(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player)
+                and self.can_be_daytime(state))
+
+    def can_bribe(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player)
+                and self.can_be_nighttime(state))
+
+    def can_scrutinize(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player)
+                and self.can_be_daytime(state))
+
+    def can_mug(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player)
+                and self.can_be_nighttime(state))
+
+    # Path Actions results access. 3 types, splitting day and night, for when NPCs will be considered in logic.
+
+    def can_have_followers_day(self, state: CollectionState) -> bool:
+        return (self.can_guide(state)
+                or self.can_allure(state))
+
+    def can_have_followers_night(self, state: CollectionState) -> bool:
+        return (self.can_hire(state)
+                or self.can_befriend(state))
+
+    def can_have_followers(self, state: CollectionState) -> bool:
+        return (self.can_have_followers_day(state)
+                or self.can_have_followers_night(state))
+
+    def can_get_npcitems_day(self, state: CollectionState) -> bool:
+        return (self.can_purchase(state)
+                or self.can_steal(state))
+
+    def can_get_npcitems_night(self, state: CollectionState) -> bool:
+        return (self.can_entreat(state)
+                or self.can_mug(state))
+
+    def can_get_npcitems(self, state: CollectionState) -> bool:
+        return (self.can_get_npcitems_day(state)
+                or self.can_get_npcitems_night(state))
+
+    def can_get_info_day(self, state: CollectionState) -> bool:
+        return (self.can_scrutinize(state)
+                or self.can_inquire(state))
+
+    def can_get_info_night(self, state: CollectionState) -> bool:
+        return (self.can_bribe(state)
+                or self.can_coerce(state))
+
+    def can_get_info(self, state: CollectionState) -> bool:
+        return (self.can_get_info_day(state)
+                or self.can_get_info_night(state))
+
+    def can_KO_day(self, state: CollectionState) -> bool:
+        return (self.can_provoke(state)
+                or self.can_challenge(state))
+
+    def can_KO_night(self, state: CollectionState) -> bool:
+        return (self.can_ambush(state)
+                or self.can_soothe(state))
+
+    def can_KO(self, state: CollectionState) -> bool:
+        return (self.can_KO_day(state)
+                or self.can_KO_night(state))
+
+    # Towns Unlocks
+
+    def capecold_unlock(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player)
+                and state.has(ItemName.OsvaldCh1, self.player)
+                or self.world.options.StartingCharacter == StartingCharacter.option_osvald)
+
+    def winterbloom_unlock(self, state: CollectionState) -> bool:
+        return ((state.has(ItemName.ThroneUnlock, self.player)
+                 and state.has(ItemName.ThroneCh2Father,self.player))
+                or (state.has(ItemName.CasttiUnlock, self.player)
+                    and state.has(ItemName.CasttiCh2Winterbloom,self.player))
+                or (state.has(ItemName.PartitioUnlock, self.player)
+                    and state.has(ItemName.PartitioWinterbloom, self.player)))
+
+    def stormhail_unlock(self, state: CollectionState) -> bool:
+        return ((state.has(ItemName.HikariUnlock, self.player)
+                 and state.has(ItemName.HikariCh4, self.player))
+                or (state.has(ItemName.OchetteUnlock, self.player)
+                    and state.has(ItemName.OchetteCh2Glacis,self.player))
+                or (state.has(ItemName.TemenosUnlock, self.player)
+                    and state.has(ItemName.TemenosCh3Stormhail,self.player)))
+
+    def flamechurch_unlock(self, state: CollectionState) -> bool:
+        return ((state.has(ItemName.TemenosUnlock, self.player)
+                 and state.has(ItemName.TemenosCh1, self.player))
+                or (state.has(ItemName.TemenosUnlock, self.player)
+                    and state.has(ItemName.ThroneUnlock,self.player)
+                    and state.has(ItemName.TemenosThroneCh1, self.player))
+                or self.world.options.StartingCharacter == StartingCharacter.option_temenos)
+
+    def montwise_unlock(self, state: CollectionState) -> bool:
+        return ((state.has(ItemName.ThroneUnlock, self.player)
+                 and state.has(ItemName.ThroneCh3Father, self.player))
+                or (state.has(ItemName.HikariUnlock, self.player)
+                    and state.has(ItemName.HikariCh4, self.player))
+                or (state.has(ItemName.OsvaldUnlock, self.player)
+                    and state.has(ItemName.OsvaldCh4, self.player))
+                or (state.has(ItemName.OsvaldUnlock, self.player)
+                    and state.has(ItemName.PartitioUnlock, self.player)
+                    and state.has(ItemName.OsvaldPartitioCh2, self.player)))
+
+    def merryhills_unlock(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player)
+                and state.has(ItemName.AgneaCh5, self.player))
+
+    def newdelsta_unlock(self, state: CollectionState) -> bool:
+        return ((state.has(ItemName.ThroneUnlock, self.player)
+                 and state.has(ItemName.ThroneCh1, self.player))
+                or (state.has(ItemName.ThroneUnlock, self.player)
+                    and state.has(ItemName.ThroneCh4, self.player))
+                or (state.has(ItemName.AgneaUnlock, self.player)
+                    and state.has(ItemName.AgneaCh2, self.player))
+                or (state.has(ItemName.OsvaldUnlock, self.player)
+                    and state.has(ItemName.PartitioUnlock,self.player)
+                    and state.has(ItemName.OsvaldPartitioCh1, self.player))
+                or self.world.options.StartingCharacter == StartingCharacter.option_throne)
+
+    def abandonedvillage_unlock(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player)
+                and state.has(ItemName.CasttiCh3, self.player))
+
+    def clockbank_unlock(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player)
+                and state.has(ItemName.PartitioCh2, self.player))
+
+    def lostseed_unlock(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player)
+                and state.has(ItemName.ThroneCh4, self.player))
+
+    def beasting_unlock(self, state: CollectionState) -> bool:
+        return ((state.has(ItemName.OchetteUnlock, self.player)
+                 and state.has(ItemName.OchetteCh1, self.player))
+                or (state.has(ItemName.OchetteUnlock, self.player)
+                    and state.has(ItemName.OchetteCh3, self.player))
+                or self.world.options.StartingCharacter == StartingCharacter.option_ochette)
+
+    def tropuhopu_unlock(self, state: CollectionState) -> bool:
+        return ((state.has(ItemName.AgneaUnlock, self.player)
+                 and state.has(ItemName.AgneaCh3, self.player))
+                or (state.has(ItemName.PartitioUnlock, self.player)
+                    and state.has(ItemName.PartitioTotohaha,self.player)))
+
+    def nameless_unlock(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player)
+                and state.has(ItemName.TemenosCh4, self.player))
+
+    def canalbrine_unlock(self, state: CollectionState) -> bool:
+        return ((state.has(ItemName.CasttiUnlock, self.player)
+                 and state.has(ItemName.CasttiCh1, self.player))
+                or (state.has(ItemName.TemenosUnlock, self.player)
+                    and state.has(ItemName.TemenosCh2,self.player))
+                or self.world.options.StartingCharacter == StartingCharacter.option_castti)
+
+    def conningcreek_unlock(self, state: CollectionState) -> bool:
+        return ((state.has(ItemName.OchetteUnlock, self.player)
+                and state.has(ItemName.OchetteCh2Acta,self.player))
+                or (state.has(ItemName.OsvaldUnlock, self.player)
+                    and state.has(ItemName.OsvaldCh3, self.player))
+                or (state.has(ItemName.ThroneUnlock, self.player)
+                    and state.has(ItemName.TemenosUnlock,self.player)
+                    and state.has(ItemName.TemenosThroneCh2, self.player)))
+
+    def roqueisland_unlock(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player)
+                and state.has(ItemName.PartitioCh4, self.player))
+
+    def ryu_unlock(self, state: CollectionState) -> bool:
+        return ((state.has(ItemName.HikariUnlock, self.player)
+                 and state.has(ItemName.HikariCh1, self.player))
+                or (state.has(ItemName.HikariUnlock, self.player)
+                    and state.has(ItemName.AgneaUnlock,self.player)
+                    and state.has(ItemName.HikariAgneaCh1, self.player))
+                or self.world.options.StartingCharacter == StartingCharacter.option_hikari)
+
+    def sai_unlock(self, state: CollectionState) -> bool:
+        return ((state.has(ItemName.CasttiUnlock, self.player)
+                 and state.has(ItemName.CasttiCh2Sai, self.player))
+                or (state.has(ItemName.AgneaUnlock, self.player)
+                    and state.has(ItemName.AgneaCh4, self.player))
+                or (state.has(ItemName.PartitioUnlock, self.player)
+                    and state.has(ItemName.PartitioSai,self.player)))
+
+    def ku_unlock(self, state: CollectionState) -> bool:
+        return ((state.has(ItemName.HikariUnlock, self.player)
+                and state.has(ItemName.HikariCh5, self.player))
+                or (state.has(ItemName.HikariUnlock, self.player)
+                    and state.has(ItemName.AgneaUnlock,self.player)
+                    and state.has(ItemName.HikariAgneaCh2, self.player)))
+
+    def cropdale_unlock(self, state: CollectionState) -> bool:
+        return ((state.has(ItemName.AgneaUnlock, self.player)
+                 and state.has(ItemName.AgneaCh1, self.player))
+                or (state.has(ItemName.CasttiUnlock, self.player)
+                    and state.has(ItemName.OchetteUnlock,self.player)
+                    and (state.has(ItemName.CasttiOchetteCh1, self.player)
+                         or state.has(ItemName.CasttiOchetteCh2, self.player)))
+                or self.world.options.StartingCharacter == StartingCharacter.option_agnea)
+
+    def wellgrove_unlock(self, state: CollectionState) -> bool:
+        return ((state.has(ItemName.ThroneUnlock, self.player)
+                and state.has(ItemName.ThroneCh3Mother,self.player))
+                or (state.has(ItemName.HikariUnlock, self.player)
+                    and state.has(ItemName.HikariCh3, self.player))
+                or (state.has(ItemName.PartitioUnlock, self.player)
+                    and state.has(ItemName.PartitioCh3,self.player)))
+
+    def timberain_unlock(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player)
+                and state.has(ItemName.CasttiCh4, self.player))
+
+    def oresrush_unlock(self, state: CollectionState) -> bool:
+        return ((state.has(ItemName.PartitioUnlock, self.player)
+                 and state.has(ItemName.PartitioCh1, self.player))
+                or (state.has(ItemName.ThroneUnlock, self.player)
+                    and state.has(ItemName.ThroneCh2Mother, self.player))
+        or self.world.options.StartingCharacter == StartingCharacter.option_partitio)
+
+    def crackridge_unlock(self, state: CollectionState) -> bool:
+        return ((state.has(ItemName.TemenosUnlock, self.player)
+                 and state.has(ItemName.TemenosCh3Crackridge,self.player))
+                or (state.has(ItemName.OchetteUnlock, self.player)
+                    and state.has(ItemName.OchetteCh2Tera, self.player)))
+
+    def gravell_unlock(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player)
+                and state.has(ItemName.OsvaldCh5, self.player))
+
+    # Towns Accesses
+
+    def can_access_capecold(self, state: CollectionState) -> bool:
+        return (self.capecold_unlock(state))
+
+    def can_access_winterbloom(self, state: CollectionState) -> bool:
+        return (self.winterbloom_unlock(state)
+                and self.can_access_winterlands1(state))
+
+    def can_access_stormhail(self, state: CollectionState) -> bool:
+        return (self.stormhail_unlock(state)
+                and self.can_access_winterlands2(state))
+
+    def can_access_flamechurch(self, state: CollectionState) -> bool:
+        return (self.flamechurch_unlock(state))
+
+    def can_access_montwise(self, state: CollectionState) -> bool:
+        return (self.montwise_unlock(state)
+                and self.can_access_crestlands(state))
+
+    def can_access_merryhills(self, state: CollectionState) -> bool:
+        return (self.merryhills_unlock(state)
+                and self.can_access_crestlands(state))
+
+    def can_access_newdelsta(self, state: CollectionState) -> bool:
+        return (self.newdelsta_unlock(state))
+
+    def can_access_clockbank(self, state: CollectionState) -> bool:
+        return (self.clockbank_unlock(state)
+                and self.can_access_brightlands(state))
+
+    def can_access_abandonedvillage(self, state: CollectionState) -> bool:
+        return (self.abandonedvillage_unlock(state)
+                and self.can_access_brightlands(state))
+
+    def can_access_lostseed(self, state: CollectionState) -> bool:
+        return (self.lostseed_unlock(state)
+                and self.can_access_brightlands(state))
+
+    def can_access_beasting(self, state: CollectionState) -> bool:
+        return (self.beasting_unlock(state))
+
+    def can_access_tropuhopu(self, state: CollectionState) -> bool:
+        return (self.tropuhopu_unlock(state)
+                and self.can_access_totohaha(state))
+
+    def can_access_nameless(self, state: CollectionState) -> bool:
+        return (self.nameless_unlock(state)
+                and self.can_access_totohaha(state)
+                and state.has(ItemName.Boat, self.player))
+
+    def can_access_canalbrine(self, state: CollectionState) -> bool:
+        return (self.canalbrine_unlock(state))
+
+    def can_access_conningcreek(self, state: CollectionState) -> bool:
+        return (self.conningcreek_unlock(state)
+                and self.can_access_harborlands(state))
+
+    def can_access_roqueisland(self, state: CollectionState) -> bool:
+        return (self.roqueisland_unlock(state))
+
+    def can_access_ryu(self, state: CollectionState) -> bool:
+        return (self.ryu_unlock(state))
+
+    def can_access_sai(self, state: CollectionState) -> bool:
+        return (self.sai_unlock(state)
+                and self.can_access_hinoeuma2(state))
+
+    def can_access_ku(self, state: CollectionState) -> bool:
+        return (self.ku_unlock(state)
+                and self.can_access_hinoeuma2(state))
+
+    def can_access_cropdale(self, state: CollectionState) -> bool:
+        return (self.cropdale_unlock(state))
+
+    def can_access_wellgrove(self, state: CollectionState) -> bool:
+        return (self.wellgrove_unlock(state)
+                and self.can_access_leaflands(state))
+
+    def can_access_timberain(self, state: CollectionState) -> bool:
+        return (self.timberain_unlock(state)
+                and self.can_access_leaflands(state))
+
+    def can_access_oresrush(self, state: CollectionState) -> bool:
+        return (self.oresrush_unlock(state))
+
+    def can_access_crackridge(self, state: CollectionState) -> bool:
+        return (self.crackridge_unlock(state)
+                and self.can_access_wildlands2(state))
+
+    def can_access_gravell(self, state: CollectionState) -> bool:
+        return (self.gravell_unlock(state)
+                and self.can_access_wildlands2(state))
+
+    # Can Clear Story chapters
+
+    def can_clear_osvaldch1(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player)
+                and state.has(ItemName.OsvaldCh1, self.player)
+                and state.has(ItemName.Boat, self.player)
+                and self.can_access_capecold(state) and self.can_mug(state)
+                and self.can_scrutinize(state))
+
+    def can_clear_osvaldch3(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player)
+                and state.has(ItemName.OsvaldCh3, self.player)
+                and self.can_access_conningcreek(state) and self.can_scrutinize(state))
+
+    def can_clear_osvaldch4(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player)
+                and state.has(ItemName.OsvaldCh4, self.player)
+                and self.can_access_montwise(state)
+                and self.can_scrutinize(state))
+
+    def can_clear_osvaldch5(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player)
+                and state.has(ItemName.OsvaldCh5, self.player)
+                and self.can_access_gravell(state)
+                and self.can_mug(state)
+                and self.can_scrutinize(state))
+
+    def can_clear_temenosch1(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player)
+                and state.has(ItemName.TemenosCh1, self.player)
+                and state.has(ItemName.Boat, self.player)
+                and self.can_access_flamechurch(state)
+                and self.can_guide(state)
+                and self.can_coerce(state))
+
+    def can_clear_temenosch2(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player)
+                and state.has(ItemName.TemenosCh2, self.player)
+                and self.can_access_canalbrine(state)
+                and self.can_guide(state)
+                and self.can_coerce(state))
+
+    def can_clear_temenosch3crackridge(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player)
+                and state.has(ItemName.TemenosCh3Crackridge,self.player)
+                and self.can_access_crackridge(state)
+                and self.can_guide(state)
+                and self.can_coerce(state))
+
+    def can_clear_temenosch3stormhail(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player)
+                and state.has(ItemName.TemenosCh3Stormhail,self.player)
+                and self.can_access_stormhail(state)
+                and self.can_guide(state)
+                and self.can_coerce(state))
+
+    def can_clear_temenosch4(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player)
+                and state.has(ItemName.TemenosCh4, self.player)
+                and self.can_access_nameless(state)
+                and self.can_guide(state))
+
+    def can_clear_thronech1(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player)
+                and state.has(ItemName.ThroneCh1, self.player)
+                and self.can_access_newdelsta(state)
+                and self.can_steal(state)
+                and self.can_ambush(state))
+
+    def can_clear_thronech2mother(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player)
+                and state.has(ItemName.ThroneCh2Mother,self.player)
+                and self.can_access_oresrush(state)
+                and self.can_steal(state)
+                and self.can_ambush(state))
+
+    def can_clear_thronech2father(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player)
+                and state.has(ItemName.ThroneCh2Father,self.player)
+                and self.can_access_winterbloom(state)
+                and self.can_ambush(state))
+
+    def can_clear_thronech3mother(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player)
+                and state.has(ItemName.ThroneCh3Mother,self.player)
+                and self.can_access_wellgrove(state)
+                and self.can_steal(state)
+                and self.can_ambush(state))
+
+    def can_clear_thronech3father(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player)
+                and state.has(ItemName.ThroneCh3Father,self.player)
+                and self.can_access_montwise(state))
+
+    def can_clear_thronech4(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.ThroneUnlock, self.player)
+                and state.has(ItemName.ThroneCh4, self.player)
+                and self.can_access_newdelsta(state))
+
+    def can_clear_ochettech1(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.OchetteUnlock, self.player)
+                and state.has(ItemName.OchetteCh1, self.player)
+                and self.can_access_beasting(state)
+                and self.can_provoke(state)
+                and self.can_befriend(state))
+
+    def can_clear_ochettech2acta(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.OchetteUnlock, self.player)
+                and state.has(ItemName.OchetteCh2Acta,self.player)
+                and self.can_access_conningcreek(state)
+                and self.can_provoke(state)
+                and state.has(ItemName.Boat, self.player))
+
+    def can_clear_ochettech2tera(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.OchetteUnlock, self.player)
+                and state.has(ItemName.OchetteCh2Tera,self.player)
+                and self.can_access_crackridge(state)
+                and self.can_befriend(state))
+
+    def can_clear_ochettech2glacis(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.OchetteUnlock, self.player)
+                and state.has(ItemName.OchetteCh2Glacis,self.player)
+                and self.can_access_stormhail(state)
+                and self.can_provoke(state))
+
+    def can_clear_ochettech3(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.OchetteUnlock, self.player)
+                and state.has(ItemName.OchetteCh3, self.player)
+                and self.can_access_beasting(state)
+                and self.can_befriend(state))
+
+    def can_clear_casttich1(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player)
+                and state.has(ItemName.CasttiCh1, self.player)
+                and state.has(ItemName.Boat, self.player)
+                and self.can_access_canalbrine(state)
+                and self.can_inquire(state)
+                and self.can_soothe(state))
+
+    def can_clear_casttich2sai(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player)
+                and state.has(ItemName.CasttiCh2Sai, self.player)
+                and self.can_access_sai(state)
+                and self.can_inquire(state)
+                and self.can_soothe(state))
+
+    def can_clear_casttich2winterbloom(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player)
+                and state.has(ItemName.CasttiCh2Winterbloom, self.player)
+                and self.can_access_winterbloom(state)
+                and self.can_inquire(state)
+                and self.can_soothe(state))
+
+    def can_clear_casttich3(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player)
+                and state.has(ItemName.CasttiCh3, self.player)
+                and self.can_access_abandonedvillage(state)
+                and self.can_inquire(state))
+
+    def can_clear_casttich4(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player) 
+                and state.has(ItemName.CasttiCh4, self.player)
+                and self.can_access_timberain(state) 
+                and self.can_inquire(state) 
+                and self.can_soothe(state))
+
+    def can_clear_hikarich1(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player) 
+                and state.has(ItemName.HikariCh1, self.player)
+                and self.can_access_ryu(state) 
+                and self.can_bribe(state) 
+                and self.can_challenge(state))
+
+    def can_clear_hikarich2(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player) 
+                and state.has(ItemName.HikariCh2, self.player)
+                and self.can_access_montwise(state) 
+                and self.can_bribe(state) 
+                and self.can_challenge(state))
+
+    def can_clear_hikarich3(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player) 
+                and state.has(ItemName.HikariCh3, self.player)
+                and self.can_access_wellgrove(state) 
+                and self.can_bribe(state) 
+                and self.can_challenge(state))
+
+    def can_clear_hikarich4(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player) 
+                and state.has(ItemName.HikariCh4, self.player)
+                and self.can_access_stormhail(state) 
+                and self.can_challenge(state)) # Challenge needed for the flashback duel
+
+    def can_clear_hikarich5(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player) 
+                and state.has(ItemName.HikariCh5, self.player)
+                and self.can_access_ku(state)
+                and self.can_challenge(state))
+
+    def can_clear_partitioch1(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player) 
+                and state.has(ItemName.PartitioCh1, self.player)
+                and self.can_access_oresrush(state) 
+                and self.can_purchase(state) 
+                and self.can_hire(state))
+
+    def can_clear_partitioch2(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player)
+                and state.has(ItemName.PartitioCh2, self.player)
+                and self.can_access_clockbank(state)
+                and self.can_purchase(state)
+                and self.can_hire(state))
+
+    def can_clear_partitioch3(self, state: CollectionState) -> bool:
+        return ((state.has(ItemName.PartitioUnlock, self.player)
+                 and state.has(ItemName.PartitioCh3, self.player)
+                 and self.can_access_wellgrove(state)
+                 and self.can_purchase(state)
+                 and self.can_hire(state))
+                and (self.can_clear_partitiowinterbloom(state) # You don't need to finish these?
+                    or self.can_clear_partitiototohaha(state)       # You only need the item, afaik.
+                    or self.can_clear_partitiosai(state)))
+
+    def can_clear_partitioch4(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player)
+                and state.has(ItemName.PartitioCh4, self.player)
+                and self.can_access_roqueisland(state)
+                and self.can_purchase(state)
+                and self.can_hire(state))
+
+    def can_clear_partitiowinterbloom(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player)
+                and state.has(ItemName.PartitioWinterbloom,self.player)
+                and self.can_access_winterbloom(state)
+                and self.can_access_canalbrine(state)
+                and self.can_access_crackridge(state)
+                and self.can_access_flamechurch(state)
+                and (self.can_have_followers_night(state)  # Canalbrine is Night Follower, Flamechurch is both
+                     or self.can_have_followers_day(state)))  # Crackrdige is Day Follower
+
+    def can_clear_partitiototohaha(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player)
+                and state.has(ItemName.PartitioTotohaha,self.player)
+                and self.can_access_tropuhopu(state)
+                and self.can_purchase(state))
 
 
-class KH2WorldRules(KH2Rules):
-    def __init__(self, kh2world: KH2World) -> None:
+    def can_clear_partitiosai(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.PartitioUnlock, self.player)
+                and state.has(ItemName.PartitioSai,self.player)
+                and self.can_access_sai(state)
+                and self.can_hire(state))
+
+    def can_clear_agneach1(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player)
+                and state.has(ItemName.AgneaCh1, self.player)
+                and self.can_access_cropdale(state)
+                and self.can_allure(state)
+                and self.can_entreat(state))
+
+    def can_clear_agneach2(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player)
+                and state.has(ItemName.AgneaCh2, self.player)
+                and self.can_access_newdelsta(state)
+                and self.can_entreat(state)
+                and self.can_allure(state))
+
+    def can_clear_agneach3(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player)
+                and state.has(ItemName.AgneaCh3, self.player)
+                and self.can_access_tropuhopu(state)
+                and self.can_allure(state)
+                and self.can_entreat(state))
+
+    def can_clear_agneach4(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player)
+                and state.has(ItemName.AgneaCh4, self.player)
+                and self.can_access_sai(state)
+                and self.can_entreat(state))
+
+    def can_clear_agneach5(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.AgneaUnlock, self.player)
+                and state.has(ItemName.AgneaCh5, self.player)
+                and self.can_access_merryhills(state)
+                and self.can_allure(state))
+
+    # Can Clear Full stories
+
+    def can_clear_osvaldstory(self, state: CollectionState) -> bool:
+        return (self.can_clear_osvaldch1(state)
+                and self.can_clear_osvaldch3(state)
+                and self.can_clear_osvaldch4(state)
+                and self.can_clear_osvaldch5(state))
+
+    def can_clear_temenosstory(self, state: CollectionState) -> bool:
+        return (self.can_clear_temenosch1(state)
+                and self.can_clear_temenosch2(state)
+                and self.can_clear_temenosch3crackridge(state)
+                and self.can_clear_temenosch3stormhail(state)
+                and self.can_clear_temenosch4(state))
+
+    def can_clear_thronestory(self, state: CollectionState) -> bool:
+        return (self.can_clear_thronech1(state)
+                and self.can_clear_thronech2mother(state)
+                and self.can_clear_thronech2father(state)
+                and self.can_clear_thronech3mother(state)
+                and self.can_clear_thronech3father(state)
+                and self.can_clear_thronech4(state))
+
+    def can_clear_ochettestory(self, state: CollectionState) -> bool:
+        return (self.can_clear_ochettech1(state)
+                and self.can_clear_ochettech2acta(state)
+                and self.can_clear_ochettech2tera(state)
+                and self.can_clear_ochettech2glacis(state)
+                and self.can_clear_ochettech3(state))
+
+    def can_clear_casttistory(self, state: CollectionState) -> bool:
+        return (self.can_clear_casttich1(state)
+                and self.can_clear_casttich2sai(state)
+                and self.can_clear_casttich2winterbloom(state)
+                and self.can_clear_casttich3(state)
+                and self.can_clear_casttich4(state))
+
+    def can_clear_hikaristory(self, state: CollectionState) -> bool:
+        return (self.can_clear_hikarich1(state)
+                and self.can_clear_hikarich2(state)
+                and self.can_clear_hikarich3(state)
+                and self.can_clear_hikarich4(state)
+                and self.can_clear_hikarich5(state))
+
+    def can_clear_partitiostory(self, state: CollectionState) -> bool:
+        return (self.can_clear_partitioch1(state)
+                and self.can_clear_partitioch2(state)
+                and self.can_clear_partitioch3(state)
+                and self.can_clear_partitioch4(state))
+
+    def can_clear_agneastory(self, state: CollectionState) -> bool:
+        return (self.can_clear_agneach1(state)
+                and self.can_clear_agneach2(state)
+                and self.can_clear_agneach3(state)
+                and self.can_clear_agneach4(state)
+                and self.can_clear_agneach5(state))
+
+    # Can Clear Dual-Stories
+    def can_clear_temenosthronech1(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player)
+                and state.has(ItemName.ThroneUnlock, self.player)
+                and state.has(ItemName.TemenosThroneCh1, self.player)
+                and self.can_access_flamechurch(state)
+                and self.can_coerce(state)
+                and self.can_guide(state))
+
+    def can_clear_temenosthronech2(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.TemenosUnlock, self.player)
+                and state.has(ItemName.ThroneUnlock, self.player)
+                and state.has(ItemName.TemenosThroneCh2, self.player)
+                and self.can_access_conningcreek(state)
+                and self.can_access_harborlands(state)
+                and self.can_ambush(state)
+                and self.can_steal(state))
+
+    def can_clear_hikariagneach1(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player)
+                and state.has(ItemName.AgneaUnlock, self.player)
+                and state.has(ItemName.HikariAgneaCh1, self.player)
+                and self.can_access_ryu(state)
+                and self.can_bribe(state)
+            and self.can_entreat(state))
+
+    def can_clear_hikariagneach2(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.HikariUnlock, self.player)
+                and state.has(ItemName.AgneaUnlock, self.player)
+                and state.has(ItemName.HikariAgneaCh2, self.player)
+                and self.can_access_ku(state)
+                and self.can_access_hinoeuma2(state)
+                and self.can_challenge(state)
+                and self.can_entreat(state))
+
+    def can_clear_casttiochettech1(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player)
+                and state.has(ItemName.OchetteUnlock, self.player)
+                and state.has(ItemName.CasttiOchetteCh1, self.player)
+                and self.can_access_cropdale(state))
+
+    def can_clear_casttiochettech2(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.CasttiUnlock, self.player)
+                and state.has(ItemName.OchetteUnlock, self.player)
+                and state.has(ItemName.CasttiOchetteCh2, self.player)
+                and self.can_access_cropdale(state)
+                and self.can_provoke(state))
+
+    def can_clear_osvaldpartitioch1(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player)
+                and state.has(ItemName.PartitioUnlock, self.player)
+                and state.has(ItemName.OsvaldPartitioCh1, self.player)
+                and self.can_access_newdelsta(state)
+                and self.can_purchase(state))
+
+    def can_clear_osvaldpartitioch2(self, state: CollectionState) -> bool:
+        return (state.has(ItemName.OsvaldUnlock, self.player)
+                and state.has(ItemName.PartitioUnlock,self.player)
+                and state.has(ItemName.OsvaldPartitioCh2, self.player)
+                and self.can_access_montwise(state)
+                and self.can_mug(state))
+
+
+
+
+class OT2WorldRules(OT2Rules):
+    def __init__(self, ot2world: Octopath2World) -> None:
         # These Rules are Always in effect
-        super().__init__(kh2world)
+        super().__init__(ot2world)
         self.region_rules = {
-            RegionName.LoD:                lambda state: self.lod_unlocked(state, 1),
-            RegionName.LoD2:               lambda state: self.lod_unlocked(state, 2),
-
-            RegionName.Oc:                 lambda state: self.oc_unlocked(state, 1),
-            RegionName.Oc2:                lambda state: self.oc_unlocked(state, 2),
-
-            RegionName.Twtnw2:             lambda state: self.twtnw_unlocked(state, 2),
-            # These will be swapped and First Visit lock for twtnw is in development.
-            # RegionName.Twtnw1: lambda state: self.lod_unlocked(state, 2),
-
-            RegionName.Ht:                 lambda state: self.ht_unlocked(state, 1),
-            RegionName.Ht2:                lambda state: self.ht_unlocked(state, 2),
-
-            RegionName.Tt:                 lambda state: self.tt_unlocked(state, 1),
-            RegionName.Tt2:                lambda state: self.tt_unlocked(state, 2),
-            RegionName.Tt3:                lambda state: self.tt_unlocked(state, 3),
-
-            RegionName.Pr:                 lambda state: self.pr_unlocked(state, 1),
-            RegionName.Pr2:                lambda state: self.pr_unlocked(state, 2),
-
-            RegionName.Sp:                 lambda state: self.sp_unlocked(state, 1),
-            RegionName.Sp2:                lambda state: self.sp_unlocked(state, 2),
-
-            RegionName.Stt:                lambda state: self.stt_unlocked(state, 1),
-
-            RegionName.Dc:                 lambda state: self.dc_unlocked(state, 1),
-            RegionName.Tr:                 lambda state: self.dc_unlocked(state, 2),
-            #  Terra is a fight and can have more than just this requirement.
-            # RegionName.Terra:      lambda state:state.has(ItemName.ProofofConnection,self.player),
-
-            RegionName.Hb:                 lambda state: self.hb_unlocked(state, 1),
-            RegionName.Hb2:                lambda state: self.hb_unlocked(state, 2),
-            RegionName.Mushroom13:         lambda state: state.has(ItemName.ProofofPeace, self.player),
-
-            RegionName.Pl:                 lambda state: self.pl_unlocked(state, 1),
-            RegionName.Pl2:                lambda state: self.pl_unlocked(state, 2),
-
-            RegionName.Ag:                 lambda state: self.ag_unlocked(state, 1),
-            RegionName.Ag2:                lambda state: self.ag_unlocked(state, 2),
-
-            RegionName.Bc:                 lambda state: self.bc_unlocked(state, 1),
-            RegionName.Bc2:                lambda state: self.bc_unlocked(state, 2),
-
-            RegionName.AtlanticaSongThree: lambda state: self.at_three_unlocked(state),
-            RegionName.AtlanticaSongFour:  lambda state: self.at_four_unlocked(state),
-
-            RegionName.Ha1:                lambda state: True,
-            RegionName.Ha2:                lambda state: self.hundred_acre_unlocked(state, 1),
-            RegionName.Ha3:                lambda state: self.hundred_acre_unlocked(state, 2),
-            RegionName.Ha4:                lambda state: self.hundred_acre_unlocked(state, 3),
-            RegionName.Ha5:                lambda state: self.hundred_acre_unlocked(state, 4),
-            RegionName.Ha6:                lambda state: self.hundred_acre_unlocked(state, 5),
-
-            RegionName.LevelsVS1:          lambda state: self.level_locking_unlock(state, 1),
-            RegionName.LevelsVS3:          lambda state: self.level_locking_unlock(state, 3),
-            RegionName.LevelsVS6:          lambda state: self.level_locking_unlock(state, 6),
-            RegionName.LevelsVS9:          lambda state: self.level_locking_unlock(state, 9),
-            RegionName.LevelsVS12:         lambda state: self.level_locking_unlock(state, 12),
-            RegionName.LevelsVS15:         lambda state: self.level_locking_unlock(state, 15),
-            RegionName.LevelsVS18:         lambda state: self.level_locking_unlock(state, 18),
-            RegionName.LevelsVS21:         lambda state: self.level_locking_unlock(state, 21),
-            RegionName.LevelsVS24:         lambda state: self.level_locking_unlock(state, 24),
-            RegionName.LevelsVS26:         lambda state: self.level_locking_unlock(state, 26),
+            # Winterlands regions
+            RegionName.Winterlands1: lambda state: self.can_access_winterlands1(state),
+            RegionName.Ruffians: lambda state: (self.can_access_winterlands1(state) and (state.has(ItemName.Boat, self.player) or self.can_KO(state))),
+            RegionName.RuffiansBoss: lambda state: (self.can_access_winterlands1(state) and state.has(ItemName.Boat, self.player)),
+            RegionName.CapeCold: lambda state: self.can_access_capecold(state),
+            RegionName.OsvaldCh1: lambda state: self.can_clear_osvaldch1(state),
+            RegionName.Winterbloom: lambda state: self.can_access_winterbloom(state),
+            RegionName.WinterbloomKO: lambda state: (self.can_access_winterbloom(state) and self.can_KO(state)),
+            RegionName.ThroneCh2Father: lambda state: self.can_clear_thronech2father(state),
+            RegionName.Winterlands2: lambda state: self.can_access_winterlands2(state),
+            RegionName.InfernalCastle: lambda state: (self.can_access_winterlands2(state) and self.can_hire(state) and self.can_guide(state) and self.can_befriend(state) and self.can_allure(state)),
+            RegionName.Stormhail: lambda state: self.can_access_stormhail(state),
+            RegionName.StormhailKO: lambda state: (self.can_access_stormhail(state) and self.can_KO(state)),
+            RegionName.TemenosCh3Stormhail: lambda state: self.can_clear_temenosch3stormhail(state),
+            RegionName.HikariCh4: lambda state: self.can_clear_hikarich4(state),
+            RegionName.OchetteCh2Glacis: lambda state: self.can_clear_ochettech2glacis(state),
+            RegionName.CasttiCh2Winterbloom: lambda state: self.can_clear_casttich2winterbloom(state),
+            RegionName.PartitioWinterbloom: lambda state: self.can_clear_partitiowinterbloom(state),
+            
+            # Crestlands regions
+            RegionName.Crestlands: lambda state: self.can_access_crestlands(state),
+            RegionName.CrestlandsPass: lambda state: (self.can_access_crestlands(state) and self.can_KO(state)),
+            RegionName.SpriteCave: lambda state: (self.can_access_crestlands(state) and state.has(ItemName.Boat, self.player)),
+            RegionName.Flamechurch: lambda state: self.can_access_flamechurch(state),
+            RegionName.FlamechurchKO: lambda state: (self.can_access_flamechurch(state) and self.can_KO(state)),
+            RegionName.TemenosCh1: lambda state: self.can_clear_temenosch1(state),
+            RegionName.Montwise: lambda state: self.can_access_montwise(state),
+            RegionName.MontwiseKO: lambda state: (self.can_access_montwise(state) and self.can_KO(state)),
+            RegionName.HikariCh2: lambda state: self.can_clear_hikarich2(state),
+            RegionName.OsvaldCh4: lambda state: self.can_clear_osvaldch4(state),
+            RegionName.MerryHills: lambda state: self.can_access_merryhills(state),
+            RegionName.AgneaCh5: lambda state: self.can_clear_agneach5(state),
+            RegionName.ThroneCh3Father: lambda state: self.can_clear_thronech3father(state),
+            RegionName.AgneaClear: lambda state: self.can_clear_agneastory(state),
+            
+            #Brightlands regions
+            RegionName.Brightlands: lambda state: self.can_access_brightlands(state),
+            RegionName.Waterway: lambda state: self.can_access_brightlands(state),
+            RegionName.SunkenMaw: lambda state: (self.can_access_brightlands(state) and state.has(ItemName.Boat, self.player)),
+            RegionName.AbandonedVillage: lambda state: self.can_access_abandonedvillage(state),
+            RegionName.NewDelsta: lambda state: self.can_access_newdelsta(state),
+            RegionName.NewDelstaAmbush: lambda state: (self.can_access_newdelsta(state) and self.can_ambush(state)),
+            RegionName.NewDelstaKO: lambda state: (self.can_access_newdelsta(state) and self.can_KO(state)),
+            RegionName.AgneaCh2: lambda state: self.can_clear_agneach2(state),
+            RegionName.Clockbank: lambda state: self.can_access_clockbank(state),
+            RegionName.PartitioCh2: lambda state: self.can_clear_partitioch2(state),
+            RegionName.Clocktower: lambda state: (self.can_access_clockbank(state) and state.has(ItemName.Boat, self.player)),
+            RegionName.LostseedPass: lambda state: self.can_access_lostseed(state),
+            RegionName.Lostseed: lambda state: self.can_access_lostseed(state),
+            RegionName.ThroneCh1: lambda state: self.can_clear_thronech1(state),
+            RegionName.ThroneClear: lambda state: self.can_clear_thronestory(state),
+            RegionName.CasttiCh3: lambda state: self.can_clear_casttich3(state),
+            
+            # Totohaha regions
+            RegionName.Totohaha: lambda state: self.can_access_totohaha(state),
+            RegionName.BeastingVillage: lambda state: self.can_access_beasting(state),
+            RegionName.BeastingVillageKO: lambda state: (self.can_access_beasting(state) and self.can_KO(state)),
+            RegionName.OchetteCh3: lambda state: self.can_clear_ochettech3(state),
+            RegionName.Tropuhopu: lambda state: self.can_access_tropuhopu(state),
+            RegionName.TropuhopuKO: lambda state: (self.can_access_tropuhopu(state) and self.can_KO(state)),
+            RegionName.TropuhopuKOBoat: lambda state: (self.can_access_winterlands1(state) and self.can_KO(state) and state.has(ItemName.Boat, self.player)),
+            RegionName.CavernOfWaves: lambda state: (self.can_access_totohaha(state) and state.has(ItemName.Boat, self.player)),
+            RegionName.TotohahaPass: lambda state: (self.can_access_totohaha(state) and state.has(ItemName.Boat, self.player)),
+            RegionName.SinkingRuins: lambda state: (self.can_access_totohaha(state) and state.has(ItemName.Boat, self.player)),
+            RegionName.NamelessVillage: lambda state: self.can_access_nameless(state),
+            RegionName.NamelessVillageKO: lambda state: (self.can_access_nameless(state) and self.can_KO(state)),
+            RegionName.TemenosCh4: lambda state: self.can_clear_temenosch4(state),
+            RegionName.TemenosClear: lambda state: self.can_clear_temenosstory(state),
+            RegionName.OchetteCh1: lambda state: self.can_clear_ochettech1(state),
+            RegionName.OchetteClear: lambda state: self.can_clear_ochettestory(state),
+            RegionName.PartitioTropuhopu: lambda state: self.can_clear_partitiototohaha(state),
+            RegionName.AgneaCh3: lambda state: self.can_clear_agneach3(state),
+            
+            #Harborlands
+            RegionName.Harborlands: lambda state: self.can_access_harborlands(state),
+            RegionName.HarborlandsBoat: lambda state: (self.can_access_harborlands(state) and state.has(ItemName.Boat, self.player)),
+            RegionName.HarborlandsKO: lambda state: (self.can_access_totohaha(state) and self.can_KO(state)),
+            RegionName.SunMoonCave: lambda state: (self.can_access_harborlands(state) and self.can_be_daytime(state) and self.can_be_nighttime(state)),
+            RegionName.Canalbrine: lambda state: self.can_access_canalbrine(state),
+            RegionName.CanalbrineBoat: lambda state: (self.can_access_canalbrine(state) and state.has(ItemName.Boat, self.player)),            
+            RegionName.CanalbrineBoatKO: lambda state: (self.can_access_totohaha(state) and state.has(ItemName.Boat, self.player) and self.can_KO(state)),
+            RegionName.TemenosCh2: lambda state: self.can_clear_temenosch2(state),
+            RegionName.ConningCreek: lambda state: self.can_access_conningcreek(state),
+            RegionName.OsvaldCh3: lambda state: self.can_clear_osvaldch3(state),
+            RegionName.OchetteCh2Acta: lambda state: self.can_clear_ochettech2acta(state),
+            RegionName.RoqueIsland: lambda state: self.can_access_roqueisland(state),
+            RegionName.RoqueIslandKO: lambda state: (self.can_access_roqueisland(state) and self.can_KO(state)),
+            RegionName.PartitioCh4: lambda state: self.can_clear_partitioch4(state),
+            RegionName.CasttiCh1: lambda state: self.can_clear_casttich1(state),
+            RegionName.PartitioClear: lambda state: self.can_clear_partitiostory(state),
+            
+            # Hinoeuma Regions
+            RegionName.Hinoeuma1: lambda state: self.can_access_hinoeuma1(state),
+            RegionName.Ryu: lambda state: self.can_access_ryu(state),
+            RegionName.Hinoeuma2: lambda state: self.can_access_hinoeuma2(state),
+            RegionName.Sai: lambda state: self.can_access_sai(state),
+            RegionName.SaiRuins: lambda state: self.can_access_sai(state), # Must add requirements for ruins sidequest here
+            RegionName.SaiKO: lambda state: (self.can_access_sai(state) and self.can_KO(state)),
+            RegionName.CasttiCh2Sai: lambda state: self.can_clear_casttich2sai(state),
+            RegionName.CasttiCh2SaiKO: lambda state: (self.can_clear_casttich2sai(state) and self.can_KO(state)),
+            RegionName.Ku: lambda state: self.can_access_ku(state),
+            RegionName.HikariCh5: lambda state: self.can_clear_hikarich5(state),
+            RegionName.HikariCh1: lambda state: self.can_clear_hikarich1(state),
+            RegionName.HikariClear: lambda state: self.can_clear_hikaristory(state),
+            RegionName.PartitioSai: lambda state: self.can_clear_partitiosai(state),
+            RegionName.AgneaCh4: lambda state: self.can_clear_agneach4(state),
+            
+            # Leaflands regions
+            RegionName.Leaflands: lambda state: self.can_access_leaflands(state),
+            RegionName.LeaflandsBoat: lambda state: (self.can_access_leaflands(state) and state.has(ItemName.Boat, self.player)),
+            RegionName.Spring: lambda state: (self.can_access_leaflands(state) and state.has(ItemName.Boat, self.player)),
+            RegionName.Cropdale: lambda state: self.can_access_cropdale(state),
+            RegionName.CropdaleBoat: lambda state: (self.can_access_cropdale(state) and state.has(ItemName.Boat, self.player)),
+            RegionName.Wellgrove: lambda state: self.can_access_wellgrove(state),
+            RegionName.ThroneCh3Mother: lambda state: self.can_clear_thronech3mother(state),
+            RegionName.Timberain: lambda state: self.can_access_timberain(state),
+            RegionName.TimberainKO: lambda state: (self.can_access_timberain(state) and self.can_KO(state)),
+            RegionName.CasttiCh4: lambda state: self.can_clear_casttich4(state),
+            RegionName.CasttiClear: lambda state: self.can_clear_casttistory(state),
+            RegionName.HikariCh3: lambda state: self.can_clear_hikarich3(state),
+            RegionName.PartitioCh3: lambda state: self.can_clear_partitioch3(state),
+            RegionName.AgneaCh1: lambda state: self.can_clear_agneach1(state),
+            RegionName.ThroneCh2Mother: lambda state: self.can_clear_thronech2mother(state),
+            
+            # Wildlands Regions
+            RegionName.Wildlands1: lambda state: self.can_access_wildlands1(state),
+            RegionName.Oresrush: lambda state: self.can_access_oresrush(state),
+            RegionName.OresrushKO: lambda state: (self.can_access_oresrush(state) and self.can_KO(state)),
+            RegionName.PartitioCh1: lambda state: self.can_clear_partitioch1(state),
+            RegionName.Wildlands2: lambda state: self.can_access_wildlands2(state),
+            RegionName.Tunnels: lambda state: (self.can_access_wildlands2(state) and self.can_KO(state)),
+            RegionName.Crackridge: lambda state: self.can_access_crackridge(state),
+            RegionName.CrackridgeKO: lambda state: (self.can_access_crackridge(state) and self.can_KO(state)),
+            RegionName.TemenosCh3Crackridge: lambda state: self.can_clear_temenosch3crackridge(state),
+            RegionName.OchetteCh2Tera: lambda state: self.can_clear_ochettech2tera(state),
+            RegionName.Gravell: lambda state: self.can_access_gravell(state),
+            RegionName.OsvaldCh5: lambda state: self.can_clear_osvaldch5(state),
+            RegionName.OsvaldClear: lambda state: self.can_clear_osvaldstory(state),
+            
+            
+            # Sea Regions
+            RegionName.SunderingSea: lambda state: self.can_access_sea(state),
+            RegionName.SeaBehindScourge: lambda state: self.can_access_sea(state),
+            RegionName.SeaIslands: lambda state: self.can_access_sea(state),
+            RegionName.SeaBehindShark: lambda state: self.can_access_sea(state),
+            RegionName.TyranodrakesLair: lambda state: (self.can_access_sea(state) and state.has(ItemName.Boat, self.player)),
+            
+            #Side-Stories
+            RegionName.ThroneTemenosCh2: lambda state: self.can_clear_temenosthronech2(state),
+            RegionName.AgneaHikariCh1: lambda state: self.can_clear_hikariagneach1(state),
+            RegionName.AgneaHikariCh2: lambda state: self.can_clear_hikariagneach2(state),
+            RegionName.PartitioOsvaldCh1: lambda state: self.can_clear_osvaldpartitioch1(state),
+            RegionName.PartitioOsvaldCh2: lambda state: self.can_clear_osvaldpartitioch2(state),
+            RegionName.OchetteCasttiCh1: lambda state: self.can_clear_casttiochettech1(state),
+            RegionName.OchetteCasttiCh2: lambda state: self.can_clear_casttiochettech2(state),
+            
+            #Endbosses quests, quests requirements are borked
+            RegionName.Vide: lambda state: (self.can_clear_casttiochettech2(state) and self.can_clear_temenosthronech2(state) and self.can_clear_hikariagneach2(state) and self.can_clear_osvaldpartitioch2(state)),
+            
+            RegionName.TravelersBag: lambda state: (self.can_be_nighttime(state)),
+            RegionName.PeculiarTomes: lambda state: (self.can_get_npcitems(state) and state.can_reach(RegionName.Crackridge, player=self.player) and state.can_reach(RegionName.BeastingVillage, player=self.player) and state.can_reach(RegionName.Winterlands2, player=self.player)),
+            RegionName.ReachesOfHell: lambda state: (state.can_reach(RegionName.PeculiarTomes, player=self.player) and self.can_get_info(state) and state.can_reach(RegionName.SunderingSea, player=self.player) and state.has(ItemName.Boat, self.player)),
+            RegionName.Galdera: lambda state: (state.can_reach(RegionName.SunderingSea, player=self.player) and state.can_reach(RegionName.TravelersBag, player=self.player) and state.can_reach(RegionName.PeculiarTomes, player=self.player) and state.can_reach(RegionName.ReachesOfHell, player=self.player)),
+            
         }
-
-    def set_kh2_rules(self) -> None:
+        
+    def set_ot2_rules(self) -> None:
         for region_name, rules in self.region_rules.items():
             region = self.multiworld.get_region(region_name, self.player)
             for entrance in region.entrances:
                 entrance.access_rule = rules
-
-        self.set_kh2_goal()
-
-        weapon_region = self.multiworld.get_region(RegionName.Keyblade, self.player)
-        for location in weapon_region.locations:
-            add_rule(location, lambda state: state.has(exclusion_table["WeaponSlots"][location.name], self.player))
-            if location.name in Goofy_Checks:
-                add_item_rule(location, lambda item: item.player == self.player and item.name in GoofyAbility_Table.keys())
-            elif location.name in Donald_Checks:
-                add_item_rule(location, lambda item: item.player == self.player and item.name in DonaldAbility_Table.keys())
-
-    def set_kh2_goal(self):
-
-        final_xemnas_location = self.multiworld.get_location(LocationName.FinalXemnas, self.player)
-        if self.multiworld.Goal[self.player] == "three_proofs":
-            final_xemnas_location.access_rule = lambda state: self.kh2_has_all(three_proofs, state)
-            if self.multiworld.FinalXemnas[self.player]:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
-            else:
-                self.multiworld.completion_condition[self.player] = lambda state: self.kh2_has_all(three_proofs, state)
-        # lucky emblem hunt
-        elif self.multiworld.Goal[self.player] == "lucky_emblem_hunt":
-            final_xemnas_location.access_rule = lambda state: state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value)
-            if self.multiworld.FinalXemnas[self.player]:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
-            else:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value)
-        # hitlist if == 2
-        elif self.multiworld.Goal[self.player] == "hitlist":
-            final_xemnas_location.access_rule = lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value)
-            if self.multiworld.FinalXemnas[self.player]:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
-            else:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value)
-        else:
-            final_xemnas_location.access_rule = lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value) and\
-                                  state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value)
-            if self.multiworld.FinalXemnas[self.player]:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
-            else:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value) and \
-                                                                                  state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value)
-
-
-class KH2FormRules(KH2Rules):
-    #: Dict[str, Callable[[CollectionState], bool]]
-    def __init__(self, world: KH2World) -> None:
-        super().__init__(world)
-        # access rules on where you can level a form.
-
-        self.form_rules = {
-            LocationName.Valorlvl2:  lambda state: self.form_list_unlock(state, ItemName.ValorForm, 0),
-            LocationName.Valorlvl3:  lambda state: self.form_list_unlock(state, ItemName.ValorForm, 1),
-            LocationName.Valorlvl4:  lambda state: self.form_list_unlock(state, ItemName.ValorForm, 2),
-            LocationName.Valorlvl5:  lambda state: self.form_list_unlock(state, ItemName.ValorForm, 3),
-            LocationName.Valorlvl6:  lambda state: self.form_list_unlock(state, ItemName.ValorForm, 4),
-            LocationName.Valorlvl7:  lambda state: self.form_list_unlock(state, ItemName.ValorForm, 5),
-            LocationName.Wisdomlvl2: lambda state: self.form_list_unlock(state, ItemName.WisdomForm, 0),
-            LocationName.Wisdomlvl3: lambda state: self.form_list_unlock(state, ItemName.WisdomForm, 1),
-            LocationName.Wisdomlvl4: lambda state: self.form_list_unlock(state, ItemName.WisdomForm, 2),
-            LocationName.Wisdomlvl5: lambda state: self.form_list_unlock(state, ItemName.WisdomForm, 3),
-            LocationName.Wisdomlvl6: lambda state: self.form_list_unlock(state, ItemName.WisdomForm, 4),
-            LocationName.Wisdomlvl7: lambda state: self.form_list_unlock(state, ItemName.WisdomForm, 5),
-            LocationName.Limitlvl2:  lambda state: self.form_list_unlock(state, ItemName.LimitForm, 0),
-            LocationName.Limitlvl3:  lambda state: self.form_list_unlock(state, ItemName.LimitForm, 1),
-            LocationName.Limitlvl4:  lambda state: self.form_list_unlock(state, ItemName.LimitForm, 2),
-            LocationName.Limitlvl5:  lambda state: self.form_list_unlock(state, ItemName.LimitForm, 3),
-            LocationName.Limitlvl6:  lambda state: self.form_list_unlock(state, ItemName.LimitForm, 4),
-            LocationName.Limitlvl7:  lambda state: self.form_list_unlock(state, ItemName.LimitForm, 5),
-            LocationName.Masterlvl2: lambda state: self.form_list_unlock(state, ItemName.MasterForm, 0),
-            LocationName.Masterlvl3: lambda state: self.form_list_unlock(state, ItemName.MasterForm, 1),
-            LocationName.Masterlvl4: lambda state: self.form_list_unlock(state, ItemName.MasterForm, 2),
-            LocationName.Masterlvl5: lambda state: self.form_list_unlock(state, ItemName.MasterForm, 3),
-            LocationName.Masterlvl6: lambda state: self.form_list_unlock(state, ItemName.MasterForm, 4),
-            LocationName.Masterlvl7: lambda state: self.form_list_unlock(state, ItemName.MasterForm, 5),
-            LocationName.Finallvl2:  lambda state: self.form_list_unlock(state, ItemName.FinalForm, 0),
-            LocationName.Finallvl3:  lambda state: self.form_list_unlock(state, ItemName.FinalForm, 1),
-            LocationName.Finallvl4:  lambda state: self.form_list_unlock(state, ItemName.FinalForm, 2),
-            LocationName.Finallvl5:  lambda state: self.form_list_unlock(state, ItemName.FinalForm, 3),
-            LocationName.Finallvl6:  lambda state: self.form_list_unlock(state, ItemName.FinalForm, 4),
-            LocationName.Finallvl7:  lambda state: self.form_list_unlock(state, ItemName.FinalForm, 5),
-            LocationName.Summonlvl2: lambda state: self.summon_levels_unlocked(state, 1),
-            LocationName.Summonlvl3: lambda state: self.summon_levels_unlocked(state, 1),
-            LocationName.Summonlvl4: lambda state: self.summon_levels_unlocked(state, 2),
-            LocationName.Summonlvl5: lambda state: self.summon_levels_unlocked(state, 3),
-            LocationName.Summonlvl6: lambda state: self.summon_levels_unlocked(state, 4),
-            LocationName.Summonlvl7: lambda state: self.summon_levels_unlocked(state, 4),
-        }
-        self.form_region_rules = {
-            RegionName.Valor:  lambda state: self.multi_form_region_access(),
-            RegionName.Wisdom: lambda state: self.multi_form_region_access(),
-            RegionName.Limit:  lambda state: self.limit_form_region_access(),
-            RegionName.Master: lambda state: self.multi_form_region_access(),
-            RegionName.Final:  lambda state: self.final_form_region_access(state)
-        }
-
-    def final_form_region_access(self, state: CollectionState) -> bool:
-        """
-        Can reach one of TT3,Twtnw post Roxas, BC2, LoD2 or PR2
-        """
-        # tt3 start, can beat roxas, can beat gr2, can beat xaldin, can beat storm rider.
-
-        return any(
-                self.multiworld.get_location(location, self.player).can_reach(state) for location in
-                final_leveling_access
-        )
-
-    @staticmethod
-    def limit_form_region_access() -> bool:
-        """
-        returns true since twtnw always is open and has enemies
-        """
-        return True
-
-    @staticmethod
-    def multi_form_region_access() -> bool:
-        """
-        returns true since twtnw always is open and has enemies
-        Valor, Wisdom and Master Form region access.
-        Note: This does not account for having the drive form. See form_list_unlock
-        """
-        # todo: if boss enemy start the player with oc stone because of cerb
-        return True
-
-    def set_kh2_form_rules(self):
-        for region_name in drive_form_list:
-            if region_name == RegionName.Summon and not self.world.options.SummonLevelLocationToggle:
-                continue
-            # could get the location of each of these, but I feel like that would be less optimal
-            region = self.multiworld.get_region(region_name, self.player)
-            # if region_name in form_region_rules
-            if region_name != RegionName.Summon:
-                for entrance in region.entrances:
-                    entrance.access_rule = self.form_region_rules[region_name]
-            for loc in region.locations:
-                loc.access_rule = self.form_rules[loc.name]
-
-
-class KH2FightRules(KH2Rules):
-    player: int
-    world: KH2World
-    region_rules: Dict[str, Callable[[CollectionState], bool]]
-    location_rules: Dict[str, Callable[[CollectionState], bool]]
-
-    # cor logic
-    # have 3 things for the logic
-    # region:movement_rules and (fight_rules or skip rules)
-    # if skip rules are of return false
-    def __init__(self, world: KH2World) -> None:
-        super().__init__(world)
-        self.fight_logic = self.multiworld.FightLogic[self.player].current_key
-
-        self.fight_region_rules = {
-            RegionName.ShanYu:            lambda state: self.get_shan_yu_rules(state),
-            RegionName.AnsemRiku:         lambda state: self.get_ansem_riku_rules(state),
-            RegionName.StormRider:        lambda state: self.get_storm_rider_rules(state),
-            RegionName.DataXigbar:        lambda state: self.get_data_xigbar_rules(state),
-            RegionName.TwinLords:         lambda state: self.get_fire_lord_rules(state) and self.get_blizzard_lord_rules(state),
-            RegionName.GenieJafar:        lambda state: self.get_genie_jafar_rules(state),
-            RegionName.DataLexaeus:       lambda state: self.get_data_lexaeus_rules(state),
-            RegionName.OldPete:           lambda state: self.get_old_pete_rules(),
-            RegionName.FuturePete:        lambda state: self.get_future_pete_rules(state),
-            RegionName.Terra:             lambda state: self.get_terra_rules(state),
-            RegionName.DataMarluxia:      lambda state: self.get_data_marluxia_rules(state),
-            RegionName.Barbosa:           lambda state: self.get_barbosa_rules(state),
-            RegionName.GrimReaper1:       lambda state: self.get_grim_reaper1_rules(),
-            RegionName.GrimReaper2:       lambda state: self.get_grim_reaper2_rules(state),
-            RegionName.DataLuxord:        lambda state: self.get_data_luxord_rules(state),
-            RegionName.Cerberus:          lambda state: self.get_cerberus_rules(state),
-            RegionName.OlympusPete:       lambda state: self.get_olympus_pete_rules(state),
-            RegionName.Hydra:             lambda state: self.get_hydra_rules(state),
-            RegionName.Hades:             lambda state: self.get_hades_rules(state),
-            RegionName.DataZexion:        lambda state: self.get_data_zexion_rules(state),
-            RegionName.OcPainAndPanicCup: lambda state: self.get_pain_and_panic_cup_rules(state),
-            RegionName.OcCerberusCup:     lambda state: self.get_cerberus_cup_rules(state),
-            RegionName.Oc2TitanCup:       lambda state: self.get_titan_cup_rules(state),
-            RegionName.Oc2GofCup:         lambda state: self.get_goddess_of_fate_cup_rules(state),
-            RegionName.HadesCups:         lambda state: self.get_hades_cup_rules(state),
-            RegionName.Thresholder:       lambda state: self.get_thresholder_rules(state),
-            RegionName.Beast:             lambda state: self.get_beast_rules(),
-            RegionName.DarkThorn:         lambda state: self.get_dark_thorn_rules(state),
-            RegionName.Xaldin:            lambda state: self.get_xaldin_rules(state),
-            RegionName.DataXaldin:        lambda state: self.get_data_xaldin_rules(state),
-            RegionName.HostileProgram:    lambda state: self.get_hostile_program_rules(state),
-            RegionName.Mcp:               lambda state: self.get_mcp_rules(state),
-            RegionName.DataLarxene:       lambda state: self.get_data_larxene_rules(state),
-            RegionName.PrisonKeeper:      lambda state: self.get_prison_keeper_rules(state),
-            RegionName.OogieBoogie:       lambda state: self.get_oogie_rules(),
-            RegionName.Experiment:        lambda state: self.get_experiment_rules(state),
-            RegionName.DataVexen:         lambda state: self.get_data_vexen_rules(state),
-            RegionName.HBDemyx:           lambda state: self.get_demyx_rules(state),
-            RegionName.ThousandHeartless: lambda state: self.get_thousand_heartless_rules(state),
-            RegionName.DataDemyx:         lambda state: self.get_data_demyx_rules(state),
-            RegionName.Sephi:             lambda state: self.get_sephiroth_rules(state),
-            RegionName.CorFirstFight:     lambda state: self.get_cor_first_fight_movement_rules(state) and (self.get_cor_first_fight_rules(state) or self.get_cor_skip_first_rules(state)),
-            RegionName.CorSecondFight:    lambda state: self.get_cor_second_fight_movement_rules(state),
-            RegionName.Transport:         lambda state: self.get_transport_movement_rules(state),
-            RegionName.Scar:              lambda state: self.get_scar_rules(state),
-            RegionName.GroundShaker:      lambda state: self.get_groundshaker_rules(state),
-            RegionName.DataSaix:          lambda state: self.get_data_saix_rules(state),
-            RegionName.TwilightThorn:     lambda state: self.get_twilight_thorn_rules(),
-            RegionName.Axel1:             lambda state: self.get_axel_one_rules(),
-            RegionName.Axel2:             lambda state: self.get_axel_two_rules(),
-            RegionName.DataRoxas:         lambda state: self.get_data_roxas_rules(state),
-            RegionName.DataAxel:          lambda state: self.get_data_axel_rules(state),
-            RegionName.Roxas:             lambda state: self.get_roxas_rules(state) and self.twtnw_unlocked(state, 1),
-            RegionName.Xigbar:            lambda state: self.get_xigbar_rules(state),
-            RegionName.Luxord:            lambda state: self.get_luxord_rules(state),
-            RegionName.Saix:              lambda state: self.get_saix_rules(state),
-            RegionName.Xemnas:            lambda state: self.get_xemnas_rules(state),
-            RegionName.ArmoredXemnas:     lambda state: self.get_armored_xemnas_one_rules(state),
-            RegionName.ArmoredXemnas2:    lambda state: self.get_armored_xemnas_two_rules(state),
-            RegionName.FinalXemnas:       lambda state: self.get_final_xemnas_rules(state),
-            RegionName.DataXemnas:        lambda state: self.get_data_xemnas_rules(state),
-        }
-
-    def set_kh2_fight_rules(self) -> None:
-        for region_name, rules in self.fight_region_rules.items():
-            region = self.multiworld.get_region(region_name, self.player)
-            for entrance in region.entrances:
-                entrance.access_rule = rules
-
-        for loc_name in [LocationName.TransportEventLocation, LocationName.TransporttoRemembrance]:
-            location = self.multiworld.get_location(loc_name, self.player)
-            add_rule(location, lambda state: self.get_transport_fight_rules(state))
-
-    def get_shan_yu_rules(self, state: CollectionState) -> bool:
-        # easy: gap closer, defensive tool,drive form
-        # normal: 2 out of easy
-        # hard: defensive tool or drive form
-        shan_yu_rules = {
-            "easy":   self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 3,
-            "normal": self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 2,
-            "hard":   self.kh2_list_any_sum([defensive_tool, form_list], state) >= 1
-        }
-        return shan_yu_rules[self.fight_logic]
-
-    def get_ansem_riku_rules(self, state: CollectionState) -> bool:
-        # easy: gap closer,defensive tool,ground finisher/limit form 
-        # normal: defensive tool and (gap closer/ground finisher/limit form)
-        # hard: defensive tool or limit form
-        ansem_riku_rules = {
-            "easy":   self.kh2_list_any_sum([gap_closer, defensive_tool, [ItemName.LimitForm], ground_finisher], state) >= 3,
-            "normal": self.kh2_list_any_sum([gap_closer, defensive_tool, [ItemName.LimitForm], ground_finisher], state) >= 2,
-            "hard":   self.kh2_has_any([ItemName.ReflectElement, ItemName.Guard, ItemName.LimitForm], state),
-        }
-        return ansem_riku_rules[self.fight_logic]
-
-    def get_storm_rider_rules(self, state: CollectionState) -> bool:
-        # easy: has defensive tool,drive form, party limit,aerial move
-        # normal: has 3 of those things
-        # hard: has 2 of those things 
-        storm_rider_rules = {
-            "easy":   self.kh2_list_any_sum([defensive_tool, party_limit, aerial_move, form_list], state) >= 4,
-            "normal": self.kh2_list_any_sum([defensive_tool, party_limit, aerial_move, form_list], state) >= 3,
-            "hard":   self.kh2_list_any_sum([defensive_tool, party_limit, aerial_move, form_list], state) >= 2,
-        }
-        return storm_rider_rules[self.fight_logic]
-
-    def get_data_xigbar_rules(self, state: CollectionState) -> bool:
-        # easy:final 7,firaga,2 air combo plus,air gap closer, finishing plus,guard,reflega,horizontal slash,donald limit
-        # normal:final 7,firaga,finishing plus,guard,reflect horizontal slash,donald limit
-        # hard:((final 5, fira) or donald limit), finishing plus,guard/reflect
-        data_xigbar_rules = {
-            "easy":   self.kh2_dict_count(easy_data_xigbar_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_has_any(donald_limit, state),
-            "normal": self.kh2_dict_count(normal_data_xigbar_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_has_any(donald_limit, state),
-            "hard":   ((self.form_list_unlock(state, ItemName.FinalForm, 3, True) and state.has(ItemName.FireElement, self.player, 2)) or self.kh2_has_any(donald_limit, state))
-                      and state.has(ItemName.FinishingPlus, self.player) and self.kh2_has_any(defensive_tool, state)
-        }
-        return data_xigbar_rules[self.fight_logic]
-
-    def get_fire_lord_rules(self, state: CollectionState) -> bool:
-        # easy: drive form,defensive tool,one black magic,party limit
-        # normal: 3 of those things
-        # hard:2 of those things
-        # duplicate of the other because in boss rando there will be to bosses in arena and these bosses can be split.
-        fire_lords_rules = {
-            "easy":   self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 4,
-            "normal": self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 3,
-            "hard":   self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 2,
-        }
-        return fire_lords_rules[self.fight_logic]
-
-    def get_blizzard_lord_rules(self, state: CollectionState) -> bool:
-        # easy: drive form,defensive tool,one black magic,party limit
-        # normal: 3 of those things
-        # hard:2 of those things
-        # duplicate of the other because in boss rando there will be to bosses in arena and these bosses can be split.
-        blizzard_lords_rules = {
-            "easy":   self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 4,
-            "normal": self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 3,
-            "hard":   self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 2,
-        }
-        return blizzard_lords_rules[self.fight_logic]
-
-    def get_genie_jafar_rules(self, state: CollectionState) -> bool:
-        # easy: defensive tool,black magic,ground finisher,finishing plus
-        # normal: defensive tool, ground finisher,finishing plus
-        # hard: defensive tool,finishing plus
-        genie_jafar_rules = {
-            "easy":   self.kh2_list_any_sum([defensive_tool, black_magic, ground_finisher, {ItemName.FinishingPlus}], state) >= 4,
-            "normal": self.kh2_list_any_sum([defensive_tool, ground_finisher, {ItemName.FinishingPlus}], state) >= 3,
-            "hard":   self.kh2_list_any_sum([defensive_tool, {ItemName.FinishingPlus}], state) >= 2,
-        }
-        return genie_jafar_rules[self.fight_logic]
-
-    def get_data_lexaeus_rules(self, state: CollectionState) -> bool:
-        # easy:both gap closers,final 7,firaga,reflera,donald limit, guard
-        # normal:one gap closer,final 5,fira,reflect, donald limit,guard
-        # hard:defensive tool,gap closer
-        data_lexaues_rules = {
-            "easy":   self.kh2_dict_count(easy_data_lex_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_list_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_data_lex_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
-            "hard":   self.kh2_list_any_sum([defensive_tool, gap_closer], state) >= 2,
-        }
-        return data_lexaues_rules[self.fight_logic]
-
-    @staticmethod
-    def get_old_pete_rules():
-        # fight is free.
-        return True
-
-    def get_future_pete_rules(self, state: CollectionState) -> bool:
-        # easy:defensive option,gap closer,drive form
-        # norma:2 of those things
-        # hard 1 of those things
-        future_pete_rules = {
-            "easy":   self.kh2_list_any_sum([defensive_tool, gap_closer, form_list], state) >= 3,
-            "normal": self.kh2_list_any_sum([defensive_tool, gap_closer, form_list], state) >= 2,
-            "hard":   self.kh2_list_any_sum([defensive_tool, gap_closer, form_list], state) >= 1,
-        }
-        return future_pete_rules[self.fight_logic]
-
-    def get_data_marluxia_rules(self, state: CollectionState) -> bool:
-        # easy:both gap closers,final 7,firaga,reflera,donald limit, guard
-        # normal:one gap closer,final 5,fira,reflect, donald limit,guard
-        # hard:defensive tool,gap closer
-        data_marluxia_rules = {
-            "easy":   self.kh2_dict_count(easy_data_marluxia_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_list_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_data_marluxia_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
-            "hard":   self.kh2_list_any_sum([defensive_tool, gap_closer, [ItemName.AerialRecovery]], state) >= 3,
-        }
-        return data_marluxia_rules[self.fight_logic]
-
-    def get_terra_rules(self, state: CollectionState) -> bool:
-        # easy:scom,gap closers,explosion,2 combo pluses,final 7,firaga, donald limits,reflect,guard,3 dodge roll,3 aerial dodge and 3glide
-        # normal:gap closers,explosion,2 combo pluses,2 dodge roll,2 aerial dodge and lvl 2glide,guard,donald limit, guard
-        # hard:1 gap closer,explosion,2 combo pluses,2 dodge roll,2 aerial dodge and lvl 2glide,guard
-        terra_rules = {
-            "easy":   self.kh2_dict_count(easy_terra_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True),
-            "normal": self.kh2_dict_count(normal_terra_tools, state) and self.kh2_list_any_sum([donald_limit], state) >= 1,
-            "hard":   self.kh2_dict_count(hard_terra_tools, state) and self.kh2_list_any_sum([gap_closer], state) >= 1,
-        }
-        return terra_rules[self.fight_logic]
-
-    def get_barbosa_rules(self, state: CollectionState) -> bool:
-        # easy:blizzara and thundara or one of each,defensive tool
-        # normal:(blizzard or thunder) and defensive tool
-        # hard: defensive tool
-        barbosa_rules = {
-            "easy":   self.kh2_list_count_sum([ItemName.BlizzardElement, ItemName.ThunderElement], state) >= 2 and self.kh2_list_any_sum([defensive_tool], state) >= 1,
-            "normal": self.kh2_list_any_sum([defensive_tool, {ItemName.BlizzardElement, ItemName.ThunderElement}], state) >= 2,
-            "hard":   self.kh2_list_any_sum([defensive_tool], state) >= 1,
-        }
-        return barbosa_rules[self.fight_logic]
-
-    @staticmethod
-    def get_grim_reaper1_rules():
-        # fight is free.
-        return True
-
-    def get_grim_reaper2_rules(self, state: CollectionState) -> bool:
-        # easy:master form,thunder,defensive option
-        # normal:master form/stitch,thunder,defensive option
-        # hard:any black magic,defensive option.
-        gr2_rules = {
-            "easy":   self.kh2_list_any_sum([defensive_tool, {ItemName.MasterForm, ItemName.ThunderElement}], state) >= 2,
-            "normal": self.kh2_list_any_sum([defensive_tool, {ItemName.MasterForm, ItemName.Stitch}, {ItemName.ThunderElement}], state) >= 3,
-            "hard":   self.kh2_list_any_sum([black_magic, defensive_tool], state) >= 2
-        }
-        return gr2_rules[self.fight_logic]
-
-    def get_data_luxord_rules(self, state: CollectionState) -> bool:
-        # easy:gap closers,reflega,aerial dodge lvl 2,glide lvl 2,guard
-        # normal:1 gap closer,reflect,aerial dodge lvl 1,glide lvl 1,guard
-        # hard:quick run,defensive option
-        data_luxord_rules = {
-            "easy":   self.kh2_dict_count(easy_data_luxord_tools, state),
-            "normal": self.kh2_has_all([ItemName.ReflectElement, ItemName.AerialDodge, ItemName.Glide, ItemName.Guard], state) and self.kh2_has_any(defensive_tool, state),
-            "hard":   self.kh2_list_any_sum([{ItemName.QuickRun}, defensive_tool], state)
-        }
-        return data_luxord_rules[self.fight_logic]
-
-    def get_cerberus_rules(self, state: CollectionState) -> bool:
-        # easy,normal:defensive option, offensive magic
-        # hard:defensive option
-        cerberus_rules = {
-            "easy":   self.kh2_list_any_sum([defensive_tool, black_magic], state) >= 2,
-            "normal": self.kh2_list_any_sum([defensive_tool, black_magic], state) >= 2,
-            "hard":   self.kh2_has_any(defensive_tool, state),
-        }
-        return cerberus_rules[self.fight_logic]
-
-    def get_pain_and_panic_cup_rules(self, state: CollectionState) -> bool:
-        # easy:2 party limit,reflect
-        # normal:1 party limit,reflect
-        # hard:reflect
-        pain_and_panic_rules = {
-            "easy":   self.kh2_list_count_sum(party_limit, state) >= 2 and state.has(ItemName.ReflectElement, self.player),
-            "normal": self.kh2_list_count_sum(party_limit, state) >= 1 and state.has(ItemName.ReflectElement, self.player),
-            "hard":   state.has(ItemName.ReflectElement, self.player)
-        }
-        return pain_and_panic_rules[self.fight_logic] and (self.kh2_has_all([ItemName.FuturePeteEvent], state) or state.has(ItemName.HadesCupTrophy, self.player))
-
-    def get_cerberus_cup_rules(self, state: CollectionState) -> bool:
-        # easy:3 drive forms,reflect
-        # normal:2 drive forms,reflect
-        # hard:reflect
-        cerberus_cup_rules = {
-            "easy":   self.kh2_can_reach_any([LocationName.Valorlvl5, LocationName.Wisdomlvl5, LocationName.Limitlvl5, LocationName.Masterlvl5, LocationName.Finallvl5], state) and state.has(ItemName.ReflectElement, self.player),
-            "normal": self.kh2_can_reach_any([LocationName.Valorlvl4, LocationName.Wisdomlvl4, LocationName.Limitlvl4, LocationName.Masterlvl4, LocationName.Finallvl4], state) and state.has(ItemName.ReflectElement, self.player),
-            "hard":   state.has(ItemName.ReflectElement, self.player)
-        }
-        return cerberus_cup_rules[self.fight_logic] and (self.kh2_has_all([ItemName.ScarEvent, ItemName.OogieBoogieEvent, ItemName.TwinLordsEvent], state) or state.has(ItemName.HadesCupTrophy, self.player))
-
-    def get_titan_cup_rules(self, state: CollectionState) -> bool:
-        # easy:4 summons,reflera
-        # normal:4 summons,reflera
-        # hard:2 summons,reflera
-        titan_cup_rules = {
-            "easy":   self.kh2_list_count_sum(summons, state) >= 4 and state.has(ItemName.ReflectElement, self.player, 2),
-            "normal": self.kh2_list_count_sum(summons, state) >= 3 and state.has(ItemName.ReflectElement, self.player, 2),
-            "hard":   self.kh2_list_count_sum(summons, state) >= 2 and state.has(ItemName.ReflectElement, self.player, 2),
-        }
-        return titan_cup_rules[self.fight_logic] and (state.has(ItemName.HadesEvent, self.player) or state.has(ItemName.HadesCupTrophy, self.player))
-
-    def get_goddess_of_fate_cup_rules(self, state: CollectionState) -> bool:
-        # can beat all the other cups+xemnas 1
-        return self.kh2_has_all([ItemName.OcPainAndPanicCupEvent, ItemName.OcCerberusCupEvent, ItemName.Oc2TitanCupEvent], state)
-
-    def get_hades_cup_rules(self, state: CollectionState) -> bool:
-        # can beat goddess of fate cup
-        return state.has(ItemName.Oc2GofCupEvent, self.player)
-
-    def get_olympus_pete_rules(self, state: CollectionState) -> bool:
-        # easy:gap closer,defensive option,drive form
-        # normal:2 of those things
-        # hard:1 of those things
-        olympus_pete_rules = {
-            "easy":   self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 3,
-            "normal": self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 2,
-            "hard":   self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 1,
-        }
-        return olympus_pete_rules[self.fight_logic]
-
-    def get_hydra_rules(self, state: CollectionState) -> bool:
-        # easy:drive form,defensive option,offensive magic
-        # normal 2 of those things
-        # hard: one of those things
-        hydra_rules = {
-            "easy":   self.kh2_list_any_sum([black_magic, defensive_tool, form_list], state) >= 3,
-            "normal": self.kh2_list_any_sum([black_magic, defensive_tool, form_list], state) >= 2,
-            "hard":   self.kh2_list_any_sum([black_magic, defensive_tool, form_list], state) >= 1,
-        }
-        return hydra_rules[self.fight_logic]
-
-    def get_hades_rules(self, state: CollectionState) -> bool:
-        # easy:drive form,summon,gap closer,defensive option
-        # normal:3 of those things
-        # hard:2 of those things
-        hades_rules = {
-            "easy":   self.kh2_list_any_sum([gap_closer, summons, defensive_tool, form_list], state) >= 4,
-            "normal": self.kh2_list_any_sum([gap_closer, summons, defensive_tool, form_list], state) >= 3,
-            "hard":   self.kh2_list_any_sum([gap_closer, summons, defensive_tool, form_list], state) >= 2,
-        }
-        return hades_rules[self.fight_logic]
-
-    def get_data_zexion_rules(self, state: CollectionState) -> bool:
-        # easy: final 7,firaga,scom,both donald limits, Reflega ,guard,2 gap closers,quick run level 3
-        # normal:final 7,firaga, donald limit, Reflega ,guard,1 gap closers,quick run level 3
-        # hard:final 5,fira, donald limit, reflect,gap closer,quick run level 2
-        data_zexion_rules = {
-            "easy":   self.kh2_dict_count(easy_data_zexion, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True),
-            "normal": self.kh2_dict_count(normal_data_zexion, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
-            "hard":   self.kh2_dict_count(hard_data_zexion, state) and self.form_list_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
-        }
-        return data_zexion_rules[self.fight_logic]
-
-    def get_thresholder_rules(self, state: CollectionState) -> bool:
-        # easy:drive form,black magic,defensive tool
-        # normal:2 of those things
-        # hard:defensive tool or drive form
-        thresholder_rules = {
-            "easy":   self.kh2_list_any_sum([form_list, black_magic, defensive_tool], state) >= 3,
-            "normal": self.kh2_list_any_sum([form_list, black_magic, defensive_tool], state) >= 2,
-            "hard":   self.kh2_list_any_sum([form_list, defensive_tool], state) >= 1,
-        }
-        return thresholder_rules[self.fight_logic]
-
-    @staticmethod
-    def get_beast_rules():
-        # fight is free
-        return True
-
-    def get_dark_thorn_rules(self, state: CollectionState) -> bool:
-        # easy:drive form,defensive tool,gap closer
-        # normal:drive form,defensive tool
-        # hard:defensive tool
-        dark_thorn_rules = {
-            "easy":   self.kh2_list_any_sum([form_list, gap_closer, defensive_tool], state) >= 3,
-            "normal": self.kh2_list_any_sum([form_list, defensive_tool], state) >= 2,
-            "hard":   self.kh2_list_any_sum([defensive_tool], state) >= 1,
-        }
-        return dark_thorn_rules[self.fight_logic]
-
-    def get_xaldin_rules(self, state: CollectionState) -> bool:
-        # easy:guard,2 aerial modifier,valor/master/final
-        # normal:guard,1 aerial modifier
-        # hard:guard
-        xaldin_rules = {
-            "easy":   self.kh2_list_any_sum([[ItemName.Guard], [ItemName.ValorForm, ItemName.MasterForm, ItemName.FinalForm]], state) >= 2 and self.kh2_list_count_sum(aerial_move, state) >= 2,
-            "normal": self.kh2_list_any_sum([aerial_move], state) >= 1 and state.has(ItemName.Guard, self.player),
-            "hard":   state.has(ItemName.Guard, self.player),
-        }
-        return xaldin_rules[self.fight_logic]
-
-    def get_data_xaldin_rules(self, state: CollectionState) -> bool:
-        # easy:final 7,firaga,2 air combo plus, finishing plus,guard,reflega,donald limit,high jump aerial dodge glide lvl 3,magnet,aerial dive,aerial spiral,hori slash,berserk charge
-        # normal:final 7,firaga, finishing plus,guard,reflega,donald limit,high jump aerial dodge glide lvl 3,magnet,aerial dive,aerial spiral,hori slash
-        # hard:final 5, fira, party limit, finishing plus,guard,high jump aerial dodge glide lvl 2,magnet,aerial dive
-        data_xaldin_rules = {
-            "easy":   self.kh2_dict_count(easy_data_xaldin, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True),
-            "normal": self.kh2_dict_count(normal_data_xaldin, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True),
-            "hard":   self.kh2_dict_count(hard_data_xaldin, state) and self.form_list_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_has_any(party_limit, state),
-        }
-        return data_xaldin_rules[self.fight_logic]
-
-    def get_hostile_program_rules(self, state: CollectionState) -> bool:
-        # easy:donald limit,reflect,drive form,summon
-        # normal:3 of those things
-        # hard: 2 of those things
-        hostile_program_rules = {
-            "easy":   self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 4,
-            "normal": self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 3,
-            "hard":   self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 2,
-        }
-        return hostile_program_rules[self.fight_logic]
-
-    def get_mcp_rules(self, state: CollectionState) -> bool:
-        # easy:donald limit,reflect,drive form,summon
-        # normal:3 of those things
-        # hard: 2 of those things
-        mcp_rules = {
-            "easy":   self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 4,
-            "normal": self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 3,
-            "hard":   self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 2,
-        }
-        return mcp_rules[self.fight_logic]
-
-    def get_data_larxene_rules(self, state: CollectionState) -> bool:
-        # easy: final 7,firaga,scom,both donald limits, Reflega,guard,2 gap closers,2 ground finishers,aerial dodge 3,glide 3
-        # normal:final 7,firaga, donald limit, Reflega ,guard,1 gap closers,1 ground finisher,aerial dodge 3,glide 3
-        # hard:final 5,fira, donald limit, reflect,gap closer,aerial dodge 2,glide 2
-        data_larxene_rules = {
-            "easy":   self.kh2_dict_count(easy_data_larxene, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True),
-            "normal": self.kh2_dict_count(normal_data_larxene, state) and self.kh2_list_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.form_list_unlock(state, ItemName.FinalForm, 5, True),
-            "hard":   self.kh2_dict_count(hard_data_larxene, state) and self.kh2_list_any_sum([gap_closer, donald_limit], state) >= 2 and self.form_list_unlock(state, ItemName.FinalForm, 3, True),
-        }
-        return data_larxene_rules[self.fight_logic]
-
-    def get_prison_keeper_rules(self, state: CollectionState) -> bool:
-        # easy:defensive tool,drive form, party limit
-        # normal:two of those things
-        # hard:one of those things
-        prison_keeper_rules = {
-            "easy":   self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 3,
-            "normal": self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 2,
-            "hard":   self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 1,
-        }
-        return prison_keeper_rules[self.fight_logic]
-
-    @staticmethod
-    def get_oogie_rules():
-        # fight is free
-        return True
-
-    def get_experiment_rules(self, state: CollectionState) -> bool:
-        # easy:drive form,defensive tool,summon,party limit
-        # normal:3 of those things
-        # hard 2 of those things
-        experiment_rules = {
-            "easy":   self.kh2_list_any_sum([form_list, defensive_tool, party_limit, summons], state) >= 4,
-            "normal": self.kh2_list_any_sum([form_list, defensive_tool, party_limit, summons], state) >= 3,
-            "hard":   self.kh2_list_any_sum([form_list, defensive_tool, party_limit, summons], state) >= 2,
-        }
-        return experiment_rules[self.fight_logic]
-
-    def get_data_vexen_rules(self, state: CollectionState) -> bool:
-        # easy: final 7,firaga,scom,both donald limits, Reflega,guard,2 gap closers,2 ground finishers,aerial dodge 3,glide 3,dodge roll 3,quick run 3
-        # normal:final 7,firaga, donald limit, Reflega,guard,1 gap closers,1 ground finisher,aerial dodge 3,glide 3,dodge roll 3,quick run 3
-        # hard:final 5,fira, donald limit, reflect,gap closer,aerial dodge 2,glide 2,dodge roll 2,quick run 2
-        data_vexen_rules = {
-            "easy":   self.kh2_dict_count(easy_data_vexen, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True),
-            "normal": self.kh2_dict_count(normal_data_vexen, state) and self.kh2_list_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.form_list_unlock(state, ItemName.FinalForm, 5, True),
-            "hard":   self.kh2_dict_count(hard_data_vexen, state) and self.kh2_list_any_sum([gap_closer, donald_limit], state) >= 2 and self.form_list_unlock(state, ItemName.FinalForm, 3, True),
-        }
-        return data_vexen_rules[self.fight_logic]
-
-    def get_demyx_rules(self, state: CollectionState) -> bool:
-        # defensive option,drive form,party limit
-        # defensive option,drive form
-        # defensive option
-        demyx_rules = {
-            "easy":   self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 3,
-            "normal": self.kh2_list_any_sum([defensive_tool, form_list], state) >= 2,
-            "hard":   self.kh2_list_any_sum([defensive_tool], state) >= 1,
-        }
-        return demyx_rules[self.fight_logic]
-
-    def get_thousand_heartless_rules(self, state: CollectionState) -> bool:
-        # easy:scom,limit form,guard,magnera
-        # normal:limit form, guard
-        # hard:guard
-        thousand_heartless_rules = {
-            "easy":   self.kh2_dict_count(easy_thousand_heartless_rules, state),
-            "normal": self.kh2_dict_count(normal_thousand_heartless_rules, state),
-            "hard":   state.has(ItemName.Guard, self.player),
-        }
-        return thousand_heartless_rules[self.fight_logic]
-
-    def get_data_demyx_rules(self, state: CollectionState) -> bool:
-        # easy:wisdom 7,1 form boosts,reflera,firaga,duck flare,guard,scom,finishing plus
-        # normal:remove form boost and scom
-        # hard:wisdom 6,reflect,guard,duck flare,fira,finishing plus
-        data_demyx_rules = {
-            "easy":   self.kh2_dict_count(easy_data_demyx, state) and self.form_list_unlock(state, ItemName.WisdomForm, 5, True),
-            "normal": self.kh2_dict_count(normal_data_demyx, state) and self.form_list_unlock(state, ItemName.WisdomForm, 5, True),
-            "hard":   self.kh2_dict_count(hard_data_demyx, state) and self.form_list_unlock(state, ItemName.WisdomForm, 4, True),
-        }
-        return data_demyx_rules[self.fight_logic]
-
-    def get_sephiroth_rules(self, state: CollectionState) -> bool:
-        # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom
-        # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus
-        # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus
-        sephiroth_rules = {
-            "easy":   self.kh2_dict_count(easy_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
-            "hard":   self.kh2_dict_count(hard_sephiroth_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2,
-        }
-        return sephiroth_rules[self.fight_logic]
-
-    def get_cor_first_fight_movement_rules(self, state: CollectionState) -> bool:
-        # easy: quick run 3 or wisdom 5 (wisdom has qr 3)
-        # normal: quick run 2 and aerial dodge 1 or wisdom 5 (wisdom has qr 3)
-        # hard: (quick run 1, aerial dodge 1) or (wisdom form and aerial dodge 1)
-        cor_first_fight_movement_rules = {
-            "easy":   state.has(ItemName.QuickRun, self.player, 3) or self.form_list_unlock(state, ItemName.WisdomForm, 3, True),
-            "normal": self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 1}, state) or self.form_list_unlock(state, ItemName.WisdomForm, 3, True),
-            "hard":   self.kh2_has_all([ItemName.AerialDodge, ItemName.QuickRun], state) or self.kh2_has_all([ItemName.AerialDodge, ItemName.WisdomForm], state),
-        }
-        return cor_first_fight_movement_rules[self.fight_logic]
-
-    def get_cor_first_fight_rules(self, state: CollectionState) -> bool:
-        # easy:have 5 of these things (reflega,stitch and chicken,final form,magnera,explosion,thundara)
-        # normal:have 3 of these things (reflega,stitch and chicken,final form,magnera,explosion,thundara)
-        # hard: reflect,stitch or chicken,final form
-        cor_first_fight_rules = {
-            "easy":   self.kh2_dict_one_count(not_hard_cor_tools_dict, state) >= 5 or self.kh2_dict_one_count(not_hard_cor_tools_dict, state) >= 4 and self.form_list_unlock(state, ItemName.FinalForm, 1, True),
-            "normal": self.kh2_dict_one_count(not_hard_cor_tools_dict, state) >= 3 or self.kh2_dict_one_count(not_hard_cor_tools_dict, state) >= 2 and self.form_list_unlock(state, ItemName.FinalForm, 1, True),
-            "hard":   state.has(ItemName.ReflectElement, self.player) and self.kh2_has_any([ItemName.Stitch, ItemName.ChickenLittle], state) and self.form_list_unlock(state, ItemName.FinalForm, 1, True),
-        }
-        return cor_first_fight_rules[self.fight_logic]
-
-    def get_cor_skip_first_rules(self, state: CollectionState) -> bool:
-        # if option is not allow skips return false else run rules
-        if not self.multiworld.CorSkipToggle[self.player]:
-            return False
-        # easy: aerial dodge 3,master form,fire
-        # normal: aerial dodge 2, master form,fire
-        # hard:void cross(quick run 3,aerial dodge 1)
-        # or (quick run 2,aerial dodge 2 and magic)
-        # or (final form and (magic or combo master))
-        # or (master form and (reflect or fire or thunder or combo master)
-        # wall rise(aerial dodge 1 and (final form lvl 3 or glide 2) or (master form and (1 of black magic or combo master)
-        void_cross_rules = {
-            "easy":   state.has(ItemName.AerialDodge, self.player, 3) and self.kh2_has_all([ItemName.MasterForm, ItemName.FireElement], state),
-            "normal": state.has(ItemName.AerialDodge, self.player, 2) and self.kh2_has_all([ItemName.MasterForm, ItemName.FireElement], state),
-            "hard":   (self.kh2_dict_count({ItemName.QuickRun: 3, ItemName.AerialDodge: 1}, state)) \
-                      or (self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 2}, state) and self.kh2_has_any(magic, state)) \
-                      or (state.has(ItemName.FinalForm, self.player) and (self.kh2_has_any(magic, state) or state.has(ItemName.ComboMaster, self.player))) \
-                      or (state.has(ItemName.MasterForm, self.player) and (self.kh2_has_any([ItemName.ReflectElement, ItemName.FireElement, ItemName.ComboMaster], state)))
-        }
-        wall_rise_rules = {
-            "easy":   True,
-            "normal": True,
-            "hard":   state.has(ItemName.AerialDodge, self.player) and (self.form_list_unlock(state, ItemName.FinalForm, 1, True) or state.has(ItemName.Glide, self.player, 2))
-        }
-        return void_cross_rules[self.fight_logic] and wall_rise_rules[self.fight_logic]
-
-    def get_cor_second_fight_movement_rules(self, state: CollectionState) -> bool:
-        # easy: quick run 2, aerial dodge 3 or master form 5
-        # normal: quick run 2, aerial dodge 2 or master 5
-        # hard: (glide 1,aerial dodge 1 any magic) or (master 3 any magic) or glide 1 and aerial dodge 2
-
-        cor_second_fight_movement_rules = {
-            "easy":   self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 3}, state) or self.form_list_unlock(state, ItemName.MasterForm, 3, True),
-            "normal": self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 2}, state) or self.form_list_unlock(state, ItemName.MasterForm, 3, True),
-            "hard":   (self.kh2_has_all([ItemName.Glide, ItemName.AerialDodge], state) and self.kh2_has_any(magic, state)) \
-                      or (state.has(ItemName.MasterForm, self.player) and self.kh2_has_any(magic, state)) \
-                      or (state.has(ItemName.Glide, self.player) and state.has(ItemName.AerialDodge, self.player, 2)),
-        }
-        return cor_second_fight_movement_rules[self.fight_logic]
-
-    def get_transport_fight_rules(self, state: CollectionState) -> bool:
-        # easy: reflega,stitch and chicken,final form,magnera,explosion,finishing leap,thundaga,2 donald limits
-        # normal: 7 of those things
-        # hard: 5 of those things
-        transport_fight_rules = {
-            "easy":   self.kh2_dict_count(transport_tools_dict, state),
-            "normal": self.kh2_dict_one_count(transport_tools_dict, state) >= 7,
-            "hard":   self.kh2_dict_one_count(transport_tools_dict, state) >= 5,
-        }
-        return transport_fight_rules[self.fight_logic]
-
-    def get_transport_movement_rules(self, state: CollectionState) -> bool:
-        # easy:high jump 3,aerial dodge 3,glide 3
-        # normal: high jump 2,glide 3,aerial dodge 2
-        # hard: (hj 2,glide 2,ad 1,any magic) or hj 1,glide 2,ad 3 any magic or (any magic master form,ad) or hj lvl 1,glide 3,ad 1
-        transport_movement_rules = {
-            "easy":   self.kh2_dict_count({ItemName.HighJump: 3, ItemName.AerialDodge: 3, ItemName.Glide: 3}, state),
-            "normal": self.kh2_dict_count({ItemName.HighJump: 2, ItemName.AerialDodge: 2, ItemName.Glide: 3}, state),
-            "hard":   (self.kh2_dict_count({ItemName.HighJump: 2, ItemName.AerialDodge: 1, ItemName.Glide: 2}, state) and self.kh2_has_any(magic, state)) \
-                      or (self.kh2_dict_count({ItemName.HighJump: 1, ItemName.Glide: 2, ItemName.AerialDodge: 3}, state) and self.kh2_has_any(magic, state)) \
-                      or (self.kh2_dict_count({ItemName.HighJump: 1, ItemName.Glide: 3, ItemName.AerialDodge: 1}, state)) \
-                      or (self.kh2_has_all([ItemName.MasterForm, ItemName.AerialDodge], state) and self.kh2_has_any(magic, state)),
-        }
-        return transport_movement_rules[self.fight_logic]
-
-    def get_scar_rules(self, state: CollectionState) -> bool:
-        # easy: reflect,thunder,fire
-        # normal:reflect,fire
-        # hard:reflect
-        scar_rules = {
-            "easy":   self.kh2_has_all([ItemName.ReflectElement, ItemName.ThunderElement, ItemName.FireElement], state),
-            "normal": self.kh2_has_all([ItemName.ReflectElement, ItemName.FireElement], state),
-            "hard":   state.has(ItemName.ReflectElement, self.player),
-        }
-        return scar_rules[self.fight_logic]
-
-    def get_groundshaker_rules(self, state: CollectionState) -> bool:
-        # easy:berserk charge,cure,2 air combo plus,reflect
-        # normal:berserk charge,reflect,cure
-        # hard:berserk charge or 2 air combo plus. reflect
-        groundshaker_rules = {
-            "easy":   state.has(ItemName.AirComboPlus, self.player, 2) and self.kh2_has_all([ItemName.BerserkCharge, ItemName.CureElement, ItemName.ReflectElement], state),
-            "normal": self.kh2_has_all([ItemName.BerserkCharge, ItemName.ReflectElement, ItemName.CureElement], state),
-            "hard":   (state.has(ItemName.BerserkCharge, self.player) or state.has(ItemName.AirComboPlus, self.player, 2)) and state.has(ItemName.ReflectElement, self.player),
-        }
-        return groundshaker_rules[self.fight_logic]
-
-    def get_data_saix_rules(self, state: CollectionState) -> bool:
-        # easy:guard,2 gap closers,thunder,blizzard,2 donald limit,reflega,2 ground finisher,aerial dodge 3,glide 3,final 7,firaga,scom
-        # normal:guard,1 gap closers,thunder,blizzard,1 donald limit,reflega,1 ground finisher,aerial dodge 3,glide 3,final 7,firaga
-        # hard:aerial dodge 3,glide 3,guard,reflect,blizzard,1 gap closer,1 ground finisher
-        easy_data_rules = {
-            "easy":   self.kh2_dict_count(easy_data_saix, state) and self.form_list_unlock(state, ItemName.FinalForm, 5),
-            "normal": self.kh2_dict_count(normal_data_saix, state) and self.kh2_list_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.form_list_unlock(state, ItemName.FinalForm, 5),
-            "hard":   self.kh2_dict_count(hard_data_saix, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
-        }
-        return easy_data_rules[self.fight_logic]
-
-    @staticmethod
-    def get_twilight_thorn_rules() -> bool:
-        return True
-
-    @staticmethod
-    def get_axel_one_rules() -> bool:
-        return True
-
-    @staticmethod
-    def get_axel_two_rules() -> bool:
-        return True
-
-    def get_data_roxas_rules(self, state: CollectionState) -> bool:
-        # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom
-        # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus
-        # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus
-        data_roxas_rules = {
-            "easy":   self.kh2_dict_count(easy_data_roxas_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_data_roxas_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
-            "hard":   self.kh2_dict_count(hard_data_roxas_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
-        }
-        return data_roxas_rules[self.fight_logic]
-
-    def get_data_axel_rules(self, state: CollectionState) -> bool:
-        # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom,blizzaga
-        # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus,blizzaga
-        # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus,blizzara
-        data_axel_rules = {
-            "easy":   self.kh2_dict_count(easy_data_axel_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_data_axel_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
-            "hard":   self.kh2_dict_count(hard_data_axel_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
-        }
-        return data_axel_rules[self.fight_logic]
-
-    def get_roxas_rules(self, state: CollectionState) -> bool:
-        # easy:aerial dodge 1,glide 1, limit form,thunder,reflera,guard break,2 gap closers,finishing plus,blizzard
-        # normal:thunder,reflera,guard break,2 gap closers,finishing plus,blizzard
-        # hard:guard
-        roxas_rules = {
-            "easy":   self.kh2_dict_count(easy_roxas_tools, state),
-            "normal": self.kh2_dict_count(normal_roxas_tools, state),
-            "hard":   state.has(ItemName.Guard, self.player),
-        }
-        return roxas_rules[self.fight_logic]
-
-    def get_xigbar_rules(self, state: CollectionState) -> bool:
-        # easy:final 4,horizontal slash,fira,finishing plus,glide 2,aerial dodge 2,quick run 2,guard,reflect
-        # normal:final 4,fira,finishing plus,glide 2,aerial dodge 2,quick run 2,guard,reflect
-        # hard:guard,quick run,finishing plus
-        xigbar_rules = {
-            "easy":   self.kh2_dict_count(easy_xigbar_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 1) and self.kh2_has_any([ItemName.LightDarkness, ItemName.FinalForm], state),
-            "normal": self.kh2_dict_count(normal_xigbar_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 1),
-            "hard":   self.kh2_has_all([ItemName.Guard, ItemName.QuickRun, ItemName.FinishingPlus], state),
-        }
-        return xigbar_rules[self.fight_logic]
-
-    def get_luxord_rules(self, state: CollectionState) -> bool:
-        # easy:aerial dodge 1,glide 1,quickrun 2,guard,reflera,2 gap closers,ground finisher,limit form
-        # normal:aerial dodge 1,glide 1,quickrun 2,guard,reflera,1 gap closers,ground finisher
-        # hard:quick run,guard
-        luxord_rules = {
-            "easy":   self.kh2_dict_count(easy_luxord_tools, state) and self.kh2_has_any(ground_finisher, state),
-            "normal": self.kh2_dict_count(normal_luxord_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2,
-            "hard":   self.kh2_has_all([ItemName.Guard, ItemName.QuickRun], state)
-        }
-        return luxord_rules[self.fight_logic]
-
-    def get_saix_rules(self, state: CollectionState) -> bool:
-        # easy:aerial dodge 1,glide 1,quickrun 2,guard,reflera,2 gap closers,ground finisher,limit form
-        # normal:aerial dodge 1,glide 1,quickrun 2,guard,reflera,1 gap closers,ground finisher
-        # hard:,guard
-
-        saix_rules = {
-            "easy":   self.kh2_dict_count(easy_saix_tools, state) and self.kh2_has_any(ground_finisher, state),
-            "normal": self.kh2_dict_count(normal_saix_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2,
-            "hard":   self.kh2_has_all([ItemName.Guard], state)
-        }
-        return saix_rules[self.fight_logic]
-
-    def get_xemnas_rules(self, state: CollectionState) -> bool:
-        # easy:aerial dodge 1,glide 1,quickrun 2,guard,reflera,2 gap closers,ground finisher,limit form
-        # normal:aerial dodge 1,glide 1,quickrun 2,guard,reflera,1 gap closers,ground finisher
-        # hard:,guard
-        xemnas_rules = {
-            "easy":   self.kh2_dict_count(easy_xemnas_tools, state) and self.kh2_has_any(ground_finisher, state),
-            "normal": self.kh2_dict_count(normal_xemnas_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2,
-            "hard":   self.kh2_has_all([ItemName.Guard], state)
-        }
-        return xemnas_rules[self.fight_logic]
-
-    def get_armored_xemnas_one_rules(self, state: CollectionState) -> bool:
-        # easy:donald limit,reflect,1 gap closer,ground finisher
-        # normal:reflect,gap closer,ground finisher
-        # hard:reflect
-        armored_xemnas_one_rules = {
-            "easy":   self.kh2_list_any_sum([donald_limit, gap_closer, ground_finisher, {ItemName.ReflectElement}], state) >= 4,
-            "normal": self.kh2_list_any_sum([gap_closer, ground_finisher, {ItemName.ReflectElement}], state) >= 3,
-            "hard":   state.has(ItemName.ReflectElement, self.player),
-        }
-        return armored_xemnas_one_rules[self.fight_logic]
-
-    def get_armored_xemnas_two_rules(self, state: CollectionState) -> bool:
-        # easy:donald limit,reflect,1 gap closer,ground finisher
-        # normal:reflect,gap closer,ground finisher
-        # hard:reflect
-        armored_xemnas_two_rules = {
-            "easy":   self.kh2_list_any_sum([gap_closer, ground_finisher, {ItemName.ReflectElement}, {ItemName.ThunderElement}], state) >= 4,
-            "normal": self.kh2_list_any_sum([gap_closer, ground_finisher, {ItemName.ReflectElement}], state) >= 3,
-            "hard":   state.has(ItemName.ReflectElement, self.player),
-        }
-        return armored_xemnas_two_rules[self.fight_logic]
-
-    def get_final_xemnas_rules(self, state: CollectionState) -> bool:
-        # easy:reflera,limit form,finishing plus,gap closer,guard
-        # normal:reflect,finishing plus,guard
-        # hard:guard
-        final_xemnas_rules = {
-            "easy":   self.kh2_has_all([ItemName.LimitForm, ItemName.FinishingPlus, ItemName.Guard], state) and state.has(ItemName.ReflectElement, self.player, 2) and self.kh2_has_any(gap_closer, state),
-            "normal": self.kh2_has_all([ItemName.ReflectElement, ItemName.FinishingPlus, ItemName.Guard], state),
-            "hard":   state.has(ItemName.Guard, self.player),
-        }
-        return final_xemnas_rules[self.fight_logic]
-
-    def get_data_xemnas_rules(self, state: CollectionState) -> bool:
-        # easy:combo master,slapshot,reflega,2 ground finishers,both gap closers,finishing plus,guard,limit 5,scom,trinity limit
-        # normal:combo master,slapshot,reflega,2 ground finishers,both gap closers,finishing plus,guard,limit 5,
-        # hard:combo master,slapshot,reflera,1 ground finishers,1 gap closers,finishing plus,guard,limit form
-        data_xemnas_rules = {
-            "easy":   self.kh2_dict_count(easy_data_xemnas, state) and self.kh2_list_count_sum(ground_finisher, state) >= 2 and self.kh2_can_reach(LocationName.Limitlvl5, state),
-            "normal": self.kh2_dict_count(normal_data_xemnas, state) and self.kh2_list_count_sum(ground_finisher, state) >= 2 and self.kh2_can_reach(LocationName.Limitlvl5, state),
-            "hard":   self.kh2_dict_count(hard_data_xemnas, state) and self.kh2_list_any_sum([ground_finisher, gap_closer], state) >= 2
-        }
-        return data_xemnas_rules[self.fight_logic]
+                
+            # add rules to restrict starting zones depending on starting character
+        add_rule(self.multiworld.get_entrance("Starting Items -> Oresrush", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_partitio)
+        add_rule(self.multiworld.get_entrance("Starting Items -> New Delsta", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_throne)
+        add_rule(self.multiworld.get_entrance("Starting Items -> Beasting Village", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_ochette)
+        add_rule(self.multiworld.get_entrance("Starting Items -> Canalbrine", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_castti)
+        add_rule(self.multiworld.get_entrance("Starting Items -> Ryu", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_hikari)
+        add_rule(self.multiworld.get_entrance("Starting Items -> Flamechurch", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_temenos)
+        add_rule(self.multiworld.get_entrance("Starting Items -> Cropdale", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_agnea)
+        add_rule(self.multiworld.get_entrance("Starting Items -> Cape Cold", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_osvald)
+    
+
+    # Traveler's bag quest location
+        add_rule(self.multiworld.get_entrance("Winterlands Center Roads -> Al's Traveler's Bag Subquest", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_osvald)
+        add_rule(self.multiworld.get_entrance("Crestlands Roads -> Al's Traveler's Bag Subquest", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_temenos)
+        add_rule(self.multiworld.get_entrance("Brightlands Roads -> Al's Traveler's Bag Subquest", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_throne)
+        add_rule(self.multiworld.get_entrance("Toto'haha Trails -> Al's Traveler's Bag Subquest", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_ochette)
+        add_rule(self.multiworld.get_entrance("Harborlands Roads -> Al's Traveler's Bag Subquest", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_castti)
+        add_rule(self.multiworld.get_entrance("Central Hinoeuma Roads -> Al's Traveler's Bag Subquest", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_hikari)
+        add_rule(self.multiworld.get_entrance("Wildlands Southern Roads -> Al's Traveler's Bag Subquest", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_partitio)
+        add_rule(self.multiworld.get_entrance("Leaflands Trails -> Al's Traveler's Bag Subquest", self.player),
+                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_agnea)
+                 
+                     
+        self.set_ot2_goal()
+
+    def set_ot2_goal(self):
+        vide_location = self.multiworld.get_location(LocationName.DefeatVide, self.player)
+        #if self.world.Goal == option_vide:
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.VideDefeatedEvent, self.player, 1)
+
+# We might want to add some fighting rules to split Chapters in tiers (lvl1-10, 11-20, 21-30, 31-40 and final chapters).
