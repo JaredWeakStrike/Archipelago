@@ -47,10 +47,15 @@ from Options import Choice, Range, Toggle, ItemDict, PerGameCommonOptions, Start
 #    display_name = "Include NPC Items"
 #    default = 0
 
-#class RandomizedTime(Choice):
-#    """Locks the player in a specific time, with a progression item being the ability to change day/night."""
-#    display_name = "Include NPC Items"
-#    default = 0
+class LockedTime(Toggle):
+    """Locks the player in a specific time, with a progression item being the ability to change day/night."""
+    display_name = "Lock Time"
+    default = 0
+    
+class RandomizeCanoe(Toggle):
+    """Remove the ability to board the canoe by default which is unlocked with a progression item."""
+    display_name = "Randomize Canoe"
+    default = 0
 
 class StartingCharacter(Choice):
     """Sets which character you will start with and is gonna be locked as your main character"""
@@ -65,14 +70,14 @@ class StartingCharacter(Choice):
     option_hikari = 8
     default = 2
 
-#class Difficulty(Choice):
-#    """Sets up what is expected for later regions. Easy forces later regions to be later in logic, while hard may force you to go through hard regions early."""
-#    display_name = "Difficulty"
-#    option_easy = 0
-#    option_normal = 1
-#    option_hard = 2
-#    option_no_logic = 3
-#    default = 1
+class Difficulty(Choice):
+    """Sets up what is expected for later regions. Easy forces later regions to be later in logic, while hard may force you to go through hard regions early."""
+    display_name = "Difficulty"
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    option_no_logic = 3
+    default = 1
 
 #class ShuffleSkills(Choice):
 #    """Shuffles which job has which active abilities (job commands)
@@ -155,8 +160,10 @@ class Octopath2Options(PerGameCommonOptions):
 #    IncludeSideQuests: IncludeSideQuests
 #    IncludeNPCInfo: IncludeNPCInfo
 #    IncludeNPCItems: IncludeNPCItems
+    LockedTime: LockedTime
+    RandomizeCanoe: RandomizeCanoe
     StartingCharacter: StartingCharacter
-#    Difficulty: Difficulty
+    Difficulty: Difficulty
 #    ShuffleSkills: ShuffleSkills
 #    ShuffleSupports: ShuffleSupports
 #    RandomizeProficiencies: RandomizeProficiencies

@@ -3,26 +3,38 @@ from typing import List, Any
 
 from BaseClasses import Tutorial, ItemClassification
 from Fill import fill_restrictive
+from Options import StartInventory
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 from worlds.AutoWorld import World, WebWorld
 from .Items import *
 from .Locations import *
 from .Names import ItemName, LocationName, RegionName
-from .Options import Octopath2Options, StartingCharacter
+from .Options import Octopath2Options, StartingCharacter, LockedTime, RandomizeCanoe
 from .Regions import create_regions, connect_regions
 from .Rules import *
-from .Logic import *
+#from .Logic import *
 
 
 class Octopath2Web(WebWorld):
-    tutorials = [Tutorial(
+    setup_en = Tutorial(
             "Multiworld Setup Guide",
             "A guide to playing Octopath Traveler 2 with Archipelago.",
             "English",
             "setup_en.md",
             "setup/en",
             ["Probably HappyArtea"]
-    )]
+    )
+    
+    setup_fr = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["Probably HappyArtea"]
+        )
+        
+    tutorials = [setup_en, setup_fr]
 
 
 class Octopath2World(World):
@@ -30,6 +42,7 @@ class Octopath2World(World):
     Octopath Traveler 2 is a turn-based role-playing game developed and published by Square Enix and released in 2023.
     """
     game = "Octopath Traveler 2"
+    topology_present = True
     web = Octopath2Web()
 
     #required_client_version = (0, 5, 1)
@@ -91,6 +104,9 @@ class Octopath2World(World):
     def create_items(self) -> None:
         """Create every item in the world"""
         precollected = [item.name for item in self.multiworld.precollected_items[self.player]]
+        
+        
+        
         # That's horrible code but it'll have to do for now
         # Need to handle a add_location on game start for the starter char unlock, and then
         if self.options.StartingCharacter == StartingCharacter.option_osvald:
@@ -162,7 +178,15 @@ class Octopath2World(World):
         """
         Determines the quantity of items and maps plando locations to items.
         """
-        pass
+        
+        if self.options.LockedTime == False:
+          self.exclude.append(ItemName.TimeChange)
+          self.multiworld.push_precollected(self.create_item(ItemName.TimeChange))
+        if self.options.RandomizeCanoe == False:
+          self.exclude.append(ItemName.Boat)
+          self.multiworld.push_precollected(self.create_item(ItemName.Boat))
+            
+        #pass
 
     def create_regions(self):
         """
