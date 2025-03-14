@@ -202,9 +202,10 @@ Usefull_Table = {
     ItemName.MaxHPUp:          ItemData(20, 112, 0x3671),  # 470 is DUMMY 23, 112 is Encampment Area Map
     ItemName.MaxMPUp:          ItemData(4, 113, 0x3672),  # 471 is DUMMY 24, 113 is Village Area Map
     ItemName.DriveGaugeUp:     ItemData(6, 114, 0x3673),  # 472 is DUMMY 25, 114 is Cornerstone Hill Map
-    ItemName.ArmorSlotUp:      ItemData(3, 116, 0x3674),  # 473 is DUMMY 26, 116 is Lilliput Map
-    ItemName.AccessorySlotUp:  ItemData(3, 117, 0x3675),  # 474 is DUMMY 27, 117 is Building Site Map
-    ItemName.ItemSlotUp:       ItemData(5, 118, 0x3660),  # 463 is DUMMY 16, 118 is Mickey’s House Map
+    # these are now 0 because the amount is dynamic. By default, it is 3,3,5 respectively
+    ItemName.ArmorSlotUp:      ItemData(0, 116, 0x2500),  # 473 is DUMMY 26, 116 is Lilliput Map
+    ItemName.AccessorySlotUp:  ItemData(0, 117, 0x2501),  # 474 is DUMMY 27, 117 is Building Site Map
+    ItemName.ItemSlotUp:       ItemData(0, 118, 0x2502),  # 463 is DUMMY 16, 118 is Mickey’s House Map
 }
 SupportAbility_Table = {
     ItemName.Scan:             ItemData(2, 138, 0x08A, ability=True),

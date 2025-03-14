@@ -16,7 +16,7 @@ from .Subclasses import KH2Item
 
 
 def launch_client():
-    from .Client.Client import launch
+    from .Client import launch
     launch_component(launch, name="KH2Client")
 
 
@@ -88,6 +88,12 @@ class KH2World(World):
         self.slot_data_sora_weapon = dict()
         self.slot_data_donald_weapon = dict()
 
+        self.SlotUpgrades = {
+            ItemName.AccessorySlotUp: 0,
+            ItemName.ArmorSlotUp:     0,
+            ItemName.ItemSlotUp:      0,
+        }
+
     def fill_slot_data(self) -> dict:
         for ability in self.slot_data_sora_weapon:
             if ability in self.sora_ability_dict and self.sora_ability_dict[ability] >= 1:
@@ -102,16 +108,17 @@ class KH2World(World):
                 self.goofy_ability_dict[ability] -= 1
 
         slot_data = self.options.as_dict(
-            "Goal", 
-            "FinalXemnas", 
-            "LuckyEmblemsRequired", 
-            "BountyRequired",
-            "FightLogic",
-            "FinalFormLogic",
-            "AutoFormLogic",
-            "LevelDepth",
-            "DonaldGoofyStatsanity",
-            "CorSkipToggle"
+                "Goal",
+                "FinalXemnas",
+                "LuckyEmblemsRequired",
+                "BountyRequired",
+                "FightLogic",
+                "FinalFormLogic",
+                "AutoFormLogic",
+                "LevelDepth",
+                "DonaldGoofyStatsanity",
+                "CorSkipToggle",
+                "SlotUpSanity"
         )
         slot_data.update({
             "hitlist":                [],  # remove this after next update
@@ -119,6 +126,7 @@ class KH2World(World):
             "KeybladeAbilities":      self.sora_ability_dict,
             "StaffAbilities":         self.donald_ability_dict,
             "ShieldAbilities":        self.goofy_ability_dict,
+            "SlotUpMax":              self.SlotUpgrades,
         })
         return slot_data
 
@@ -190,8 +198,58 @@ class KH2World(World):
                 self.visitlocking_dict.pop(item)
             self.multiworld.push_precollected(self.create_item(item))
 
-        itempool = [self.create_item(item) for item, data in self.item_quantity_dict.items() for _ in range(data)]
+        # if == default then amount in pool is gonna be one less than in pool
+        # if == all then its going to be one to one with whats in pool and the max
+        # if == off then its going to be 5 in pool for items max 8
+        # 3 items in pool and 4 max for each accessory and armor up
+        if self.options.SlotUpSanity != "off":
+            possibleRandomSlots = [ItemName.AccessorySlotUp, ItemName.ArmorSlotUp, ItemName.ItemSlotUp]
+            # self.slotupgrades start at 0 for all by default
+            if self.options.SlotUpSanity == "default":
+                # start player with 3 item slots
+                for _ in range(3):
+                    self.multiworld.push_precollected(self.create_item(ItemName.ItemSlotUp))
+                # start player with 1 of the armor and accessory slots
+                # setting current max to what they already have gotten
+                # normally it would be 1 1 3 respectively but due to game limitations it cannot be odd
+                for SlotUp in [ItemName.AccessorySlotUp, ItemName.ArmorSlotUp]:
+                    # one of these is already given by push pre collected. The other will be put into the itempool
+                    self.SlotUpgrades[SlotUp] = 2
+                    self.multiworld.push_precollected(self.create_item(SlotUp))
+                    self.item_quantity_dict[SlotUp] += 1
+                self.SlotUpgrades[ItemName.ItemSlotUp] = 4
+                self.item_quantity_dict[ItemName.ItemSlotUp] += 1
+            # update max amount of slots that the player can have in  a seed
+            # these can only result in 8 6 6 or 8 8 4 unordered
+            # if it is 7 7 6 or 8 7 5 it crashes the game due to drawing to many slots on screen
+            # since they are drawn by 2
+            while sum(self.SlotUpgrades.values()) < 20:
+                random_choice = self.random.choice(possibleRandomSlots)
+                # updating max count by 1
+                self.SlotUpgrades[random_choice] += 2
+                self.item_quantity_dict[random_choice] += 2
+                # cannot have more than 8 of a random slot
+                if self.SlotUpgrades[random_choice] == 8:
+                    possibleRandomSlots.remove(random_choice)
+        else:  # == off
+            # makes this like vanilla
+            # start with 3 Item slots, 1 accessory and armor slot
+            # 5 item slot upgrades in the pool, and 3 of accessory and armor
+            for _ in range(3):  # start player with 3 item ups
+                self.multiworld.push_precollected(self.create_item(ItemName.ItemSlotUp))
+            # put 5 item slots into the pool
+            self.item_quantity_dict[ItemName.ItemSlotUp] = 5
+            # max amount of item slots player can have this seed
+            self.SlotUpgrades[ItemName.ItemSlotUp] = 8
+            # start player with 1 slot of Accessory and Armor slots
+            for SlotUp in [ItemName.AccessorySlotUp, ItemName.ArmorSlotUp]:
+                self.multiworld.push_precollected(self.create_item(SlotUp))
+                # put 3 of each into the pool
+                self.item_quantity_dict[SlotUp] = 3
+                # max amount the player can have
+                self.SlotUpgrades[SlotUp] = 4
 
+        itempool = [self.create_item(item) for item, data in self.item_quantity_dict.items() for _ in range(data)]
         # Creating filler for unfilled locations
         itempool += [self.create_filler() for _ in range(self.total_locations - len(itempool))]
 
@@ -442,7 +500,7 @@ class KH2World(World):
         """
         for item, value in self.options.start_inventory.value.items():
             if item in ActionAbility_Table \
-                    or item in SupportAbility_Table or item in exclusion_item_table["StatUps"] \
+                    or item in SupportAbility_Table \
                     or item in DonaldAbility_Table or item in GoofyAbility_Table:
                 # cannot have more than the quantity for abilties
                 if value > item_dictionary_table[item].quantity:

@@ -248,9 +248,18 @@ class KH2Context(CommonContext):
         self.base_hp = 20
         self.base_mp = 100
         self.base_drive = 5
-        self.base_accessory_slots = 1
-        self.base_armor_slots = 1
-        self.base_item_slots = 3
+
+        self.MaxSlotUps = {
+            ItemName.AccessorySlotUp: 4,
+            ItemName.ArmorSlotUp:     4,
+            ItemName.ItemSlotUp:      8
+        }
+        self.BaseAmountOfSlots = {
+            ItemName.AccessorySlotUp : 1,
+            ItemName.ArmorSlotUp     : 1,
+            ItemName.ItemSlotUp      : 3
+        }
+
         self.front_ability_slots = [0x2546, 0x2658, 0x276C, 0x2548, 0x254A, 0x254C, 0x265A, 0x265C, 0x265E, 0x276E,
                                     0x2770, 0x2772]
 
@@ -346,6 +355,12 @@ class KH2Context(CommonContext):
 
             self.kh2_data_package = Utils.load_data_package_for_checksum(
                     "Kingdom Hearts 2", self.checksums["Kingdom Hearts 2"])
+
+            if "SlotUpSanity" in self.kh2slotdata:
+                self.MaxSlotUps = self.kh2slotdata["SlotUpMax"]
+                if self.kh2slotdata["SlotUpSanity"] == 2:
+                    for slot in self.BaseAmountOfSlots.keys():
+                        self.BaseAmountOfSlots[slot] = 0
 
             if "location_name_to_id" in self.kh2_data_package:
                 self.data_package_kh2_cache(

@@ -312,6 +312,13 @@ async def verifyItems(self):
                 for SlotOffset in Equipment_Anchor_List:
                     if self.kh2_read_short(self.Save + self.CharacterAnchors[partyMember] + SlotOffset) == item_data.kh2id:
                         amount_found_in_slots += 1
+
+            worldID = self.kh2_read_byte(self.Now)
+            if worldID in self.WorldIDtoParty:
+                for SlotOffset in Equipment_Anchor_List:
+                    if self.kh2_read_short(self.Save + self.CharacterAnchors[self.WorldIDtoParty[worldID]] + SlotOffset) == item_data.kh2id:
+                        amount_found_in_slots += 1
+
             if item_name in self.kh2_seed_save["SoldEquipment"]:
                 amount_found_in_slots += self.kh2_seed_save["SoldEquipment"][item_name]
             inInventory = self.kh2_seed_save_cache["AmountInvo"]["Equipment"][item_name] - amount_found_in_slots
@@ -325,8 +332,14 @@ async def verifyItems(self):
             if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and self.kh2_read_byte(
                     self.Shop) in {10, 8}:
                 self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
+        # if these go above 8 it can crash the game
+        # the sum of these 3 items cannot go over 20 or game crash
+        #for SlotUp in [ItemName.ArmorSlotUp, ItemName.AccessorySlotUp, ItemName.ItemSlotUp]:
+        #    if self.kh2_seed_save_cache["AmountInvo"]["StatIncrease"][SlotUp] > 8:
+        #        self.kh2_seed_save_cache["AmountInvo"]["StatIncrease"][SlotUp] = 8
 
         for item_name in master_stat:
+
             amount_of_items = 0
             amount_of_items += self.kh2_seed_save_cache["AmountInvo"]["StatIncrease"][item_name]
             # checking if they talked to the computer to give them these
@@ -352,35 +365,21 @@ async def verifyItems(self):
                     # change when max drive is changed from 6 to 4
                     if current_max_drive < 9 and current_max_drive != self.base_drive + amount_of_items:
                         self.kh2_write_byte(self.Slot1 + 0x1B2, self.base_drive + amount_of_items)
-                # need to do these differently when the amount is dynamic
-                elif item_name == ItemName.AccessorySlotUp:
-                    current_accessory = self.kh2_read_byte(self.Save + 0x2501)
-                    if current_accessory != self.base_accessory_slots + amount_of_items:
-                        if 4 > current_accessory < self.base_accessory_slots + amount_of_items:
-                            self.kh2_write_byte(self.Save + 0x2501, current_accessory + 1)
-                        elif self.base_accessory_slots + amount_of_items < 4:
-                            self.kh2_write_byte(self.Save + 0x2501, self.base_accessory_slots + amount_of_items)
+                        
+        for Slots, amountOfSlots in self.BaseAmountOfSlots.items():
+            amount_of_items = 0
+            amount_of_items += self.kh2_seed_save_cache["AmountInvo"]["StatIncrease"][Slots]
+            if amount_of_items > self.MaxSlotUps[Slots]:
+                amount_of_items = self.MaxSlotUps[Slots]
+                self.kh2_seed_save_cache["AmountInvo"]["StatIncrease"][Slots] = amount_of_items
+            item_data = self.item_name_to_data[Slots]
 
-                elif item_name == ItemName.ArmorSlotUp:
-                    current_armor_slots = self.kh2_read_byte(self.Save + 0x2500)
-                    if current_armor_slots != self.base_armor_slots + amount_of_items:
-                        if 4 > current_armor_slots < self.base_armor_slots + amount_of_items:
-                            self.kh2_write_byte(self.Save + 0x2500, current_armor_slots + 1)
-                        elif self.base_armor_slots + amount_of_items < 4:
-                            self.kh2_write_byte(self.Save + 0x2500, self.base_armor_slots + amount_of_items)
-
-                elif item_name == ItemName.ItemSlotUp:
-                    current_item_slots = self.kh2_read_byte(self.Save + 0x2502)
-                    if current_item_slots != self.base_item_slots + amount_of_items:
-                        if 8 > current_item_slots < self.base_item_slots + amount_of_items:
-                            self.kh2_write_byte(self.Save + 0x2502, current_item_slots + 1)
-                        elif self.base_item_slots + amount_of_items < 8:
-                            self.kh2_write_byte(self.Save + 0x2502, self.base_item_slots + amount_of_items)
-
-            # if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items \
-            #        and self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5 and \
-            #        self.kh2_read_byte(self.Save + 0x23DF) & 0x1 << 3 > 0 and self.kh2_read_byte(0x741320) in {10, 8}:
+            #if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and amount_of_items >= 0:
             #    self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
+            current_amount_of_slots = self.kh2_read_byte(self.Save + item_data.memaddr)
+            sum_of_should_have = amount_of_items + amountOfSlots
+            if current_amount_of_slots != sum_of_should_have and sum_of_should_have <= 8:
+                self.kh2_write_byte(self.Save + item_data.memaddr, sum_of_should_have)
 
         if "PoptrackerVersionCheck" in self.kh2slotdata:
             if self.kh2slotdata["PoptrackerVersionCheck"] > 4.2 and self.kh2_read_byte(

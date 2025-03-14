@@ -331,6 +331,25 @@ class SummonLevelLocationToggle(Toggle):
     default = False
 
 
+class SlotUpSanity(Choice):
+    """
+    Include a random amount of Slot Up items (Accessory, Equipment and Item Slots).
+    Note: These slots have a hard cap of 8 and the sum cannot go over 20.
+    You are guaranteed 4 slots for each no matter your setting.
+
+    Option Off: Turns off this option, and it will act like the vanilla randomizer
+
+    Option Default: You start with 3 Item Slots,1 Armor Slot and 1 Accessory Slot but the amount of upgrades is random. i.e. 8 Accessory Slots
+
+    Option All: You don't start with any slots for anything and is all random. i.e. you don't get to start with 3 item slots 1 accessory slot or 1 armor slot.
+    """
+    display_name = "Slot Up Sanity"
+    option_off = 0
+    option_default = 1
+    option_all = 2
+    default = 2
+
+
 # shamelessly stolen from the messanger
 @dataclass
 class KingdomHearts2Options(PerGameCommonOptions):
@@ -370,3 +389,4 @@ class KingdomHearts2Options(PerGameCommonOptions):
     AtlanticaToggle: AtlanticaToggle
     CorSkipToggle: CorSkipToggle
     CustomItemPoolQuantity: CustomItemPoolQuantity
+    SlotUpSanity: SlotUpSanity
