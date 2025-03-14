@@ -223,6 +223,9 @@ class KH2World(World):
             # these can only result in 8 6 6 or 8 8 4 unordered
             # if it is 7 7 6 or 8 7 5 it crashes the game due to drawing to many slots on screen
             # since they are drawn by 2
+            # rewrite as
+            # random choise between 8 6 6 or 8 8 4
+            # random choice on which one gets 8 8 4 or 8 6 6 i.e just shuffle 8 8 4 to be 4 8 8 or 8 4 8
             while sum(self.SlotUpgrades.values()) < 20:
                 random_choice = self.random.choice(possibleRandomSlots)
                 # updating max count by 1

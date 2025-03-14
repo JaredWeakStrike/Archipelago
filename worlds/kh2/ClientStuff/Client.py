@@ -255,9 +255,9 @@ class KH2Context(CommonContext):
             ItemName.ItemSlotUp:      8
         }
         self.BaseAmountOfSlots = {
-            ItemName.AccessorySlotUp : 1,
-            ItemName.ArmorSlotUp     : 1,
-            ItemName.ItemSlotUp      : 3
+            ItemName.AccessorySlotUp: 1,
+            ItemName.ArmorSlotUp:     1,
+            ItemName.ItemSlotUp:      3
         }
 
         self.front_ability_slots = [0x2546, 0x2658, 0x276C, 0x2548, 0x254A, 0x254C, 0x265A, 0x265C, 0x265E, 0x276E,
