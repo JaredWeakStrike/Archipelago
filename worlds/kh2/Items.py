@@ -642,6 +642,40 @@ filler_items = [ItemName.PowerBoost, ItemName.MagicBoost, ItemName.DefenseBoost,
                 ItemName.Potion, ItemName.HiPotion, ItemName.Ether, ItemName.Elixir, ItemName.Megalixir,
                 ItemName.Tent, ItemName.DriveRecovery, ItemName.HighDriveRecovery,
                 ]
+# all possible combinations for the SlotSanity setting
+# this is just done in a dictionary since it makes it trivial instead of doing some for loop stuff
+possible_random_slot = [
+    {
+        ItemName.ItemSlotUp:      4,
+        ItemName.ArmorSlotUp:     8,
+        ItemName.AccessorySlotUp: 8,
+    },
+    {
+        ItemName.ItemSlotUp:      8,
+        ItemName.ArmorSlotUp:     4,
+        ItemName.AccessorySlotUp: 8,
+    },
+    {
+        ItemName.ItemSlotUp:      8,
+        ItemName.ArmorSlotUp:     8,
+        ItemName.AccessorySlotUp: 4,
+    },
+    {
+        ItemName.ItemSlotUp:      6,
+        ItemName.ArmorSlotUp:     8,
+        ItemName.AccessorySlotUp: 6,
+    },
+    {
+        ItemName.ItemSlotUp:      8,
+        ItemName.ArmorSlotUp:     6,
+        ItemName.AccessorySlotUp: 6,
+    },
+    {
+        ItemName.ItemSlotUp:      6,
+        ItemName.ArmorSlotUp:     6,
+        ItemName.AccessorySlotUp: 8,
+    }
+]
 item_groups: typing.Dict[str, list] = {
     "Drive Form":      [item_name for item_name in Forms_Table.keys()],
     "Growth":          [item_name for item_name in Movement_Table.keys()],

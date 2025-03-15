@@ -203,37 +203,23 @@ class KH2World(World):
         # if == off then its going to be 5 in pool for items max 8
         # 3 items in pool and 4 max for each accessory and armor up
         if self.options.SlotUpSanity != "off":
-            possibleRandomSlots = [ItemName.AccessorySlotUp, ItemName.ArmorSlotUp, ItemName.ItemSlotUp]
             # self.slotupgrades start at 0 for all by default
+            self.SlotUpgrades = self.random.choice(possible_random_slot)
             if self.options.SlotUpSanity == "default":
                 # start player with 3 item slots
                 for _ in range(3):
                     self.multiworld.push_precollected(self.create_item(ItemName.ItemSlotUp))
+                # item quantity should be 5,3 or 1 for Item Slots (without user putting more in the pool)
+                self.item_quantity_dict[ItemName.ItemSlotUp] += (self.SlotUpgrades[ItemName.ItemSlotUp] - 3)
                 # start player with 1 of the armor and accessory slots
-                # setting current max to what they already have gotten
-                # normally it would be 1 1 3 respectively but due to game limitations it cannot be odd
                 for SlotUp in [ItemName.AccessorySlotUp, ItemName.ArmorSlotUp]:
-                    # one of these is already given by push pre collected. The other will be put into the itempool
-                    self.SlotUpgrades[SlotUp] = 2
+                    # one of these is already given by push pre collected. The rest are put into the item pool
                     self.multiworld.push_precollected(self.create_item(SlotUp))
-                    self.item_quantity_dict[SlotUp] += 1
-                self.SlotUpgrades[ItemName.ItemSlotUp] = 4
-                self.item_quantity_dict[ItemName.ItemSlotUp] += 1
-            # update max amount of slots that the player can have in  a seed
-            # these can only result in 8 6 6 or 8 8 4 unordered
-            # if it is 7 7 6 or 8 7 5 it crashes the game due to drawing to many slots on screen
-            # since they are drawn by 2
-            # rewrite as
-            # random choise between 8 6 6 or 8 8 4
-            # random choice on which one gets 8 8 4 or 8 6 6 i.e just shuffle 8 8 4 to be 4 8 8 or 8 4 8
-            while sum(self.SlotUpgrades.values()) < 20:
-                random_choice = self.random.choice(possibleRandomSlots)
-                # updating max count by 1
-                self.SlotUpgrades[random_choice] += 2
-                self.item_quantity_dict[random_choice] += 2
-                # cannot have more than 8 of a random slot
-                if self.SlotUpgrades[random_choice] == 8:
-                    possibleRandomSlots.remove(random_choice)
+                    self.item_quantity_dict[SlotUp] += (self.SlotUpgrades[SlotUp] - 1)
+            else:
+                # user starts with none in their starting inventory thus item quantity = the max they can have
+                for item_name, item_quantity in self.SlotUpgrades.items():
+                    self.item_quantity_dict[item_name] += item_quantity
         else:  # == off
             # makes this like vanilla
             # start with 3 Item slots, 1 accessory and armor slot
