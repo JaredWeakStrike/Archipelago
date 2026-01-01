@@ -15,17 +15,17 @@ NorthBeastingTraverseWindSoulstone = "North Beasting Traverse: Wind Soulstone"
 NorthBeastingTraverseWarAxe = "North Beasting Traverse: War Axe"
 BeastingBayAnchorageSlumberSage = "Beasting Bay: Anchorage: Slumber Sage"
 BeastingBayAnchorageHealingGrapeM = "Beasting Bay: Anchorage: Healing Grape (M)"
-WesternTropuHopuTraverseEmpoweringLychee = "Western Tropu'Hopu Traverse: Empowering Lychee"
-WesternTropuHopuTraverseQualityJerky = "Western Tropu'Hopu Traverse: Quality Jerky"
-WesternTropuHopuTraverseLightSoulstoneM = "Western Tropu'Hopu Traverse: Light Soulstone (M)"
-WesternTropuHopuTraverseSprightlyBracelet = "Western Tropu'Hopu Traverse: Sprightly Bracelet"
-WesternTropuHopuTraverseHealingGrapeBunch = "Western Tropu'Hopu Traverse: Healing Grape Bunch"
-TropuHopuEnergizingPomegranateM = "Tropu'Hopu: Energizing Pomegranate (M)"
-TropuHopuCaitPowder = "Tropu'Hopu: Cait Powder"
-TropuHopuPrettyPearl = "Tropu'Hopu: Pretty Pearl"
-TropuHopuSkullHelm = "Tropu'Hopu: Skull Helm"
-TropuHopuShipyeardEmpoweringLycheeM = "Tropu'Hopu: Shipyeard: Empowering Lychee (M)"
-TropuHopuFloatingTheaterInspiritingPlumM = "Tropu'Hopu: Floating Theater: Inspiriting Plum (M)"
+WesternTropuHopuTraverseEmpoweringLychee = "Western Tropu'hopu Traverse: Empowering Lychee"
+WesternTropuHopuTraverseQualityJerky = "Western Tropu'hopu Traverse: Quality Jerky"
+WesternTropuHopuTraverseLightSoulstoneM = "Western Tropu'hopu Traverse: Light Soulstone (M)"
+WesternTropuHopuTraverseSprightlyBracelet = "Western Tropu'hopu Traverse: Sprightly Bracelet"
+WesternTropuHopuTraverseHealingGrapeBunch = "Western Tropu'hopu Traverse: Healing Grape Bunch"
+TropuHopuEnergizingPomegranateM = "Tropu'hopu: Energizing Pomegranate (M)"
+TropuHopuCaitPowder = "Tropu'hopu: Cait Powder"
+TropuHopuPrettyPearl = "Tropu'hopu: Pretty Pearl"
+TropuHopuSkullHelm = "Tropu'hopu: Skull Helm"
+TropuHopuShipyeardEmpoweringLycheeM = "Tropu'hopu: Shipyard: Empowering Lychee (M)"
+TropuHopuFloatingTheaterInspiritingPlumM = "Tropu'hopu: Floating Theater: Inspiriting Plum (M)"
 SouthernNamelessVillageTraverseSuperiorJerky = "Southern Nameless Village Traverse: Superior Jerky"
 SouthernNamelessVillageTraverseHerbofSerenity = "Southern Nameless Village Traverse: Herb of Serenity"
 SouthernNamelessVillageTraverseWindSoulstoneL = "Southern Nameless Village Traverse: Wind Soulstone (L)"
@@ -285,7 +285,7 @@ Winterbloom150L = "Winterbloom: 150 L"
 WinterbloomOldArmor = "Winterbloom: Old Armor"
 WinterbloomHealingGrape = "Winterbloom: Healing Grape"
 WinterbloomIceSoulstoneM = "Winterbloom: Ice Soulstone (M)"
-WinterbloomThievesQuartersEmpoweringLycheeM = "Winterbloom: Thieves' Quarters: Empowering Lychee (M)"
+WinterbloomThievesQuartersEmpoweringLycheeM = "Winterbloom: Thieves' Quarter: Empowering Lychee (M)"
 FrigitIslePrisonBottleofBlindingDust = "Frigit Isle: Prison: Bottle of Blinding Dust"
 FrigitIslePrisonInspiritingPlum = "Frigit Isle: Prison: Inspiriting Plum"
 PrisonUndergroundPassageHealingGrape = "Prison: Underground Passage: Healing Grape"
@@ -353,9 +353,9 @@ WesternGravellWildsHerbofSerenity = "Western Gravell Wilds: Herb of Serenity"
 WesternGravellWildsStarsplitter = "Western Gravell Wilds: Starsplitter"
 WesternGravellWilds23500L = "Western Gravell Wilds: 23500 L"
 GravellQuartzShield = "Gravell: Quartz Shield"
-PathtoDuskruinShrineHealingGrapeBunch = "Path to Duskruin Shrine: Healing Grape Bunch"
-PathtoDuskruinShrineAntiqueCoat = "Path to Duskruin Shrine: Antique Coat"
-PathtoDuskruinShrineEnergizingPomegranateM = "Path to Duskruin Shrine: Energizing Pomegranate (M)"
+PathtoDuskruinShrineHealingGrapeBunch = "Path to the Duskruin Shrine: Healing Grape Bunch"
+PathtoDuskruinShrineAntiqueCoat = "Path to the Duskruin Shrine: Antique Coat"
+PathtoDuskruinShrineEnergizingPomegranateM = "Path to the Duskruin Shrine: Energizing Pomegranate (M)"
 DuskruinShrineOliveofLifeL = "Duskruin Shrine: Olive of Life (L)"
 DuskruinShrineCriticalNecklace = "Duskruin Shrine: Critical Necklace"
 DuskruinShrineIceSoulstoneL = "Duskruin Shrine: Ice Soulstone (L)"
@@ -370,9 +370,9 @@ DuskruinShrineDepthsShadowSoulstoneL = "Duskruin Shrine: Depths: Shadow Soulston
 #IvoryRavineBattleHatchet = "Ivory Ravine: Battle Hatchet"
 #IvoryRavineRefinedSword = "Ivory Ravine: Refined Sword
 IvoryRavineEveningMist = "Ivory Ravine: Evening Mist"
-IvoryRavineLostTribesAxe = "Ivory Ravine: Lost Tribes Axe"
+IvoryRavineLostTribesAxe = "Ivory Ravine: Lost Tribe's Axe"
 IvoryRavineBottleofBefuddlingDust = "Ivory Ravine: Bottle of Befuddling Dust"
-IvoryRavineGiantsClub = "Ivory Ravine: Giants Club"
+IvoryRavineGiantsClub = "Ivory Ravine: Giant's Club"
 CropdaleHealingGrape = "Cropdale: Healing Grape"
 CropdaleOliveofLife = "Cropdale: Olive of Life"
 ForestPathHealingGrape = "Forest Path: Healing Grape"
@@ -546,6 +546,11 @@ WesternSaiSandsOliveofLifeL = "Western Sai Sands: Olive of Life (L)"
 WesternSaiSandsReinforcingJam = "Western Sai Sands: Reinforcing Jam"
 SaiInspiritingPlumM = "Sai: Inspiriting Plum (M)"
 SaiWindSoulstoneM = "Sai: Wind Soulstone (M)"
+SaiEastDistrictTatteredShoes = "Sai: East District: Tattered Shoes"
+SaiEastDistrictTatteredDress = "Sai: East District: Tattered Dress"
+SaiEastDistrictRefinedSword  = "Sai: East District: Refined Sword"
+SaiEastDistrictBattleHatchet = "Sai: East District: Battle Hatchet"
+SaiEastDistrictHerbofRevival = "Sai: East District: Herb of Revival"
 SandflowPassQuartzBlade = "Sandflow Pass: Quartz Blade"
 SandflowPassSteelLance = "Sandflow Pass: Steel Lance"
 SandflowPassBoneMail = "Sandflow Pass: Bone Mail"
@@ -567,7 +572,7 @@ DragonridgeEmpoweringLychee = "Dragonridge: Empowering Lychee"
 DragonridgeInspiritingPlumBasket = "Dragonridge: Inspiriting Plum Basket"
 DragonridgeTempestAmulet = "Dragonridge: Tempest Amulet"
 DecayingTempleBottleofSleepingDust = "Decaying Temple: Bottle of Sleeping Dust"
-DecayingTempleEnergizingPomegranate = "Decaying Temple: Energizing Pomegranate"
+DecayingTempleEnergizingPomegranate = "Decaying Temple: Energizing Pomegranate (M)"
 DecayingTemple20000L = "Decaying Temple: 20000 L"
 DecayingTempleFireDragonsGlaive = "Decaying Temple: Fire Dragon's Glaive"
 DecayingTempleSnipersBow = "Decaying Temple: Sniper's Bow"
@@ -697,6 +702,7 @@ TravelersBagClear = "Found Al's Bag"
 PeculiarTomesClear = "Found the three Peculiar Tomes"
 FromTheFarReachesOfHellClear = "Translated a Cursed Tome"
 GalderaDefeated = "Defeated Galdera"
+
 
 chestNameToData = {
     "Treasure_Dng_Cty_1_1_01": {
@@ -1952,6 +1958,60 @@ chestNameToData = {
         "ItemFileName": "ITM_CSM_0050",
         "ChestID": 1939
     },
+"Treasure_Twn_Isd_2_1_A_03":{
+      "Item":"Cait Powder",
+      "Region":"Twn_Isd_2_1_A",
+      "Hidden Item":False,
+      "Name":"Tropu'hopu",
+      "Parent":"Totohaha",
+      "ChestID":602,
+      "HaveItemLabel":"ITM_EQP_ACS_660"
+   },
+   "Treasure_Twn_Isd_2_1_A_06":{
+      "Item":"Skull Helm",
+      "Region":"Twn_Isd_2_1_A",
+      "Hidden Item":False,
+      "Name":"Tropu'hopu",
+      "Parent":"Totohaha",
+      "ChestID":605,
+      "HaveItemLabel":"ITM_EQP_HLM_180"
+   },
+   "Treasure_SS_TIsland21_0200_010":{
+      "Item":"Pretty Pearl",
+      "Region":"Twn_Isd_2_1_A",
+      "Hidden Item":False,
+      "Name":"Tropu'hopu",
+      "Parent":"Totohaha",
+      "ChestID":2332,
+      "HaveItemLabel":"ITM_TRE_SS_TI21_0200_0010"
+   },
+    "Treasure_Twn_Isd_2_1_B_02":{
+      "Item":"Inspiriting Plum (M)",
+      "Region":"Twn_Isd_2_1_C",
+      "Hidden Item":False,
+      "Name":"Tropu'hopu: Floating Theater",
+      "Parent":"Totohaha",
+      "ChestID":611,
+      "HaveItemLabel":"ITM_CSM_0050"
+   },
+   "Treasure_Twn_Isd_2_1_C_03":{
+      "Item":"Empowering Lychee (M)",
+      "Region":"Twn_Isd_2_1_C",
+      "Hidden Item":False,
+      "Name":"Tropu'hopu: Shipyard",
+      "Parent":"Totohaha",
+      "ChestID":622,
+      "HaveItemLabel":"ITM_CSM_0230"
+   },
+   "Treasure_Twn_Isd_2_1_A_07":{
+      "Item":"Energizing Pomegranate (M)",
+      "Region":"Twn_Isd_2_1_A",
+      "Hidden Item":False,
+      "Name":"Tropu'hopu",
+      "Parent":"Totohaha",
+      "ChestID":606,
+      "HaveItemLabel":"ITM_CSM_0080"
+   },
     "Treasure_Dng_Isd_1_1_02": {
         "Item": "Composite Bow",
         "Region": "Dng_Isd_1_1",
@@ -2050,6 +2110,51 @@ chestNameToData = {
         "Parent": "Totohaha",
         "ItemFileName": "ITM_CSM_0475",
         "ChestID": 2339
+    },
+    "Treasure_Fld_Isd_2_1_01": {
+        "Item": "Healing Grape Bunch",
+        "Region": "Fld_Isd_2_1",
+        "Hidden Item": False,
+        "Name": "Western Tropu'hopu Traverse",
+        "Parent": "Totohaha",
+        "HaveItemLabel": "ITM_CSM_0030",
+        "ChestID":1822
+    },
+    "Treasure_Fld_Isd_2_1_02": {
+        "Item": "Light Soulstone (M)",
+        "Region": "Fld_Isd_2_1",
+        "Hidden Item": False,
+        "Name": "Western Tropu'hopu Traverse",
+        "Parent": "Totohaha",
+        "HaveItemLabel": "ITM_CSM_0420",
+        "ChestID":1823
+    },
+    "Treasure_Fld_Isd_2_1_03": {
+        "Item": "Empowering Lychee",
+        "Region": "Fld_Isd_2_1",
+        "Hidden Item": False,
+        "Name": "Western Tropu'hopu Traverse",
+        "Parent": "Totohaha",
+        "HaveItemLabel": "ITM_CSM_0220",
+        "ChestID":1824
+    },
+    "Treasure_Fld_Isd_2_1_04": {
+        "Item": "Sprightly Bracelet",
+        "Region": "Fld_Isd_2_1",
+        "Hidden Item": False,
+        "Name": "Western Tropu'hopu Traverse",
+        "Parent": "Totohaha",
+        "HaveItemLabel": "ITM_EQP_ACS_200",
+        "ChestID":1825
+    },
+    "Treasure_Fld_Isd_2_1_05": {
+        "Item": "Quality Jerky",
+        "Region": "Fld_Isd_2_1",
+        "Hidden Item": False,
+        "Name": "Western Tropu'hopu Traverse",
+        "Parent": "Totohaha",
+        "HaveItemLabel": "ITM_MEAT_1290",
+        "ChestID":1826
     },
     "Treasure_Dng_Isd_2_1_01": {
         "Item": "Perfect Jerky",
@@ -2676,7 +2781,7 @@ chestNameToData = {
         "Item": "Inspiriting Plum Basket",
         "Region": "Dng_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "Shipwreck of the Empress",
+        "Name": "Sundering Sea: Shipwreck of the Empress",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0060",
         "ChestID": 2004
@@ -2685,7 +2790,7 @@ chestNameToData = {
         "Item": "Lost Tribe's Spear",
         "Region": "Dng_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "Shipwreck of the Empress",
+        "Name": "Sundering Sea: Shipwreck of the Empress",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_LNS_490",
         "ChestID": 2005
@@ -2694,7 +2799,7 @@ chestNameToData = {
         "Item": "Thunder Soulstone (L)",
         "Region": "Dng_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "Shipwreck of the Empress",
+        "Name": "Sundering Sea: Shipwreck of the Empress",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0370",
         "ChestID": 2006
@@ -2703,7 +2808,7 @@ chestNameToData = {
         "Item": "Cursed Shield",
         "Region": "Dng_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "Shipwreck of the Empress",
+        "Name": "Sundering Sea: Shipwreck of the Empress",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_SLD_360",
         "ChestID": 2007
@@ -2712,7 +2817,7 @@ chestNameToData = {
         "Item": "Master Thief's Sapphire Stone",
         "Region": "Dng_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "Shipwreck of the Empress",
+        "Name": "Sundering Sea: Shipwreck of the Empress",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_TRE_GLD_02",
         "ChestID": 2008
@@ -2721,7 +2826,7 @@ chestNameToData = {
         "Item": "Rusty Dagger",
         "Region": "Dng_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "Shipwreck of the Empress",
+        "Name": "Sundering Sea: Shipwreck of the Empress",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_TRE_WPM_03",
         "ChestID": 2009
@@ -2730,7 +2835,7 @@ chestNameToData = {
         "Item": "Herb of Serenity",
         "Region": "Dng_Ocn_1_2",
         "Hidden Item": False,
-        "Name": "Curious Nest",
+        "Name": "Sundering Sea: Curious Nest",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_SLP_0020",
         "ChestID": 2010
@@ -2739,7 +2844,7 @@ chestNameToData = {
         "Item": "Lost Tribe's Bow",
         "Region": "Dng_Ocn_1_2",
         "Hidden Item": False,
-        "Name": "Curious Nest",
+        "Name": "Sundering Sea: Curious Nest",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_BOW_500",
         "ChestID": 2011
@@ -2748,7 +2853,7 @@ chestNameToData = {
         "Item": "Tornado Glaive",
         "Region": "Dng_Ocn_1_2",
         "Hidden Item": False,
-        "Name": "Curious Nest",
+        "Name": "Sundering Sea: Curious Nest",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_LNS_360",
         "ChestID": 2012
@@ -2757,7 +2862,7 @@ chestNameToData = {
         "Item": "Fang of Ferocity",
         "Region": "Dng_Ocn_1_2",
         "Hidden Item": False,
-        "Name": "Curious Nest",
+        "Name": "Sundering Sea: Curious Nest",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_ACS_960",
         "ChestID": 2013
@@ -2766,7 +2871,7 @@ chestNameToData = {
         "Item": "Inspiriting Plum (M)",
         "Region": "Dng_Ocn_1_2",
         "Hidden Item": False,
-        "Name": "Curious Nest",
+        "Name": "Sundering Sea: Curious Nest",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0050",
         "ChestID": 2014
@@ -2775,7 +2880,7 @@ chestNameToData = {
         "Item": "Decaying Dragon's Essence 1",
         "Region": "Dng_Ocn_1_2",
         "Hidden Item": False,
-        "Name": "Curious Nest",
+        "Name": "Sundering Sea: Curious Nest",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0477",
         "ChestID": 2015
@@ -2784,7 +2889,7 @@ chestNameToData = {
         "Item": "Inspiriting Plum (M)",
         "Region": "Dng_Ocn_1_2",
         "Hidden Item": False,
-        "Name": "Curious Nest",
+        "Name": "Sundering Sea: Curious Nest",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0050",
         "ChestID": 2345
@@ -2793,7 +2898,7 @@ chestNameToData = {
         "Item": "Decaying Dragon's Essence 2",
         "Region": "Dng_Ocn_1_2",
         "Hidden Item": False,
-        "Name": "Curious Nest",
+        "Name": "Sundering Sea: Curious Nest",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0477",
         "ChestID": 2348
@@ -2802,7 +2907,7 @@ chestNameToData = {
         "Item": "Conscious Stone",
         "Region": "Dng_Ocn_1_3",
         "Hidden Item": False,
-        "Name": "Nameless Isle",
+        "Name": "Sundering Sea: Nameless Isle",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_ACS_640",
         "ChestID": 2016
@@ -2811,7 +2916,7 @@ chestNameToData = {
         "Item": "Healing Grape Bunch",
         "Region": "Dng_Ocn_1_3",
         "Hidden Item": False,
-        "Name": "Nameless Isle",
+        "Name": "Sundering Sea: Nameless Isle",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0030",
         "ChestID": 2017
@@ -2820,7 +2925,7 @@ chestNameToData = {
         "Item": "Quartz Axe",
         "Region": "Dng_Ocn_1_3",
         "Hidden Item": False,
-        "Name": "Nameless Isle",
+        "Name": "Sundering Sea: Nameless Isle",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_AXE_250",
         "ChestID": 2018
@@ -2829,7 +2934,7 @@ chestNameToData = {
         "Item": "Finisher's Claws",
         "Region": "Dng_Ocn_1_3",
         "Hidden Item": False,
-        "Name": "Nameless Isle",
+        "Name": "Sundering Sea: Nameless Isle",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_ACS_940",
         "ChestID": 2019
@@ -2838,7 +2943,7 @@ chestNameToData = {
         "Item": "Inspiriting Plum (M)",
         "Region": "Dng_Ocn_1_3",
         "Hidden Item": False,
-        "Name": "Nameless Isle",
+        "Name": "Sundering Sea: Nameless Isle",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0050",
         "ChestID": 2020
@@ -2847,7 +2952,7 @@ chestNameToData = {
         "Item": "Inspiriting Plum (M)",
         "Region": "Dng_Ocn_1_3",
         "Hidden Item": False,
-        "Name": "Nameless Isle",
+        "Name": "Sundering Sea: Nameless Isle",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0050",
         "ChestID": 2021
@@ -4775,6 +4880,42 @@ chestNameToData = {
         "ItemFileName": "ITM_CSM_0050",
         "ChestID": 1077
     },
+    "Treasure_Fld_Dst_3_1_01": {
+        "Item": "Fire Soulstone",
+        "Region": "Fld_Dst_3_1",
+        "Hidden Item": False,
+        "Name": "Southern Ku Sands",
+        "Parent": "Hinoeuma",
+        "ItemFileName": "ITM_CSM_0170",
+        "ChestID": 18
+    },
+    "Treasure_Fld_Dst_3_1_02": {
+        "Item": "Herb of Light",
+        "Region": "Fld_Dst_3_1",
+        "Hidden Item": False,
+        "Name": "Southern Ku Sands",
+        "Parent": "Hinoeuma",
+        "ItemFileName": "ITM_CSM_0070",
+        "ChestID": 19
+    },
+    "Treasure_Fld_Dst_3_1_03": {
+        "Item": "Inspiriting Plum",
+        "Region": "Fld_Dst_3_1",
+        "Hidden Item": False,
+        "Name": "Southern Ku Sands",
+        "Parent": "Hinoeuma",
+        "ItemFileName": "ITM_CSM_0290",
+        "ChestID": 1019
+    },
+    "Treasure_Fld_Dst_3_1_04": {
+        "Item": "Energizing Pomegranate",
+        "Region": "Fld_Dst_3_1",
+        "Hidden Item": False,
+        "Name": "Southern Ku Sands",
+        "Parent": "Southern",
+        "ItemFileName": "ITM_CSM_0040",
+        "ChestID": 1020
+    },
     "Treasure_Fld_Dst_3_2_01": {
         "Item": "Thunder Soulstone (L)",
         "Region": "Fld_Dst_3_2",
@@ -5788,7 +5929,7 @@ chestNameToData = {
         "Item": "Double Tomahawk",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_AXE_270",
         "ChestID": 1980
@@ -5797,7 +5938,7 @@ chestNameToData = {
         "Item": "Herb of Serenity",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_SLP_0020",
         "ChestID": 1981
@@ -5806,7 +5947,7 @@ chestNameToData = {
         "Item": "Dual Flower",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_MRL_ATK_0090",
         "ChestID": 1982
@@ -5815,7 +5956,7 @@ chestNameToData = {
         "Item": "Sublime Ornamental Armor",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_AMR_470",
         "ChestID": 1983
@@ -5824,7 +5965,7 @@ chestNameToData = {
         "Item": "Inspiriting Plum Basket",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0060",
         "ChestID": 1984
@@ -5833,7 +5974,7 @@ chestNameToData = {
         "Item": "20000 L",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "None",
         "ChestID": 1985
@@ -5842,7 +5983,7 @@ chestNameToData = {
         "Item": "EXP Augmentor",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_ACS_050",
         "ChestID": 2317
@@ -5851,7 +5992,7 @@ chestNameToData = {
         "Item": "Gold Nugget",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_FLV_0330",
         "ChestID": 2318
@@ -5860,7 +6001,7 @@ chestNameToData = {
         "Item": "Platinum Shield",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_SLD_220",
         "ChestID": 2319
@@ -5869,7 +6010,7 @@ chestNameToData = {
         "Item": "Sunken Gold Statue",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_FLV_0380",
         "ChestID": 2320
@@ -5878,7 +6019,7 @@ chestNameToData = {
         "Item": "Beastly Scarf",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_ACS_021",
         "ChestID": 2321
@@ -5887,7 +6028,7 @@ chestNameToData = {
         "Item": "Strengthening Serum",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_MRL_COM_0020",
         "ChestID": 2322
@@ -5896,7 +6037,7 @@ chestNameToData = {
         "Item": "Reinforcing Jam",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0101",
         "ChestID": 2323
@@ -5905,7 +6046,7 @@ chestNameToData = {
         "Item": "Fortune Wand",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_ROD_140",
         "ChestID": 2324
@@ -5914,7 +6055,7 @@ chestNameToData = {
         "Item": "Leviathan Greatbow",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_BOW_300",
         "ChestID": 2325
@@ -5923,7 +6064,7 @@ chestNameToData = {
         "Item": "Invigorating Nut (L)",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0520",
         "ChestID": 2326
@@ -5932,7 +6073,7 @@ chestNameToData = {
         "Item": "Olive of Life (L)",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0140",
         "ChestID": 2327
@@ -5941,7 +6082,7 @@ chestNameToData = {
         "Item": "Gimmick Goggles",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_HLM_260",
         "ChestID": 2328
@@ -5950,7 +6091,7 @@ chestNameToData = {
         "Item": "Diffusing Serum",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_MRL_COM_0010",
         "ChestID": 2329
@@ -5959,7 +6100,7 @@ chestNameToData = {
         "Item": "Dual Leaf",
         "Region": "Fld_Ocn_1_1",
         "Hidden Item": False,
-        "Name": "On the Water",
+        "Name": "Sundering Sea: On the Water",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_MRL_REV_0090",
         "ChestID": 2330
@@ -5968,7 +6109,7 @@ chestNameToData = {
         "Item": "Octopuff Pot",
         "Region": "Fld_Ocn_1_2",
         "Hidden Item": False,
-        "Name": "Lighthouse Island",
+        "Name": "Sundering Sea: Lighthouse Island",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_ACS_670",
         "ChestID": 1986
@@ -5977,7 +6118,7 @@ chestNameToData = {
         "Item": "12000 L",
         "Region": "Fld_Ocn_1_2",
         "Hidden Item": False,
-        "Name": "Lighthouse Island",
+        "Name": "Sundering Sea: Lighthouse Island",
         "Parent": "Crestlands",
         "ItemFileName": "None",
         "ChestID": 1987
@@ -5986,7 +6127,7 @@ chestNameToData = {
         "Item": "Inspiriting Plum (M)",
         "Region": "Fld_Ocn_1_2",
         "Hidden Item": False,
-        "Name": "Lighthouse Island",
+        "Name": "Sundering Sea: Lighthouse Island",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0050",
         "ChestID": 1988
@@ -5995,7 +6136,7 @@ chestNameToData = {
         "Item": "Inspiriting Plum (M)",
         "Region": "Fld_Ocn_1_2",
         "Hidden Item": False,
-        "Name": "Lighthouse Island",
+        "Name": "Sundering Sea: Lighthouse Island",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0050",
         "ChestID": 1989
@@ -6004,7 +6145,7 @@ chestNameToData = {
         "Item": "Inspiriting Plum (M)",
         "Region": "Fld_Ocn_1_2",
         "Hidden Item": False,
-        "Name": "Lighthouse Island",
+        "Name": "Sundering Sea: Lighthouse Island",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0050",
         "ChestID": 1990
@@ -6013,7 +6154,7 @@ chestNameToData = {
         "Item": "Inspiriting Plum (M)",
         "Region": "Fld_Ocn_1_2",
         "Hidden Item": False,
-        "Name": "Lighthouse Island",
+        "Name": "Sundering Sea: Lighthouse Island",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0050",
         "ChestID": 1991
@@ -6022,7 +6163,7 @@ chestNameToData = {
         "Item": "Ancient Cursed Talisman 1",
         "Region": "Fld_Ocn_1_3",
         "Hidden Item": False,
-        "Name": "The Lost Isle",
+        "Name": "Sundering Sea: The Lost Isle",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0476",
         "ChestID": 1992
@@ -6031,7 +6172,7 @@ chestNameToData = {
         "Item": "Blessing in Disguise",
         "Region": "Fld_Ocn_1_3",
         "Hidden Item": False,
-        "Name": "The Lost Isle",
+        "Name": "Sundering Sea: The Lost Isle",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_ACS_890",
         "ChestID": 1993
@@ -6040,7 +6181,7 @@ chestNameToData = {
         "Item": "Great Sage's Staff",
         "Region": "Fld_Ocn_1_3",
         "Hidden Item": False,
-        "Name": "The Lost Isle",
+        "Name": "Sundering Sea: The Lost Isle",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_ROD_310",
         "ChestID": 1994
@@ -6049,7 +6190,7 @@ chestNameToData = {
         "Item": "Lost Tribe's Dagger",
         "Region": "Fld_Ocn_1_3",
         "Hidden Item": False,
-        "Name": "The Lost Isle",
+        "Name": "Sundering Sea: The Lost Isle",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_DGR_510",
         "ChestID": 1995
@@ -6058,7 +6199,7 @@ chestNameToData = {
         "Item": "Ancient Cursed Talisman 2",
         "Region": "Fld_Ocn_1_3",
         "Hidden Item": False,
-        "Name": "The Lost Isle",
+        "Name": "Sundering Sea: The Lost Isle",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0476",
         "ChestID": 1996
@@ -6067,7 +6208,7 @@ chestNameToData = {
         "Item": "Ancient Cursed Talisman 3",
         "Region": "Fld_Ocn_1_3",
         "Hidden Item": False,
-        "Name": "The Lost Isle",
+        "Name": "Sundering Sea: The Lost Isle",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0476",
         "ChestID": 1997
@@ -6076,7 +6217,7 @@ chestNameToData = {
         "Item": "Ancient Cursed Talisman 4",
         "Region": "Fld_Ocn_1_3",
         "Hidden Item": False,
-        "Name": "The Lost Isle",
+        "Name": "Sundering Sea: The Lost Isle",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_CSM_0476",
         "ChestID": 2349
@@ -6085,7 +6226,7 @@ chestNameToData = {
         "Item": "Herb-of-Grace Bud 1",
         "Region": "Fld_Ocn_1_4",
         "Hidden Item": False,
-        "Name": "???",
+        "Name": "Sundering Sea: ???",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_FLV_0290",
         "ChestID": 1998
@@ -6094,7 +6235,7 @@ chestNameToData = {
         "Item": "Dragon's Scarf",
         "Region": "Fld_Ocn_1_4",
         "Hidden Item": False,
-        "Name": "???",
+        "Name": "Sundering Sea: ???",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_EQP_ACS_011",
         "ChestID": 2000
@@ -6103,7 +6244,7 @@ chestNameToData = {
         "Item": "Skystone",
         "Region": "Fld_Ocn_1_4",
         "Hidden Item": False,
-        "Name": "???",
+        "Name": "Sundering Sea: ???",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_FLV_0300",
         "ChestID": 2001
@@ -6112,7 +6253,7 @@ chestNameToData = {
         "Item": "Herb-of-Grace Bud 2",
         "Region": "Fld_Ocn_1_4",
         "Hidden Item": False,
-        "Name": "???",
+        "Name": "Sundering Sea: ???",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_FLV_0290",
         "ChestID": 2002
@@ -6121,7 +6262,7 @@ chestNameToData = {
         "Item": "Herb-of-Grace Bud 3",
         "Region": "Fld_Ocn_1_4",
         "Hidden Item": False,
-        "Name": "???",
+        "Name": "Sundering Sea: ???",
         "Parent": "Crestlands",
         "ItemFileName": "ITM_FLV_0290",
         "ChestID": 2003
@@ -7082,6 +7223,15 @@ chestNameToData = {
         "ItemFileName": "ITM_CSM_0370",
         "ChestID": 1865
     },
+    "Treasure_Fld_Wld_3_2_05": {
+        "Item": "Herb of Serenity",
+        "Region": "Fld_Wld_3_2",
+        "Hidden Item": False,
+        "Name": "Western Gravell Wilds",
+        "Parent": "Wildlands",
+        "ItemFileName": "ITM_SLP_0020",
+        "ChestID": 1866
+    },
     "Treasure_Fld_Wld_3_2_06": {
         "Item": "Energizing Pomegranate (L)",
         "Region": "Fld_Wld_3_2",
@@ -7328,6 +7478,51 @@ chestNameToData = {
         "Parent": "Brightlands",
         "ItemFileName": "ITM_CSM_0040",
         "ChestID": 2068
+    },
+    "Treasure_Dng_Cty_1_2_01": {
+        "Item": "Refreshing Jam",
+        "Region": "Twn_Cty_1_1_C",
+        "Hidden Item": False,
+        "Name": "Theater: Backstage",
+        "Parent": "Brightlands",
+        "ItemFileName": "ITM_CSM_0100",
+        "ChestID": 99
+    },
+    "Treasure_Dng_Cty_1_2_02": {
+        "Item": "Lightning Amulet",
+        "Region": "Twn_Cty_1_1_C",
+        "Hidden Item": False,
+        "Name": "Theater: Backstage",
+        "Parent": "Brightlands",
+        "ItemFileName": "ITM_EQP_ACS_550",
+        "ChestID": 100
+    },
+    "Treasure_Dng_Cty_1_2_03": {
+        "Item": "Simple Costume",
+        "Region": "Twn_Cty_1_1_C",
+        "Hidden Item": False,
+        "Name": "Theater: Backstage",
+        "Parent": "Brightlands",
+        "ItemFileName": "ITM_EQP_AMR_340",
+        "ChestID": 101
+    },
+    "Treasure_Dng_Cty_1_2_04": {
+        "Item": "Healing Grape (M)",
+        "Region": "Twn_Cty_1_1_C",
+        "Hidden Item": False,
+        "Name": "Theater: Backstage",
+        "Parent": "Brightlands",
+        "ItemFileName": "ITM_CSM_0020",
+        "ChestID": 102
+    },
+    "Treasure_Dng_Cty_1_2_05": {
+        "Item": "Falcon Knife",
+        "Region": "Twn_Cty_1_1_C",
+        "Hidden Item": False,
+        "Name": "Theater: Backstage",
+        "Parent": "Brightlands",
+        "ItemFileName": "ITM_EQP_DGR_080",
+        "ChestID": 1487
     },
     "Treasure_Twn_Cty_1_2_A_01": {
         "Item": "Inspiriting Plum (M)",

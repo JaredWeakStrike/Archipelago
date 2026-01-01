@@ -1509,7 +1509,7 @@ Foods_Table = {
     ItemName.BreezyBeefStew:                        ItemData(0,ItemType.filler),
     ItemName.GrilledChicken:                        ItemData(0,ItemType.filler),
     ItemName.BeastLiver:                            ItemData(0,ItemType.filler),
-    ItemName.CreamySauté:                           ItemData(0,ItemType.filler),
+    ItemName.CreamySaute:                           ItemData(0,ItemType.filler),
     ItemName.SaltedSeafood:                         ItemData(0,ItemType.filler),
     ItemName.Bone_11071:                            ItemData(0,ItemType.filler),
     ItemName.Bone:                                  ItemData(0,ItemType.filler),

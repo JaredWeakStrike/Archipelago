@@ -1002,7 +1002,7 @@ class OT2WorldRules(OT2Rules):
             RegionName.Ryu: lambda state: self.can_access_ryu(state),
             RegionName.Hinoeuma2: lambda state: self.can_access_hinoeuma2(state),
             RegionName.Sai: lambda state: self.can_access_sai(state),
-            RegionName.SaiRuins: lambda state: self.can_access_sai(state), # Must add requirements for ruins sidequest here
+            RegionName.SaiRuins: lambda state: (self.can_access_sai(state) and self.can_access_canalbrine(state)), # Must add requirements for ruins sidequest here
             RegionName.SaiKO: lambda state: (self.can_access_sai(state) and self.can_KO(state)),
             RegionName.CasttiCh2Sai: lambda state: self.can_clear_casttich2sai(state),
             RegionName.CasttiCh2SaiKO: lambda state: (self.can_clear_casttich2sai(state) and self.can_KO(state)),

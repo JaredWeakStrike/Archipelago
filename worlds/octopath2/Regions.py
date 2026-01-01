@@ -642,16 +642,16 @@ OT2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.DragonridgeEmpoweringLychee,
         LocationName.DragonridgeInspiritingPlumBasket,
         LocationName.DragonridgeTempestAmulet,
-        #LocationName.SaiEastDistrictHerbofRevival
+        LocationName.SaiEastDistrictHerbofRevival
     ],
     RegionName.SaiRuins:                [
-        #LocationName.SaiEastDistrictBattleHatchet,
-        #LocationName.SaiEastDistrictRefinedSword
+        LocationName.SaiEastDistrictBattleHatchet,
+        LocationName.SaiEastDistrictRefinedSword
     ],
     RegionName.SaiKO:                [
-        #LocationName.SaiEastDistrictTatteredDress,
+        LocationName.SaiEastDistrictTatteredDress,
         #LocationName.SaiEastDistrictDancerJournal,
-        #LocationName.SaiEastDistrictTatteredShoes
+        LocationName.SaiEastDistrictTatteredShoes
     ],
     RegionName.CasttiCh2Sai:                [
         LocationName.SandflowPassEmpoweringLycheeM,

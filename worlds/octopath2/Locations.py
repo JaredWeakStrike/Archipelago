@@ -1,4 +1,6 @@
+import json
 import typing
+import logging
 
 from BaseClasses import Location
 from .Names import LocationName, ItemName
@@ -262,7 +264,7 @@ Winterlands_Checks={
     LocationName.SouthernCapeColdSnowsInspiritingPlumM:                     LocationData("Southern Cape Cold Snows"),
     LocationName.SouthernCapeColdSnowsPilgrimsRobe:                         LocationData("Southern Cape Cold Snows"),
     LocationName.SouthernCapeColdSnowsEmpoweringLychee:                     LocationData("Southern Cape Cold Snows"),
-    # LocationName.BeneaththeWallStone:                                       LocationData("Beneath the Wall"),
+    LocationName.BeneaththeWallStone:                                       LocationData("Beneath the Wall"),# missable if you break the bridge
     LocationName.CastleMeiEastTowerHerbofSerenity:                          LocationData("Castle Mei: East Tower"),
     LocationName.CastleMeiEastTowerThunderSoulstoneL:                       LocationData("Castle Mei: East Tower"),
     LocationName.CastleMeiEastTowerHealingGrapeM:                           LocationData("Castle Mei: East Tower"),
@@ -332,7 +334,7 @@ Wildlands_Checks={
     LocationName.OresrushLightCoinPouch:                            LocationData("Oresrush"),
     LocationName.OresrushLightNut:                                  LocationData("Oresrush"),
     LocationName.OresrushFoundryStockedGoods:                       LocationData("Oresrush: Foundry"),
-    # LocationName.SilverMineHealingGrape:                            LocationData("Silver Mine"),
+    LocationName.SilverMineHealingGrape:                            LocationData("Silver Mine"), #partitio chapter 1 only location
     LocationName.AbandonedSilverMine500L:                           LocationData("Abandoned Silver Mine"),
     LocationName.AbandonedSilverMineEnlighteningRing:               LocationData("Abandoned Silver Mine"),
     LocationName.AbandonedSilverMineLightSoulstone:                 LocationData("Abandoned Silver Mine"),
@@ -587,12 +589,12 @@ Hinoeuma_Checks={
     LocationName.WesternSaiSandsReinforcingJam:             LocationData("Western Sai Sands"),
     LocationName.SaiInspiritingPlumM:                       LocationData("Sai"),
     LocationName.SaiWindSoulstoneM:                         LocationData("Sai"),
-#    LocationName.SaiEastDistrictHerbofRevival:              LocationData("Sai: East District"),
-#    LocationName.SaiEastDistrictTatteredDress:              LocationData("Sai: East District"),
-#    LocationName.SaiEastDistrictTatteredShoes:              LocationData("Sai: East District"),
+    LocationName.SaiEastDistrictHerbofRevival:              LocationData("Sai: East District"),
+    LocationName.SaiEastDistrictTatteredDress:              LocationData("Sai: East District"),#fight
+    LocationName.SaiEastDistrictTatteredShoes:              LocationData("Sai: East District"),#fight
     # LocationName.SaiEastDistrictDancerJournal:              LocationData("Sai: East District"),
-#    LocationName.SaiEastDistrictBattleHatchet:              LocationData("Sai: East District"),
-#    LocationName.SaiEastDistrictRefinedSword:               LocationData("Sai: East District"),
+    LocationName.SaiEastDistrictBattleHatchet:              LocationData("Sai: East District"),#quest requireing canalbrine
+    LocationName.SaiEastDistrictRefinedSword:               LocationData("Sai: East District"),#quest requireing canalbrine
     LocationName.SandflowPassQuartzBlade:                   LocationData("Sandflow Pass"),
     LocationName.SandflowPassSteelLance:                    LocationData("Sandflow Pass"),
     LocationName.SandflowPassBoneMail:                      LocationData("Sandflow Pass"),
