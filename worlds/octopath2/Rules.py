@@ -203,11 +203,12 @@ class OT2Rules:
     # Towns Unlocks
 
     def capecold_unlock(self, state: CollectionState) -> bool:
+        # has osvald and chapter 1 unlock
         return (state.has(ItemName.OsvaldUnlock, self.player)
-                and state.has(ItemName.OsvaldCh1, self.player)
-                or self.world.options.StartingCharacter == StartingCharacter.option_osvald)
+                and state.has(ItemName.OsvaldCh1, self.player))
 
     def winterbloom_unlock(self, state: CollectionState) -> bool:
+        # has throne+Ch2 or Cassti+Ch2 or Paritio+SideStoryWinterbloom
         return ((state.has(ItemName.ThroneUnlock, self.player)
                  and state.has(ItemName.ThroneCh2Father,self.player))
                 or (state.has(ItemName.CasttiUnlock, self.player)
@@ -216,6 +217,7 @@ class OT2Rules:
                     and state.has(ItemName.PartitioWinterbloom, self.player)))
 
     def stormhail_unlock(self, state: CollectionState) -> bool:
+        #hikari+Ch4 or Ochetta+Ch2 or Temenos+Ch3
         return ((state.has(ItemName.HikariUnlock, self.player)
                  and state.has(ItemName.HikariCh4, self.player))
                 or (state.has(ItemName.OchetteUnlock, self.player)
@@ -228,8 +230,7 @@ class OT2Rules:
                  and state.has(ItemName.TemenosCh1, self.player))
                 or (state.has(ItemName.TemenosUnlock, self.player)
                     and state.has(ItemName.ThroneUnlock,self.player)
-                    and state.has(ItemName.TemenosThroneCh1, self.player))
-                or self.world.options.StartingCharacter == StartingCharacter.option_temenos)
+                    and state.has(ItemName.TemenosThroneCh1, self.player)))
 
     def montwise_unlock(self, state: CollectionState) -> bool:
         return ((state.has(ItemName.ThroneUnlock, self.player)
@@ -255,8 +256,7 @@ class OT2Rules:
                     and state.has(ItemName.AgneaCh2, self.player))
                 or (state.has(ItemName.OsvaldUnlock, self.player)
                     and state.has(ItemName.PartitioUnlock,self.player)
-                    and state.has(ItemName.OsvaldPartitioCh1, self.player))
-                or self.world.options.StartingCharacter == StartingCharacter.option_throne)
+                    and state.has(ItemName.OsvaldPartitioCh1, self.player)))
 
     def abandonedvillage_unlock(self, state: CollectionState) -> bool:
         return (state.has(ItemName.CasttiUnlock, self.player)
@@ -271,11 +271,8 @@ class OT2Rules:
                 and state.has(ItemName.ThroneCh4, self.player))
 
     def beasting_unlock(self, state: CollectionState) -> bool:
-        return ((state.has(ItemName.OchetteUnlock, self.player)
-                 and state.has(ItemName.OchetteCh1, self.player))
-                or (state.has(ItemName.OchetteUnlock, self.player)
-                    and state.has(ItemName.OchetteCh3, self.player))
-                or self.world.options.StartingCharacter == StartingCharacter.option_ochette)
+        return (state.has(ItemName.OchetteUnlock, self.player)
+                 and state.has(ItemName.OchetteCh1, self.player) or state.has(ItemName.OchetteCh3, self.player))
 
     def tropuhopu_unlock(self, state: CollectionState) -> bool:
         return ((state.has(ItemName.AgneaUnlock, self.player)
@@ -291,8 +288,7 @@ class OT2Rules:
         return ((state.has(ItemName.CasttiUnlock, self.player)
                  and state.has(ItemName.CasttiCh1, self.player))
                 or (state.has(ItemName.TemenosUnlock, self.player)
-                    and state.has(ItemName.TemenosCh2,self.player))
-                or self.world.options.StartingCharacter == StartingCharacter.option_castti)
+                    and state.has(ItemName.TemenosCh2,self.player)))
 
     def conningcreek_unlock(self, state: CollectionState) -> bool:
         return ((state.has(ItemName.OchetteUnlock, self.player)
@@ -308,12 +304,8 @@ class OT2Rules:
                 and state.has(ItemName.PartitioCh4, self.player))
 
     def ryu_unlock(self, state: CollectionState) -> bool:
-        return ((state.has(ItemName.HikariUnlock, self.player)
-                 and state.has(ItemName.HikariCh1, self.player))
-                or (state.has(ItemName.HikariUnlock, self.player)
-                    and state.has(ItemName.AgneaUnlock,self.player)
-                    and state.has(ItemName.HikariAgneaCh1, self.player))
-                or self.world.options.StartingCharacter == StartingCharacter.option_hikari)
+        return state.has(ItemName.HikariUnlock, self.player) and (state.has(ItemName.HikariCh1, self.player)
+                or (state.has(ItemName.AgneaUnlock,self.player) and state.has(ItemName.HikariAgneaCh1, self.player)))
 
     def sai_unlock(self, state: CollectionState) -> bool:
         return ((state.has(ItemName.CasttiUnlock, self.player)
@@ -324,11 +316,8 @@ class OT2Rules:
                     and state.has(ItemName.PartitioSai,self.player)))
 
     def ku_unlock(self, state: CollectionState) -> bool:
-        return ((state.has(ItemName.HikariUnlock, self.player)
-                and state.has(ItemName.HikariCh5, self.player))
-                or (state.has(ItemName.HikariUnlock, self.player)
-                    and state.has(ItemName.AgneaUnlock,self.player)
-                    and state.has(ItemName.HikariAgneaCh2, self.player)))
+        return state.has(ItemName.HikariUnlock, self.player) and (state.has(ItemName.HikariCh5, self.player)
+                or (state.has(ItemName.AgneaUnlock,self.player) and state.has(ItemName.HikariAgneaCh2, self.player)))
 
     def cropdale_unlock(self, state: CollectionState) -> bool:
         return ((state.has(ItemName.AgneaUnlock, self.player)
@@ -336,8 +325,7 @@ class OT2Rules:
                 or (state.has(ItemName.CasttiUnlock, self.player)
                     and state.has(ItemName.OchetteUnlock,self.player)
                     and (state.has(ItemName.CasttiOchetteCh1, self.player)
-                         or state.has(ItemName.CasttiOchetteCh2, self.player)))
-                or self.world.options.StartingCharacter == StartingCharacter.option_agnea)
+                         or state.has(ItemName.CasttiOchetteCh2, self.player))))
 
     def wellgrove_unlock(self, state: CollectionState) -> bool:
         return ((state.has(ItemName.ThroneUnlock, self.player)
@@ -355,8 +343,7 @@ class OT2Rules:
         return ((state.has(ItemName.PartitioUnlock, self.player)
                  and state.has(ItemName.PartitioCh1, self.player))
                 or (state.has(ItemName.ThroneUnlock, self.player)
-                    and state.has(ItemName.ThroneCh2Mother, self.player))
-        or self.world.options.StartingCharacter == StartingCharacter.option_partitio)
+                    and state.has(ItemName.ThroneCh2Mother, self.player)))
 
     def crackridge_unlock(self, state: CollectionState) -> bool:
         return ((state.has(ItemName.TemenosUnlock, self.player)
@@ -1078,42 +1065,42 @@ class OT2WorldRules(OT2Rules):
             for entrance in region.entrances:
                 entrance.access_rule = rules
                 
-            # add rules to restrict starting zones depending on starting character
-        add_rule(self.multiworld.get_entrance("Starting Items -> Oresrush", self.player),
-                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_partitio)
-        add_rule(self.multiworld.get_entrance("Starting Items -> New Delsta", self.player),
-                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_throne)
-        add_rule(self.multiworld.get_entrance("Starting Items -> Beasting Village", self.player),
-                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_ochette)
-        add_rule(self.multiworld.get_entrance("Starting Items -> Canalbrine", self.player),
-                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_castti)
-        add_rule(self.multiworld.get_entrance("Starting Items -> Ryu", self.player),
-                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_hikari)
-        add_rule(self.multiworld.get_entrance("Starting Items -> Flamechurch", self.player),
-                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_temenos)
-        add_rule(self.multiworld.get_entrance("Starting Items -> Cropdale", self.player),
-                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_agnea)
-        add_rule(self.multiworld.get_entrance("Starting Items -> Cape Cold", self.player),
-                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_osvald)
-    
-
-    # Traveler's bag quest location
-        add_rule(self.multiworld.get_entrance("Winterlands Center Roads -> Al's Traveler's Bag Subquest", self.player),
-                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_osvald)
-        add_rule(self.multiworld.get_entrance("Crestlands Roads -> Al's Traveler's Bag Subquest", self.player),
-                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_temenos)
-        add_rule(self.multiworld.get_entrance("Brightlands Roads -> Al's Traveler's Bag Subquest", self.player),
-                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_throne)
-        add_rule(self.multiworld.get_entrance("Toto'haha Trails -> Al's Traveler's Bag Subquest", self.player),
-                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_ochette)
-        add_rule(self.multiworld.get_entrance("Harborlands Roads -> Al's Traveler's Bag Subquest", self.player),
-                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_castti)
-        add_rule(self.multiworld.get_entrance("Central Hinoeuma Roads -> Al's Traveler's Bag Subquest", self.player),
-                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_hikari)
-        add_rule(self.multiworld.get_entrance("Wildlands Southern Roads -> Al's Traveler's Bag Subquest", self.player),
-                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_partitio)
-        add_rule(self.multiworld.get_entrance("Leaflands Trails -> Al's Traveler's Bag Subquest", self.player),
-                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_agnea)
+#            # add rules to restrict starting zones depending on starting character
+#        add_rule(self.multiworld.get_entrance("Starting Items -> Oresrush", self.player),
+#                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_partitio)
+#        add_rule(self.multiworld.get_entrance("Starting Items -> New Delsta", self.player),
+#                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_throne)
+#        add_rule(self.multiworld.get_entrance("Starting Items -> Beasting Village", self.player),
+#                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_ochette)
+#        add_rule(self.multiworld.get_entrance("Starting Items -> Canalbrine", self.player),
+#                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_castti)
+#        add_rule(self.multiworld.get_entrance("Starting Items -> Ryu", self.player),
+#                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_hikari)
+#        add_rule(self.multiworld.get_entrance("Starting Items -> Flamechurch", self.player),
+#                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_temenos)
+#        add_rule(self.multiworld.get_entrance("Starting Items -> Cropdale", self.player),
+#                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_agnea)
+#        add_rule(self.multiworld.get_entrance("Starting Items -> Cape Cold", self.player),
+#                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_osvald)
+#
+#
+#    # Traveler's bag quest location
+#        add_rule(self.multiworld.get_entrance("Winterlands Center Roads -> Al's Traveler's Bag Subquest", self.player),
+#                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_osvald)
+#        add_rule(self.multiworld.get_entrance("Crestlands Roads -> Al's Traveler's Bag Subquest", self.player),
+#                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_temenos)
+#        add_rule(self.multiworld.get_entrance("Brightlands Roads -> Al's Traveler's Bag Subquest", self.player),
+#                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_throne)
+#        add_rule(self.multiworld.get_entrance("Toto'haha Trails -> Al's Traveler's Bag Subquest", self.player),
+#                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_ochette)
+#        add_rule(self.multiworld.get_entrance("Harborlands Roads -> Al's Traveler's Bag Subquest", self.player),
+#                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_castti)
+#        add_rule(self.multiworld.get_entrance("Central Hinoeuma Roads -> Al's Traveler's Bag Subquest", self.player),
+#                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_hikari)
+#        add_rule(self.multiworld.get_entrance("Wildlands Southern Roads -> Al's Traveler's Bag Subquest", self.player),
+#                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_partitio)
+#        add_rule(self.multiworld.get_entrance("Leaflands Trails -> Al's Traveler's Bag Subquest", self.player),
+#                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_agnea)
                  
                  
         # ABABABABA

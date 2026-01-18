@@ -3,7 +3,7 @@ import typing
 import logging
 
 from BaseClasses import Location
-from .Names import LocationName, ItemName
+from .Names import LocationName, ItemName, things
 
 
 class OT2Location(Location):
@@ -740,11 +740,11 @@ Chapter_Clears={
 }
 
 
-Game_Start={
-    LocationName.GameStartChar:                                                 LocationData("Game Start Character"),
-    LocationName.GameStartChapter:                                              LocationData("Game Start Chapter"),
-    LocationName.GameStartRegion:                                               LocationData("Game Start Region"),
-}
+#Game_Start={
+#    LocationName.GameStartChar:                                                 LocationData("Game Start Character"),
+#    LocationName.GameStartChapter:                                              LocationData("Game Start Chapter"),
+#    LocationName.GameStartRegion:                                               LocationData("Game Start Region"),
+#}
 
 # Not included in the all_chests table
 event_location_to_item = {
@@ -824,7 +824,6 @@ all_chests = {
     **Crestlands_Checks,
     **Hinoeuma_Checks,
     **OpenSeas_Checks,
-    **Game_Start
 }
 
 LuaChests = dict()
@@ -838,19 +837,30 @@ with open("output.txt","w") as text_file:
             APItemName = f"{LocaionName}: {LocationItem}"
             if APItemName in all_chests.keys():
                 #print(f"[{ChestId}] = {LocaionName}: {LocationItem}")
-                LuaChests[ChestId] =APItemName
-                text_file.write(f"[{ChestId}] = {LocaionName}: {LocationItem}\n")
-            else:
-                if v["Parent"] == "Crestlands" and LocationItem != ItemName.InspiritingPlumM:
-                    #print(f"[{ChestId}] = {LocaionName}: {LocationItem}")
-                    NewApItem = f"Sundering Sea: "+APItemName
-                    if NewApItem in all_chests.keys():
-                        LuaChests[ChestId] = NewApItem
-                        text_file.write(f"[{ChestId}] = {LocaionName}: {LocationItem}\n")
+                LuaChests[k] = v
+                #text_file.write(f"[{ChestId}] = {LocaionName}: {LocationItem}\n")
+            #else:
+            #    if v["Region"] == "Twn_Isd_2_1_C" and LocationItem != ItemName.InspiritingPlumM:
+            #        #print(f"[{ChestId}] = {LocaionName}: {LocationItem}")
+            #        NewApItem = f"Sundering Sea: "+APItemName
+            #        if NewApItem in all_chests.keys():
+            #            LuaChests[ChestId] = NewApItem
+            #            text_file.write(f"[{ChestId}] = {LocaionName}: {LocationItem}\n")
+#output_dict = dict()
 
-for k,v in all_chests.items():
-    if k not in LuaChests.values():
-        print(k)
+with open("fixedChests.json",'w') as f:
+    json.dump(LuaChests,f,indent = 2)
+#    for k,v in things.Location_to_Chest.items():
+#        if k in things.ChestData:
+#            print(k)
+#            output_dict[k] = v
+#            output_dict[k]["ChestID"] = things.ChestData[k][0]["ID"]
+#            output_dict[k]["HaveItemLabel"] = things.ChestData[k][0].get("HaveItemLabel")
+#            print(output_dict)
+#    f.write(json.dumps(output_dict))
+#for k,v in all_chests.items():
+#    if k not in LuaChests.values():
+#        logging.info(k)
 
 
 

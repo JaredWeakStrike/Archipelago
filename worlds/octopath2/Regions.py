@@ -9,12 +9,6 @@ from worlds.generic.Rules import add_rule, set_rule
 
 OT2REGIONS: typing.Dict[str, typing.List[str]] = {
     "Menu":                                 [],
-    RegionName.GameStart:                   [
-        LocationName.GameStartChar,
-        LocationName.GameStartChapter,
-        LocationName.GameStartRegion,
-    ],
-
     # Winterlands        
     RegionName.Winterlands1:                [
         LocationName.EasternCapeColdSnowsNeedleDagger,
@@ -1025,8 +1019,7 @@ def connect_regions(self):
     player = self.player
     # Connections to review, most are coded one-ways
     OT2RegionConnections: typing.Dict[str, typing.Set[str]] = {
-        "Menu":                             {RegionName.GameStart},
-        RegionName.GameStart:               {RegionName.CapeCold, RegionName.Flamechurch, RegionName.NewDelsta, RegionName.BeastingVillage,     
+        "Menu":                             {RegionName.CapeCold, RegionName.Flamechurch, RegionName.NewDelsta, RegionName.BeastingVillage,
                                              RegionName.Canalbrine, RegionName.Ryu, RegionName.Oresrush, RegionName.Cropdale},
         RegionName.Winterlands1:            {RegionName.CapeCold, RegionName.Ruffians, RegionName.Winterbloom, RegionName.Crestlands, 
                                              RegionName.Brightlands, RegionName.TravelersBag},
