@@ -129,14 +129,14 @@ class Goal(Choice):
     default = 0
 #   monster_hunt?    
 
-#class RequiredChapters(Range):
-#    """Win Condition
-#    Amount of chapters required to be able to access Vide. Dual stories also count as chapters, and Osvald Chapter 1 counts for two chapters.   
-#    """
-#    display_name = "Goal"
-#    range_start = 0
-#    range_end = 51
-#    default = 51
+class RequiredChapters(Range):
+    """Win Condition
+    Amount of chapters required to be able to access Vide. Dual stories also count as chapters, and Osvald Chapter 1 counts for two chapters.
+    """
+    display_name = "Goal"
+    range_start = 0
+    range_end = 51
+    default = 51
     
 #class RequiredStories(Range):
 #    """Win Condition

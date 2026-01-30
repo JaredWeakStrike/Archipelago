@@ -264,7 +264,7 @@ Winterlands_Checks={
     LocationName.SouthernCapeColdSnowsInspiritingPlumM:                     LocationData("Southern Cape Cold Snows"),
     LocationName.SouthernCapeColdSnowsPilgrimsRobe:                         LocationData("Southern Cape Cold Snows"),
     LocationName.SouthernCapeColdSnowsEmpoweringLychee:                     LocationData("Southern Cape Cold Snows"),
-    LocationName.BeneaththeWallStone:                                       LocationData("Beneath the Wall"),# missable if you break the bridge
+    #LocationName.BeneaththeWallStone:                                       LocationData("Beneath the Wall"),# missable if you break the bridge
     LocationName.CastleMeiEastTowerHerbofSerenity:                          LocationData("Castle Mei: East Tower"),
     LocationName.CastleMeiEastTowerThunderSoulstoneL:                       LocationData("Castle Mei: East Tower"),
     LocationName.CastleMeiEastTowerHealingGrapeM:                           LocationData("Castle Mei: East Tower"),
@@ -334,7 +334,7 @@ Wildlands_Checks={
     LocationName.OresrushLightCoinPouch:                            LocationData("Oresrush"),
     LocationName.OresrushLightNut:                                  LocationData("Oresrush"),
     LocationName.OresrushFoundryStockedGoods:                       LocationData("Oresrush: Foundry"),
-    LocationName.SilverMineHealingGrape:                            LocationData("Silver Mine"), #partitio chapter 1 only location
+    #LocationName.SilverMineHealingGrape:                            LocationData("Silver Mine"), #partitio chapter 1 only location
     LocationName.AbandonedSilverMine500L:                           LocationData("Abandoned Silver Mine"),
     LocationName.AbandonedSilverMineEnlighteningRing:               LocationData("Abandoned Silver Mine"),
     LocationName.AbandonedSilverMineLightSoulstone:                 LocationData("Abandoned Silver Mine"),
@@ -361,7 +361,7 @@ Wildlands_Checks={
     LocationName.WesternCrackridgeWildsInspiritingPlumBasket:        LocationData("Western Crackridge Wilds"),
     LocationName.WesternCrackridgeWildsOliveofLife:                  LocationData("Western Crackridge Wilds"),
     LocationName.CrackridgeOliveofLifeM:                            LocationData("Crackridge"),
-    LocationName.CrackridgeFromtheFarReachesofHell:                 LocationData("Crackridge"),
+    #LocationName.CrackridgeFromtheFarReachesofHell:                 LocationData("Crackridge"),
     LocationName.AbandonedRoadHealingGrapeM:                        LocationData("Abandoned Road"),
     LocationName.AbandonedRoad9200L:                                LocationData("Abandoned Road"),
     LocationName.AbandonedRoadBottledNightmares:                    LocationData("Abandoned Road"),

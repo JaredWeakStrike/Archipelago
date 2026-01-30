@@ -52,8 +52,25 @@ class Octopath2World(World):
                        for item_id, item in enumerate(item_table.keys(), 0x88888888)}
     location_name_to_id = {item: location
                            for location, item in enumerate(all_chests.keys(), 0x88888888)}
-    for location, id in location_name_to_id.items():
-        print(f"[{id}] = \"{location}\",")
+   #with open("ArchipelagoLists.lua", "w") as f:
+   #    f.write("ItemNameToAPId = {\n")
+   #    for item, id in item_name_to_id.items():
+   #        f.write(f"\t[\"{item}\"] = {id},\n")
+   #    f.write("}\n")
+   #    f.write("APItemIdToName = {\n")
+   #    for item, id in item_name_to_id.items():
+   #        f.write(f"\t[{id}] = \"{item}\",\n")
+   #    f.write("}\n")
+
+   #    f.write("LocationNameToAPId = {\n")
+   #    for item, id in location_name_to_id.items():
+   #        f.write(f"\t[\"{item}\"] = {id},\n")
+   #    f.write("}\n")
+   #    f.write("APLocationIdToName = {\n")
+   #    for item, id in location_name_to_id.items():
+   #        f.write(f"\t[{id}] = \"{item}\",\n")
+   #    f.write("}\n")
+
     total_locations: int
     exclude: List[str]
     starting_character: str
@@ -148,7 +165,7 @@ class Octopath2World(World):
         itempool = []
                     
         # Creating fillers for unfilled locations
-        size = len(all_chests) - non_fillers-2
+        size = len(all_chests) - non_fillers+1
         for i in range(size):
             filler = self.random.choice(list(filler_items)) 
             itempool += [self.create_item(filler)]
@@ -159,7 +176,7 @@ class Octopath2World(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = self.options.as_dict(
                 "Goal",
-                #"StartingCharacter"
+                "StartingCharacter"
         )
         return slot_data
         
