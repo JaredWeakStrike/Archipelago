@@ -12,6 +12,8 @@ from .Names import ItemName, LocationName, RegionName
 from .Options import Octopath2Options, StartingCharacter, LockedTime, RandomizeCanoe
 from .Regions import create_regions, connect_regions
 from .Rules import *
+
+
 #from .Logic import *
 
 
@@ -24,16 +26,16 @@ class Octopath2Web(WebWorld):
             "setup/en",
             ["Probably HappyArtea"]
     )
-    
+
     setup_fr = Tutorial(
-        setup_en.tutorial_name,
-        setup_en.description,
-        "Français",
-        "setup_fr.md",
-        "setup/fr",
-        ["Probably HappyArtea"]
-        )
-        
+            setup_en.tutorial_name,
+            setup_en.description,
+            "Français",
+            "setup_fr.md",
+            "setup/fr",
+            ["Probably HappyArtea"]
+    )
+
     tutorials = [setup_en, setup_fr]
 
 
@@ -52,24 +54,24 @@ class Octopath2World(World):
                        for item_id, item in enumerate(item_table.keys(), 0x88888888)}
     location_name_to_id = {item: location
                            for location, item in enumerate(all_chests.keys(), 0x88888888)}
-   #with open("ArchipelagoLists.lua", "w") as f:
-   #    f.write("ItemNameToAPId = {\n")
-   #    for item, id in item_name_to_id.items():
-   #        f.write(f"\t[\"{item}\"] = {id},\n")
-   #    f.write("}\n")
-   #    f.write("APItemIdToName = {\n")
-   #    for item, id in item_name_to_id.items():
-   #        f.write(f"\t[{id}] = \"{item}\",\n")
-   #    f.write("}\n")
+    #with open("ArchipelagoLists.lua", "w") as f:
+    #    f.write("ItemNameToAPId = {\n")
+    #    for item, id in item_name_to_id.items():
+    #        f.write(f"\t[\"{item}\"] = {id},\n")
+    #    f.write("}\n")
+    #    f.write("APItemIdToName = {\n")
+    #    for item, id in item_name_to_id.items():
+    #        f.write(f"\t[{id}] = \"{item}\",\n")
+    #    f.write("}\n")
 
-   #    f.write("LocationNameToAPId = {\n")
-   #    for item, id in location_name_to_id.items():
-   #        f.write(f"\t[\"{item}\"] = {id},\n")
-   #    f.write("}\n")
-   #    f.write("APLocationIdToName = {\n")
-   #    for item, id in location_name_to_id.items():
-   #        f.write(f"\t[{id}] = \"{item}\",\n")
-   #    f.write("}\n")
+    #    f.write("LocationNameToAPId = {\n")
+    #    for item, id in location_name_to_id.items():
+    #        f.write(f"\t[\"{item}\"] = {id},\n")
+    #    f.write("}\n")
+    #    f.write("APLocationIdToName = {\n")
+    #    for item, id in location_name_to_id.items():
+    #        f.write(f"\t[{id}] = \"{item}\",\n")
+    #    f.write("}\n")
 
     total_locations: int
     exclude: List[str]
@@ -81,7 +83,6 @@ class Octopath2World(World):
         self.exclude = []
         self.starting_character = ""
         self.starting_time = "Day"
-
 
     def create_item(self, name: str) -> Item:
         """
@@ -153,46 +154,45 @@ class Octopath2World(World):
         for item in starting_items:
             self.push_precollected(self.create_item(item))
 
-        non_fillers=0
-        
+        non_fillers = 0
+
         for name, data in item_table.items():
             if name not in self.exclude:
                 for i in range(data.quantity):
                     item = self.create_item(name)
                     self.multiworld.itempool.append(item)
-                    non_fillers = non_fillers+1
-                    
+                    non_fillers = non_fillers + 1
+
         itempool = []
-                    
+
         # Creating fillers for unfilled locations
-        size = len(all_chests) - non_fillers+1
+        size = len(all_chests) - non_fillers + 1
         for i in range(size):
-            filler = self.random.choice(list(filler_items)) 
+            filler = self.random.choice(list(filler_items))
             itempool += [self.create_item(filler)]
 
         self.multiworld.itempool += itempool
 
-
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = self.options.as_dict(
                 "Goal",
-                "StartingCharacter"
+                "StartingCharacter",
+                "RequiredChapters"
         )
         return slot_data
-        
 
     def generate_early(self) -> None:
         """
         Determines the quantity of items and maps plando locations to items.
         """
-        
+
         if self.options.LockedTime == False:
-          self.exclude.append(ItemName.TimeChange)
-          self.multiworld.push_precollected(self.create_item(ItemName.TimeChange))
+            self.exclude.append(ItemName.TimeChange)
+            self.multiworld.push_precollected(self.create_item(ItemName.TimeChange))
         if self.options.RandomizeCanoe == False:
-          self.exclude.append(ItemName.Boat)
-          self.multiworld.push_precollected(self.create_item(ItemName.Boat))
-            
+            self.exclude.append(ItemName.Boat)
+            self.multiworld.push_precollected(self.create_item(ItemName.Boat))
+
         #pass
 
     def create_regions(self):

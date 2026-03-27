@@ -115,7 +115,7 @@ class Difficulty(Choice):
 class Goal(Choice):
     """Win Condition
     To access the win conditions, you always need to complete the amount of chapters set in the RequiredChapters option and 
-    the maount of stories set in the RequiredStories option.
+    the amount of stories set in the RequiredStories option.
     main: clear main character's story
     main_with_vide: Clear main character's story, then kill vide.
     vide: kill vide
@@ -135,8 +135,8 @@ class RequiredChapters(Range):
     """
     display_name = "Goal"
     range_start = 0
-    range_end = 51
-    default = 51
+    range_end = 50
+    default = 50
     
 #class RequiredStories(Range):
 #    """Win Condition
@@ -164,6 +164,7 @@ class Octopath2Options(PerGameCommonOptions):
     RandomizeCanoe: RandomizeCanoe
     StartingCharacter: StartingCharacter
     Difficulty: Difficulty
+    RequiredChapters: RequiredChapters
 #    ShuffleSkills: ShuffleSkills
 #    ShuffleSupports: ShuffleSupports
 #    RandomizeProficiencies: RandomizeProficiencies

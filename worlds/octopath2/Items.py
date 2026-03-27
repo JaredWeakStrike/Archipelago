@@ -1607,7 +1607,67 @@ Other_Items_Table = {
 }
 
 # OT2 Events : to change for OT2 Events (Sidequests, main chapters, etc) 
-
+#50 clears
+ChapterGoalsList = [
+    ItemName.OsvaldCh1ClearedEvent,
+    ItemName.OsvaldCh3ClearedEvent,
+    ItemName.OsvaldCh4ClearedEvent,
+    ItemName.OsvaldCh5ClearedEvent,
+    #ItemName.OsvaldStoryClearedEvent,
+    ItemName.TemenosCh1ClearedEvent,
+    ItemName.TemenosCh2ClearedEvent,
+    ItemName.TemenosCh3CrackridgeClearedEvent,
+    ItemName.TemenosCh3StormhailClearedEvent,
+    ItemName.TemenosCh4ClearedEvent,
+    #ItemName.TemenosStoryClearedEvent,
+    ItemName.ThroneCh1ClearedEvent,
+    ItemName.ThroneCh2MotherClearedEvent,
+    ItemName.ThroneCh2FatherClearedEvent,
+    ItemName.ThroneCh3MotherClearedEvent,
+    ItemName.ThroneCh3FatherClearedEvent,
+    ItemName.ThroneCh4ClearedEvent,
+    #ItemName.ThroneStoryClearedEvent,
+    ItemName.OchetteCh1ClearedEvent,
+    ItemName.OchetteCh2ActaClearedEvent,
+    ItemName.OchetteCh2TeraClearedEvent,
+    ItemName.OchetteCh2GlacisClearedEvent,
+    ItemName.OchetteCh3ClearedEvent,
+    #ItemName.OchetteStoryClearedEvent,
+    ItemName.CasttiCh1ClearedEvent,
+    ItemName.CasttiCh2SaiClearedEvent,
+    ItemName.CasttiCh2WinterbloomClearedEvent,
+    ItemName.CasttiCh3ClearedEvent,
+    ItemName.CasttiCh4ClearedEvent,
+    #ItemName.CasttiStoryClearedEvent,
+    ItemName.HikariCh1ClearedEvent,
+    ItemName.HikariCh2ClearedEvent,
+    ItemName.HikariCh3ClearedEvent,
+    ItemName.HikariCh4ClearedEvent,
+    ItemName.HikariCh5ClearedEvent,
+    #ItemName.HikariStoryClearedEvent,
+    ItemName.PartitioCh1ClearedEvent,
+    ItemName.PartitioCh2ClearedEvent,
+    ItemName.PartitioCh3ClearedEvent,
+    ItemName.PartitioCh4ClearedEvent,
+    ItemName.PartitioSaiClearedEvent,
+    ItemName.PartitioWinterbloomClearedEvent,
+    ItemName.PartitioTropuhopuClearedEvent,
+    #ItemName.PartitioStoryClearedEvent,
+    ItemName.AgneaCh1ClearedEvent,
+    ItemName.AgneaCh2ClearedEvent,
+    ItemName.AgneaCh3ClearedEvent,
+    ItemName.AgneaCh4ClearedEvent,
+    ItemName.AgneaCh5ClearedEvent,
+    #ItemName.AgneaStoryClearedEvent,
+    ItemName.TemenosThroneCh1ClearedEvent,
+    ItemName.TemenosThroneCh2ClearedEvent,
+    ItemName.HikariAgneaCh1ClearedEvent,
+    ItemName.HikariAgneaCh2ClearedEvent,
+    ItemName.CasttiOchetteCh1ClearedEvent,
+    ItemName.CasttiOchetteCh2ClearedEvent,
+    ItemName.OsvaldPartitioCh1ClearedEvent,
+    ItemName.OsvaldPartitioCh2ClearedEvent,
+]
 Events_Table = {
     ItemName.OsvaldCh1ClearedEvent,
     ItemName.OsvaldCh3ClearedEvent,
@@ -1673,6 +1733,7 @@ Events_Table = {
     ItemName.FromTheFarReachesOfHellClearedEvent,
     ItemName.GalderaDefeatedEvent,
 }
+
 
 # Not all items are currently aggregated in item_table : Only those I consider we should be testing the game are in. Excluded are songs, Hidden Items/Info, Journals, Main/Side quest items, etc.
 item_table = {

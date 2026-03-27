@@ -3,7 +3,7 @@ import typing
 import logging
 
 from BaseClasses import Location
-from .Names import LocationName, ItemName, things
+from .Names import LocationName, ItemName
 
 
 class OT2Location(Location):

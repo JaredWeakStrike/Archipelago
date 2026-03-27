@@ -1,7 +1,7 @@
 from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from .Items import item_table, Character_Unlocks_Table, Job_Licenses_Table, Region_Unlocks_Table
+from .Items import item_table, Character_Unlocks_Table, Job_Licenses_Table, Region_Unlocks_Table, ChapterGoalsList
 from .Locations import all_chests 
 from .Names import LocationName, ItemName, RegionName
 from .Options import StartingCharacter, Goal
@@ -1050,8 +1050,7 @@ class OT2WorldRules(OT2Rules):
             RegionName.OchetteCasttiCh2: lambda state: self.can_clear_casttiochettech2(state),
             
             #Endbosses quests, quests requirements are borked
-            RegionName.Vide: lambda state: (self.can_clear_casttiochettech2(state) and self.can_clear_temenosthronech2(state) and self.can_clear_hikariagneach2(state) and self.can_clear_osvaldpartitioch2(state) and self.get_finalboss_rules(state)),
-            
+            RegionName.Vide: lambda state: sum(1 for item_name in ChapterGoalsList if state.has(item_name, self.player)) >= self.world.options.RequiredChapters.value,
             RegionName.TravelersBag: lambda state: (self.can_be_nighttime(state)),
             RegionName.PeculiarTomes: lambda state: (self.can_get_npcitems(state) and state.can_reach(RegionName.Crackridge, player=self.player) and state.can_reach(RegionName.BeastingVillage, player=self.player) and state.can_reach(RegionName.Winterlands2, player=self.player)),
             RegionName.ReachesOfHell: lambda state: (state.can_reach(RegionName.PeculiarTomes, player=self.player) and self.can_get_info(state) and state.can_reach(RegionName.SunderingSea, player=self.player) and state.has(ItemName.Boat, self.player)),
@@ -1064,7 +1063,8 @@ class OT2WorldRules(OT2Rules):
             region = self.multiworld.get_region(region_name, self.player)
             for entrance in region.entrances:
                 entrance.access_rule = rules
-                
+
+        self.set_ot2_goal()
 #            # add rules to restrict starting zones depending on starting character
 #        add_rule(self.multiworld.get_entrance("Starting Items -> Oresrush", self.player),
 #                 lambda state: self.world.options.StartingCharacter == StartingCharacter.option_partitio)
@@ -1133,13 +1133,6 @@ class OT2WorldRules(OT2Rules):
 
 #no logic = [
 #    Did you expect something here?
-
-    
-                 
-                 
-                 
-                     
-        self.set_ot2_goal()
         
     def get_lvl1plus_rules(self, state: CollectionState) -> bool:
         level1plus_rules = {
