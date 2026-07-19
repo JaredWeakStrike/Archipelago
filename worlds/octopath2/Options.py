@@ -157,7 +157,7 @@ class SacredEmbersHuntRequired(Range):
     range_start = 0
     range_end = 50
     default = 10
-    
+
 #class RequiredStories(Range):
 #    """Win Condition
 #    Amount of chapters required to be able to access Vide. Dual stories also count as chapters, and Osvald Chapter 1 counts for two chapters.   
@@ -184,7 +184,10 @@ class Octopath2Options(PerGameCommonOptions):
     RandomizeCanoe: RandomizeCanoe
     StartingCharacter: StartingCharacter
     Difficulty: Difficulty
+    FinalBoss: FinalBoss
     RequiredChapters: RequiredChapters
+    SacredEmbersHuntRequired: SacredEmbersHuntRequired
+    SacredEmbersHuntAmount: SacredEmbersHuntAmount
 #    ShuffleSkills: ShuffleSkills
 #    ShuffleSupports: ShuffleSupports
 #    RandomizeProficiencies: RandomizeProficiencies

@@ -176,8 +176,11 @@ class Octopath2World(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = self.options.as_dict(
                 "Goal",
+                "FinalBoss",
                 "StartingCharacter",
-                "RequiredChapters"
+                "RequiredChapters",
+                "SacredEmbersHuntRequired",
+                "SacredEmbersHuntAmount"
         )
         return slot_data
 
