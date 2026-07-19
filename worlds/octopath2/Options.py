@@ -114,29 +114,49 @@ class Difficulty(Choice):
 
 class Goal(Choice):
     """Win Condition
-    To access the win conditions, you always need to complete the amount of chapters set in the RequiredChapters option and 
-    the amount of stories set in the RequiredStories option.
-    main: clear main character's story
-    main_with_vide: Clear main character's story, then kill vide.
-    vide: kill vide
-    galdera : defeat Galdera    
+        Chapters: Finishing a required amount of chapters sends out the victory condition
+        Sacred Embers Hunt: Finding the required amount of Sacred Embers sends out the victory condition
     """
     display_name = "Goal"
-    option_vide = 0
-#    option_main = 1
-#    option_main_with_vide = 3
-#    option_galdera = 4
+    option_chapters = 0
+    option_sacred_embers_hunt = 1
     default = 0
 #   monster_hunt?    
+class FinalBoss(Choice):
+    """Final Boss to send out the victory condition
+    None: send out victory when your goal option is reached
+    Vide: unlock vidania when you reach your goal option
+    Galdera: unlock the gate of finis when you reach your goal option"""
+    display_name = "Final Boss"
+    option_none = 0
+    option_vide = 1
+    option_galdera = 2
+    default = 1
 
 class RequiredChapters(Range):
-    """Win Condition
-    Amount of chapters required to be able to access Vide. Dual stories also count as chapters, and Osvald Chapter 1 counts for two chapters.
     """
-    display_name = "Goal"
+    Amount of chapters required for you goal. Dual stories also count as chapters, and Osvald Chapter 1 counts for two chapters.
+    Ignored if your goal option is Sacred Embers Hunt
+    """
+    display_name = "RequiredChapters"
     range_start = 0
     range_end = 50
-    default = 50
+    default = 10
+class SacredEmbersHuntAmount(Range):
+    """Amount of Sacred Embers in the pool
+    Ignored if your goal option is Chapters"""
+    display_name = "Sacred Embers Hunt Amount"
+    range_start = 0
+    range_end = 50
+    default = 10
+
+class SacredEmbersHuntRequired(Range):
+    """Amount of Sacred Embers Required for your goal option
+    Ignored if your goal option is Chapters"""
+    display_name = "Sacred Embers Hunt Required"
+    range_start = 0
+    range_end = 50
+    default = 10
     
 #class RequiredStories(Range):
 #    """Win Condition
