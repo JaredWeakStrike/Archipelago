@@ -157,7 +157,7 @@ class Octopath2World(World):
         non_fillers = 0
 
         for name, data in item_table.items():
-            if name not in self.exclude:
+            if name not in self.exclude and name not in starting_items:
                 for i in range(data.quantity):
                     item = self.create_item(name)
                     self.multiworld.itempool.append(item)
@@ -179,8 +179,8 @@ class Octopath2World(World):
                 "FinalBoss",
                 "StartingCharacter",
                 "RequiredChapters",
-                "SacredEmbersHuntRequired",
-                "SacredEmbersHuntAmount"
+                #"SacredEmbersHuntRequired",
+                #"SacredEmbersHuntAmount"
         )
         return slot_data
 
@@ -189,12 +189,12 @@ class Octopath2World(World):
         Determines the quantity of items and maps plando locations to items.
         """
 
-        if self.options.LockedTime == False:
-            self.exclude.append(ItemName.TimeChange)
-            self.multiworld.push_precollected(self.create_item(ItemName.TimeChange))
-        if self.options.RandomizeCanoe == False:
-            self.exclude.append(ItemName.Boat)
-            self.multiworld.push_precollected(self.create_item(ItemName.Boat))
+        #if self.options.LockedTime == False:
+        #    self.exclude.append(ItemName.TimeChange)
+        #    self.multiworld.push_precollected(self.create_item(ItemName.TimeChange))
+        #if self.options.RandomizeCanoe == False:
+        #    self.exclude.append(ItemName.Boat)
+        #    self.multiworld.push_precollected(self.create_item(ItemName.Boat))
 
         #pass
 

@@ -271,8 +271,7 @@ class OT2Rules:
                 and state.has(ItemName.ThroneCh4, self.player))
 
     def beasting_unlock(self, state: CollectionState) -> bool:
-        return (state.has(ItemName.OchetteUnlock, self.player)
-                 and state.has(ItemName.OchetteCh1, self.player) or state.has(ItemName.OchetteCh3, self.player))
+        return state.has(ItemName.OchetteUnlock, self.player) and (state.has(ItemName.OchetteCh1, self.player) or state.has(ItemName.OchetteCh3, self.player))
 
     def tropuhopu_unlock(self, state: CollectionState) -> bool:
         return ((state.has(ItemName.AgneaUnlock, self.player)

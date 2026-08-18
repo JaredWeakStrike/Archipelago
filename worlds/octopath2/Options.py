@@ -119,7 +119,7 @@ class Goal(Choice):
     """
     display_name = "Goal"
     option_chapters = 0
-    option_sacred_embers_hunt = 1
+    #option_sacred_embers_hunt = 1
     default = 0
 #   monster_hunt?    
 class FinalBoss(Choice):
@@ -130,7 +130,7 @@ class FinalBoss(Choice):
     display_name = "Final Boss"
     option_none = 0
     option_vide = 1
-    option_galdera = 2
+    #option_galdera = 2
     default = 1
 
 class RequiredChapters(Range):
@@ -142,21 +142,21 @@ class RequiredChapters(Range):
     range_start = 0
     range_end = 50
     default = 10
-class SacredEmbersHuntAmount(Range):
-    """Amount of Sacred Embers in the pool
-    Ignored if your goal option is Chapters"""
-    display_name = "Sacred Embers Hunt Amount"
-    range_start = 0
-    range_end = 50
-    default = 10
-
-class SacredEmbersHuntRequired(Range):
-    """Amount of Sacred Embers Required for your goal option
-    Ignored if your goal option is Chapters"""
-    display_name = "Sacred Embers Hunt Required"
-    range_start = 0
-    range_end = 50
-    default = 10
+#class SacredEmbersHuntAmount(Range):
+#    """Amount of Sacred Embers in the pool
+#    Ignored if your goal option is Chapters"""
+#    display_name = "Sacred Embers Hunt Amount"
+#    range_start = 0
+#    range_end = 50
+#    default = 10
+#
+#class SacredEmbersHuntRequired(Range):
+#    """Amount of Sacred Embers Required for your goal option
+#    Ignored if your goal option is Chapters"""
+#    display_name = "Sacred Embers Hunt Required"
+#    range_start = 0
+#    range_end = 50
+#    default = 10
 
 #class RequiredStories(Range):
 #    """Win Condition
@@ -180,14 +180,14 @@ class Octopath2Options(PerGameCommonOptions):
 #    IncludeSideQuests: IncludeSideQuests
 #    IncludeNPCInfo: IncludeNPCInfo
 #    IncludeNPCItems: IncludeNPCItems
-    LockedTime: LockedTime
-    RandomizeCanoe: RandomizeCanoe
+#    LockedTime: LockedTime
+#    RandomizeCanoe: RandomizeCanoe
     StartingCharacter: StartingCharacter
     Difficulty: Difficulty
     FinalBoss: FinalBoss
     RequiredChapters: RequiredChapters
-    SacredEmbersHuntRequired: SacredEmbersHuntRequired
-    SacredEmbersHuntAmount: SacredEmbersHuntAmount
+    #SacredEmbersHuntRequired: SacredEmbersHuntRequired
+    #SacredEmbersHuntAmount: SacredEmbersHuntAmount
 #    ShuffleSkills: ShuffleSkills
 #    ShuffleSupports: ShuffleSupports
 #    RandomizeProficiencies: RandomizeProficiencies
